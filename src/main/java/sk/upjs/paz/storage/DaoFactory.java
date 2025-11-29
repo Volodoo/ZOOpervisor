@@ -15,7 +15,6 @@ public enum DaoFactory {
 
     public UserDao getUserDao() {
         if (userDao == null) {
-//          studentDao = MemoryStudentDao.createFromFile();
             userDao = new MysqlUserDao(getJdbcTemplate());
         }
         return userDao;
