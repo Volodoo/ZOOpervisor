@@ -1,0 +1,4 @@
+package sk.upjs.paz.storage;
+
+public interface TaskDao {
+}
