@@ -5,41 +5,46 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema ZOOpervisor
+-- Schema zoopervisor
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ZOOpervisor` DEFAULT CHARACTER SET utf8;
-USE `ZOOpervisor`;
 
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`user`
+-- Schema zoopervisor
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`user` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(100) NULL,
-  `last_name` VARCHAR(100) NOT NULL,
-  `gender` ENUM('MALE', 'FEMALE', 'OTHER', 'UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
-  `birth_day` DATE NOT NULL,
-  `role` ENUM('CASHIER', 'MAINTAINER', 'ZOOKEEPER', 'MANAGER', 'ADMIN') NOT NULL,
-  `email` VARCHAR(100) NULL,
-  `password` VARCHAR(100) NULL,
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+CREATE SCHEMA IF NOT EXISTS `zoopervisor` DEFAULT CHARACTER SET utf8 ;
+USE `zoopervisor` ;
+
+-- -----------------------------------------------------
+-- Table `zoopervisor`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`user` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `first_name` VARCHAR(100) NULL,
+    `last_name` VARCHAR(100) NOT NULL,
+    `gender` ENUM('MALE', 'FEMALE', 'OTHER', 'UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
+    `birth_day` DATE NOT NULL,
+    `role` ENUM('CASHIER', 'MAINTAINER', 'ZOOKEEPER', 'MANAGER', 'ADMIN') NOT NULL,
+    `email` VARCHAR(100) NULL,
+    `password` VARCHAR(100) NULL,
+    PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
 
 INSERT INTO `user` VALUES
 (1,'Ján','Novák','MALE','1990-05-12','MAINTAINER',NULL,NULL),
 (2,'Eva','Hrušková','FEMALE','1985-11-03','CASHIER',NULL,NULL),
 (3,'Alex','Kováč','OTHER','2000-02-20','ZOOKEEPER',NULL,NULL);
 
+
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`enclosure`
+-- Table `zoopervisor`.`enclosure`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`enclosure` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `zone` VARCHAR(100) NOT NULL,
-  `last_maintainance` DATETIME NULL,
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`enclosure` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    `zone` VARCHAR(100) NOT NULL,
+    `last_maintainance` DATETIME NULL,
+    PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
 
 INSERT INTO `enclosure` VALUES
 (1,'Výbeh pre levy','Savana',NULL),
@@ -48,25 +53,26 @@ INSERT INTO `enclosure` VALUES
 (4,'Výbeh pre hrochy','Savana',NULL),
 (5,'Výbeh pre tučniaky','Polárna',NULL);
 
+
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`animal`
+-- Table `zoopervisor`.`animal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`animal` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `nickname` VARCHAR(100) NULL,
-  `species` VARCHAR(100) NOT NULL,
-  `sex` ENUM('MALE', 'FEMALE', 'HERMAPHRODITE', 'UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
-  `birth_day` DATE NOT NULL,
-  `last_check` DATETIME NULL,
-  `enclosure_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_animal_enclosure1_idx` (`enclosure_id` ASC) VISIBLE,
-  CONSTRAINT `fk_animal_enclosure1`
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`animal` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `nickname` VARCHAR(100) NULL,
+    `species` VARCHAR(100) NOT NULL,
+    `sex` ENUM('MALE', 'FEMALE', 'HERMAPHRODITE', 'UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
+    `birth_day` DATE NOT NULL,
+    `last_check` DATETIME NULL,
+    `enclosure_id` BIGINT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_animal_enclosure1_idx` (`enclosure_id` ASC) VISIBLE,
+    CONSTRAINT `fk_animal_enclosure1`
     FOREIGN KEY (`enclosure_id`)
-    REFERENCES `ZOOpervisor`.`enclosure` (`id`)
+    REFERENCES `zoopervisor`.`enclosure` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO_ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
 INSERT INTO `animal` VALUES
 (1,'Alex','Lev','MALE','2010-05-20',NULL,1),
@@ -79,42 +85,41 @@ INSERT INTO `animal` VALUES
 (8,'Pešiak','Tučniak','MALE','2015-06-20',NULL,5);
 
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`ticket`
+-- Table `zoopervisor`.`ticket`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`ticket` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(100) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  `date` DATETIME NOT NULL,
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_ticket_user_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_ticket_user`
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`ticket` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `type` VARCHAR(100) NOT NULL,
+    `price` DECIMAL(10,2) NOT NULL,
+    `date` DATETIME NOT NULL,
+    `user_id` BIGINT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_ticket_user_idx` (`user_id` ASC) VISIBLE,
+    CONSTRAINT `fk_ticket_user`
     FOREIGN KEY (`user_id`)
-    REFERENCES `ZOOpervisor`.`user` (`id`)
+    REFERENCES `zoopervisor`.`user` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
--- No ticket data
 
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`task`
+-- Table `zoopervisor`.`task`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`task` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `description` TEXT NOT NULL,
-  `deadline` DATETIME NOT NULL,
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_task_user1_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_task_user1`
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`task` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    `description` TEXT NOT NULL,
+    `deadline` DATETIME NOT NULL,
+    `user_id` BIGINT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_task_user1_idx` (`user_id` ASC) VISIBLE,
+    CONSTRAINT `fk_task_user1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `ZOOpervisor`.`user` (`id`)
+    REFERENCES `zoopervisor`.`user` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
 INSERT INTO `task` VALUES
 (1,'Kontrola výbehu tučniakov','Skontrolovať stav výbehu tučniakov a opraviť svetlo.','2025-12-20 12:00:00',1),
@@ -122,49 +127,49 @@ INSERT INTO `task` VALUES
 (3,'Vakcinácia leva','Zaočkovať leva a skontrolovať či nemá parazitov.','2025-12-19 09:00:00',3);
 
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`task_has_animal`
+-- Table `zoopervisor`.`task_has_animal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`task_has_animal` (
-  `task_id` BIGINT NOT NULL,
-  `animal_id` BIGINT NOT NULL,
-  PRIMARY KEY (`task_id`, `animal_id`),
-  INDEX `fk_task_has_animal_animal1_idx` (`animal_id` ASC) VISIBLE,
-  INDEX `fk_task_has_animal_task1_idx` (`task_id` ASC) VISIBLE,
-  CONSTRAINT `fk_task_has_animal_task1`
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`task_has_animal` (
+    `task_id` BIGINT NOT NULL,
+    `animal_id` BIGINT NOT NULL,
+    PRIMARY KEY (`task_id`, `animal_id`),
+    INDEX `fk_task_has_animal_animal1_idx` (`animal_id` ASC) VISIBLE,
+    INDEX `fk_task_has_animal_task1_idx` (`task_id` ASC) VISIBLE,
+    CONSTRAINT `fk_task_has_animal_task1`
     FOREIGN KEY (`task_id`)
-    REFERENCES `ZOOpervisor`.`task` (`id`)
+    REFERENCES `zoopervisor`.`task` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_task_has_animal_animal1`
+    CONSTRAINT `fk_task_has_animal_animal1`
     FOREIGN KEY (`animal_id`)
-    REFERENCES `ZOOpervisor`.`animal` (`id`)
+    REFERENCES `zoopervisor`.`animal` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
 INSERT INTO `task_has_animal` VALUES
 (3,1);
 
 -- -----------------------------------------------------
--- Table `ZOOpervisor`.`task_has_enclosure`
+-- Table `zoopervisor`.`task_has_enclosure`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ZOOpervisor`.`task_has_enclosure` (
-  `task_id` BIGINT NOT NULL,
-  `enclosure_id` BIGINT NOT NULL,
-  PRIMARY KEY (`task_id`, `enclosure_id`),
-  INDEX `fk_task_has_enclosure_enclosure1_idx` (`enclosure_id` ASC) VISIBLE,
-  INDEX `fk_task_has_enclosure_task1_idx` (`task_id` ASC) VISIBLE,
-  CONSTRAINT `fk_task_has_enclosure_task1`
+CREATE TABLE IF NOT EXISTS `zoopervisor`.`task_has_enclosure` (
+    `task_id` BIGINT NOT NULL,
+    `enclosure_id` BIGINT NOT NULL,
+    PRIMARY KEY (`task_id`, `enclosure_id`),
+    INDEX `fk_task_has_enclosure_enclosure1_idx` (`enclosure_id` ASC) VISIBLE,
+    INDEX `fk_task_has_enclosure_task1_idx` (`task_id` ASC) VISIBLE,
+    CONSTRAINT `fk_task_has_enclosure_task1`
     FOREIGN KEY (`task_id`)
-    REFERENCES `ZOOpervisor`.`task` (`id`)
+    REFERENCES `zoopervisor`.`task` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_task_has_enclosure_enclosure1`
+    CONSTRAINT `fk_task_has_enclosure_enclosure1`
     FOREIGN KEY (`enclosure_id`)
-    REFERENCES `ZOOpervisor`.`enclosure` (`id`)
+    REFERENCES `zoopervisor`.`enclosure` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO_ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
 INSERT INTO `task_has_enclosure` VALUES
 (1,5);
