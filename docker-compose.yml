@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.4.6
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: zoopervisor
+      MYSQL_USER: zoopervisor
+      MYSQL_PASSWORD: zoopervisor
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s #default is 30s
+      timeout: 5s   #default is 30s
+      retries: 5    #default is 3
