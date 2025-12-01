@@ -1,5 +1,6 @@
 package sk.upjs.paz;
 
+
 import sk.upjs.paz.entity.Gender;
 import sk.upjs.paz.entity.Role;
 import sk.upjs.paz.entity.User;
@@ -11,13 +12,25 @@ import java.time.LocalDate;
 
 public class IDELauncher {
 
-    // This main method is used for running the app from IntelliJ IDEA.
     public static void main(String[] args) throws IOException {
+
         UserDao userDao = DaoFactory.INSTANCE.getUserDao();
+/*
+        User user = new User();
+        user.setFirstName("Janik");
+        user.setLastName("Kowalski");
+        user.setGender(Gender.OTHER);
+        user.setBirthDay(LocalDate.now());
+        user.setRole(Role.CASHIER);
+        System.out.println(user);
+        userDao.create(user);
 
         System.out.println(userDao.getAll());
+*/
 
+//      userDao.delete(13);
 
+        Main.main(args);
 
 
 

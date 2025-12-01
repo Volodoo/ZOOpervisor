@@ -2,9 +2,11 @@ package sk.upjs.paz.storage;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.upjs.paz.entity.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MysqlUserDao implements UserDao {
@@ -13,12 +15,24 @@ public class MysqlUserDao implements UserDao {
 
     private final ResultSetExtractor<List<User>> resultSetExtractor = rs -> {
         var users = new ArrayList<User>();
+        var processedUsers = new HashMap<Long, User>();
+
+
         while (rs.next()) {
-            var user = User.fromResultSet(rs);
-            users.add(user);
+            var id = rs.getLong("id");
+            var user = processedUsers.get(id);
+
+            if (user == null) {
+                user = User.fromResultSet(rs);
+                processedUsers.put(id, user);
+                users.add(user);
+            }
+
         }
+
         return users;
     };
+
 
     private final String selectUserQuery = "SELECT id, first_name, last_name, gender, birth_day, role, email, password FROM user";
 
@@ -44,17 +58,66 @@ public class MysqlUserDao implements UserDao {
 
     @Override
     public User create(User user) {
-        return null;
+        if (user == null) {
+            throw new IllegalArgumentException("User is null.");
+        }
+
+        if (user.getId() != null) {
+            throw new IllegalArgumentException("User id is already set.");
+        }
+
+        var keyHolder = new GeneratedKeyHolder();
+        jdbcOperations.update(connection -> {
+            var ps = connection.prepareStatement(
+                    "INSERT INTO user (first_name, last_name, gender, birth_day, role, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    new String[]{"id"}
+            );
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getGender().toString());
+            ps.setDate(4, java.sql.Date.valueOf(user.getBirthDay()));
+            ps.setString(5, user.getRole().toString());
+            ps.setString(6, user.getEmail());
+            ps.setString(7, user.getPassword());
+
+            return ps;
+        }, keyHolder);
+
+        var id = keyHolder.getKey().longValue();
+        System.out.println(id);
+        user.setId(id);
+        return user;
     }
 
     @Override
     public void delete(long id) {
-
+        jdbcOperations.update("DELETE FROM user WHERE id = ?", id);
     }
 
+
     @Override
-    public User update(User user) throws sk.upjs.paz.storage.NotFoundException, IllegalArgumentException {
-        return null;
+    public User update(User user) throws NotFoundException, IllegalArgumentException {
+        if (user == null) {
+            throw new IllegalArgumentException("Attendance is null.");
+        }
+
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("Attendance id is not set.");
+        }
+
+        jdbcOperations.update(
+                "UPDATE user SET first_name = ?, last_name = ?, gender = ?, birth_day = ?, role = ?, email = ?, password = ? WHERE id = ?",
+                user.getFirstName(),
+                user.getLastName(),
+                user.getGender().toString(),
+                user.getBirthDay(),
+                user.getRole().toString(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getId()
+        );
+
+        return user;
     }
 
 

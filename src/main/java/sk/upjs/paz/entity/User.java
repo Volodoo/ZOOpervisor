@@ -37,7 +37,7 @@ public class User {
         user.setBirthDay(rs.getDate(aliasPrefix + "birth_day").toLocalDate());
         user.setRole(Role.valueOf(rs.getString(aliasPrefix + "role")));
         user.setEmail(rs.getString(aliasPrefix + "email"));
-        user.setEmail(rs.getString(aliasPrefix + "password"));
+        user.setPassword(rs.getString(aliasPrefix + "password"));
         return user;
     }
 }
