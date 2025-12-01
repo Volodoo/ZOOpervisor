@@ -63,7 +63,7 @@ public enum DaoFactory {
     private JdbcTemplate getJdbcTemplate() {
         if (jdbcTemplate == null) {
             MysqlDataSource datasource = new MysqlDataSource();
-            datasource.setUrl("jdbc:mysql://localhost:3366/zoopervisor");
+            datasource.setUrl("jdbc:mysql://localhost:3306/zoopervisor");
             datasource.setUser("zoopervisor");
             datasource.setPassword("zoopervisor");
             jdbcTemplate = new JdbcTemplate(datasource);

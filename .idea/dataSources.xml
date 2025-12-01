@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="zoopervisor@localhost" uuid="aae1d257-e969-472c-9c80-ecdbe5a8f838">
+    <data-source source="LOCAL" name="zoopervisor@localhost" uuid="f42ce606-bd98-484a-a185-e56edc4c7c91">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
