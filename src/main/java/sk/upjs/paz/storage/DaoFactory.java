@@ -2,6 +2,7 @@ package sk.upjs.paz.storage;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import sk.upjs.paz.entity.Enclosure;
 
 public enum DaoFactory {
     INSTANCE;
@@ -32,10 +33,7 @@ public enum DaoFactory {
 
     public EnclosureDao getEnclosureDao() {
         if (enclosureDao == null) {
-            enclosureDao = new MysqlEnclosureDao(
-                    getJdbcTemplate(),
-                    getAnimalDao()
-            );
+            enclosureDao = new MysqlEnclosureDao(getJdbcTemplate());
         }
         return enclosureDao;
     }
