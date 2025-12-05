@@ -10,8 +10,8 @@ public interface UserDao {
     User getById(long id);
 
     User create(User user);
-    void delete(long id);
 
+    void delete(long id);
 
     User update(User user) throws NotFoundException, IllegalArgumentException;
 

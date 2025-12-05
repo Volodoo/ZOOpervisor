@@ -1,23 +1,48 @@
 package sk.upjs.paz.storage;
 
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import sk.upjs.paz.entity.Animal;
 import sk.upjs.paz.entity.Enclosure;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 
 public class MysqlEnclosureDao implements EnclosureDao {
 
-    public MysqlEnclosureDao(JdbcTemplate jdbcTemplate) {
+
+    private final JdbcOperations jdbcOperations;
+
+
+    public MysqlEnclosureDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
+    }
+
+
+    @Override
+    public List<Enclosure> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public Enclosure getById(long id) {
+        return null;
+    }
+
+    @Override
+    public Enclosure create(Enclosure enclosure) {
+        return null;
+    }
+
+    @Override
+    public void delete(long id) {
 
     }
 
     @Override
-    public List<Enclosure> getAll() {
+    public Enclosure update(Enclosure enclosure) throws NotFoundException, IllegalArgumentException {
+        return null;
+    }
+
+    public List<Enclosure> getAllSortedByZone() {
         return List.of();
     }
 }

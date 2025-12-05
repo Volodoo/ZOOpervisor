@@ -6,6 +6,7 @@ import lombok.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 public class Task {
@@ -14,7 +15,8 @@ public class Task {
     private String description;
     private LocalDateTime deadline;
     private User user;
-
+    private Set<Animal> animals;
+    private Set<Enclosure> enclosures;
 
 
     public static Task fromResultSet(ResultSet rs) throws SQLException {
@@ -33,6 +35,8 @@ public class Task {
         task.setDescription(rs.getString(aliasPrefix + "description"));
         task.setDeadline(rs.getTimestamp(aliasPrefix + "deadline").toLocalDateTime());
         task.setUser(null);
+        task.setAnimals(null);
+        task.setEnclosures(null);
         return task;
     }
 

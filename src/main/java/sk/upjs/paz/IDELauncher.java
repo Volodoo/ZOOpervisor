@@ -4,7 +4,7 @@ package sk.upjs.paz;
 import sk.upjs.paz.entity.Gender;
 import sk.upjs.paz.entity.Role;
 import sk.upjs.paz.entity.User;
-import sk.upjs.paz.storage.DaoFactory;
+import sk.upjs.paz.storage.Factory;
 import sk.upjs.paz.storage.UserDao;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class IDELauncher {
 
     public static void main(String[] args) throws IOException {
 
-        UserDao userDao = DaoFactory.INSTANCE.getUserDao();
+        UserDao userDao = Factory.INSTANCE.getUserDao();
 /*
         User user = new User();
         user.setFirstName("Janik");

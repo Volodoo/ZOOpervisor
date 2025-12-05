@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -34,7 +35,14 @@ public class Animal {
         animal.setSpecies(rs.getString(aliasPrefix + "species"));
         animal.setSex(Sex.valueOf(rs.getString(aliasPrefix + "sex")));
         animal.setBirthDay(rs.getDate(aliasPrefix + "birth_day").toLocalDate());
-        animal.setLastCheck(rs.getTimestamp(aliasPrefix + "last_check").toLocalDateTime());
+
+        Timestamp ts = rs.getTimestamp(aliasPrefix + "last_check");
+        LocalDateTime lastCheck = null;
+        if (ts != null) {
+            lastCheck = ts.toLocalDateTime();
+        }
+        animal.setLastCheck(lastCheck);
+
         animal.setEnclosure(null);
         return animal;
     }
