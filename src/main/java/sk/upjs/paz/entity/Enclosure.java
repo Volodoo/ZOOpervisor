@@ -13,6 +13,7 @@ public class Enclosure {
     private String name;
     private String zone;
     private LocalDateTime lastMaintainance;
+    private Integer animalCount;
 
     public static Enclosure fromResultSet(ResultSet rs) throws SQLException {
         return fromResultSet(rs, "");

@@ -1,25 +1,43 @@
 package sk.upjs.paz.storage;
 
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.paz.entity.Enclosure;
 
-
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlEnclosureDao implements EnclosureDao {
 
-
     private final JdbcOperations jdbcOperations;
 
+    private final ResultSetExtractor<List<Enclosure>> resultSetExtractor = rs -> {
+        var enclosures = new ArrayList<Enclosure>();
+        while (rs.next()) {
+            var enclosure = Enclosure.fromResultSet(rs);
+            int animalCount = rs.getInt("animal_count");
+            enclosure.setAnimalCount(animalCount);
+            enclosures.add(enclosure);
+        }
+        return enclosures;
+    };
+
+    private final String selectEnclosureQuery =
+            "SELECT en.id, en.name, en.zone, en.last_maintainance, " +
+                    "COUNT(an.id) AS animal_count " +
+                    "FROM enclosure en " +
+                    "LEFT JOIN animal an ON an.enclosure_id = en.id " +
+                    "GROUP BY en.id";
 
     public MysqlEnclosureDao(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
 
-
     @Override
     public List<Enclosure> getAll() {
-        return List.of();
+        return jdbcOperations.query(selectEnclosureQuery, resultSetExtractor);
     }
 
     @Override
