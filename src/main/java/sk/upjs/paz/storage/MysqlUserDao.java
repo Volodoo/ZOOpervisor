@@ -1,5 +1,7 @@
 package sk.upjs.paz.storage;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -118,6 +120,20 @@ public class MysqlUserDao implements UserDao {
         );
 
         return user;
+    }
+
+    @Override
+    public User verify(String email, String password) {
+        String sql = selectUserQuery + " WHERE email = ? AND password = ?";
+
+
+        List<User> users = jdbcOperations.query(sql, resultSetExtractor, email, password);
+
+        if (users != null && !users.isEmpty()) {
+            return users.get(0);
+        }
+
+        return null;
     }
 
 

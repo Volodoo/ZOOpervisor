@@ -39,7 +39,7 @@ public enum Factory {
                 // the `synchronized`, is a common performance optimization, because synchronization is costly.
                 if (jdbcOperations == null) {
                     var dataSource = new MysqlDataSource();
-                    dataSource.setUrl(System.getProperty("DB_JDBC", "jdbc:mysql://localhost:3306/zoopervisor"));
+                    dataSource.setUrl(System.getProperty("DB_JDBC", "jdbc:mysql://localhost:3307/zoopervisor"));
                     dataSource.setUser(System.getProperty("DB_USER", "zoopervisor"));
                     dataSource.setPassword(System.getProperty("DB_PASSWORD", "zoopervisor"));
                     jdbcOperations = new JdbcTemplate(dataSource);
