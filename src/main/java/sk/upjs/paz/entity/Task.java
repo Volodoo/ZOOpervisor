@@ -1,6 +1,5 @@
 package sk.upjs.paz.entity;
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 import java.sql.ResultSet;
@@ -14,9 +13,9 @@ public class Task {
     private String name;
     private String description;
     private LocalDateTime deadline;
-    private User user;
     private Set<Animal> animals;
     private Set<Enclosure> enclosures;
+    private User user;
 
 
     public static Task fromResultSet(ResultSet rs) throws SQLException {
@@ -34,9 +33,10 @@ public class Task {
         task.setName(rs.getString(aliasPrefix + "name"));
         task.setDescription(rs.getString(aliasPrefix + "description"));
         task.setDeadline(rs.getTimestamp(aliasPrefix + "deadline").toLocalDateTime());
-        task.setUser(null);
         task.setAnimals(null);
         task.setEnclosures(null);
+        task.setUser(null);
+
         return task;
     }
 

@@ -75,7 +75,7 @@ public enum Factory {
         if (taskDao == null) {
             synchronized (lock) {
                 if (taskDao == null) {
-                    taskDao = new MysqlTasklDao(getMysqlJdbcOperations());
+                    taskDao = new MysqlTaskDao(getMysqlJdbcOperations());
                 }
             }
         }
