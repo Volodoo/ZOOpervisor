@@ -63,7 +63,14 @@ public class MysqlAnimalDao implements AnimalDao {
 
     @Override
     public Animal getById(long id) {
-        return null;
+        String SelectAnimalByIdQuery = selectAnimalQuery + " WHERE an.id = ?";
+
+        var tasks = jdbcOperations.query(SelectAnimalByIdQuery, resultSetExtractor, id);
+        if (tasks == null || tasks.isEmpty()) {
+            throw new NotFoundException("Animal with id " + id + " not found.");
+        }
+        return tasks.get(0);
+
     }
 
     @Override

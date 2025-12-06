@@ -90,6 +90,7 @@ public class MysqlTaskDao implements TaskDao {
                     "LEFT JOIN task_has_enclosure the ON ta.id = the.task_id " +
                     "LEFT JOIN enclosure en ON the.enclosure_id = en.id";
 
+
     public MysqlTaskDao(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
@@ -101,7 +102,13 @@ public class MysqlTaskDao implements TaskDao {
 
     @Override
     public Task getById(long id) {
-        return null;
+        String SelectTaskByIdQuery = selectTaskQuery + " WHERE ta.id = ?";
+
+        var tasks = jdbcOperations.query(SelectTaskByIdQuery, resultSetExtractor, id);
+        if (tasks == null || tasks.isEmpty()) {
+            throw new NotFoundException("Task with id " + id + " not found.");
+        }
+        return tasks.get(0);
     }
 
     @Override

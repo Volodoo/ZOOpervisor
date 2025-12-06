@@ -32,8 +32,7 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     private final String selectEnclosureQuery =
             "SELECT en.id, en.name, en.zone, en.last_maintainance " +
-                    "FROM enclosure en " +
-                    "LEFT JOIN animal an ON an.enclosure_id = en.id";
+                    "FROM enclosure en";
 
     public MysqlEnclosureDao(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
@@ -68,11 +67,9 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     @Override
     public Enclosure getById(long id) {
-        String selectAnimalsByIdQuery = "SELECT en.id, en.name, en.zone, en.last_maintainance " +
-                "FROM enclosure en " +
-                "WHERE id = ?";
+        String selectEnclosureByIdQuery = selectEnclosureQuery + " WHERE id = ?";
 
-        var enclosures = jdbcOperations.query(selectAnimalsByIdQuery, resultSetExtractor, id);
+        var enclosures = jdbcOperations.query(selectEnclosureByIdQuery, resultSetExtractor, id);
         if (enclosures == null || enclosures.isEmpty()) {
             throw new NotFoundException("Enclosure with id " + id + " not found.");
         }
