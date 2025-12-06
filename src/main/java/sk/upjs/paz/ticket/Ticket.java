@@ -1,4 +1,4 @@
-package sk.upjs.paz.task;
+package sk.upjs.paz.ticket;
 
 import sk.upjs.paz.user.User;
 

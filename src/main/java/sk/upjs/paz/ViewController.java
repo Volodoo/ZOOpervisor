@@ -45,7 +45,9 @@ public class ViewController {
     public void loadTasksButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
         List<Task> tasks = taskDao.getAll();
+        System.out.println(tasks);
         itemsListView.getItems().addAll(tasks);
+
     }
 
     public void loadTicketsButtonAction(ActionEvent actionEvent) {

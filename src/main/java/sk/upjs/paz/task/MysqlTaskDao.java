@@ -2,6 +2,8 @@ package sk.upjs.paz.task;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import sk.upjs.paz.animal.Animal;
+import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.exceptions.NotFoundException;
 import sk.upjs.paz.user.User;
 
@@ -16,18 +18,21 @@ public class MysqlTaskDao implements TaskDao {
         var tasks = new ArrayList<Task>();
         var processedTasks = new HashMap<Long, Task>();
         var processedUsers = new HashMap<Long, User>();
-
+        var processedAnimals = new HashMap<Long, Animal>();
+        var processedEnclosures = new HashMap<Long, Enclosure>();
 
         while (rs.next()) {
             var id = rs.getLong("id");
             var task = processedTasks.get(id);
 
+            // Ak úloha ešte neexistuje, vytvoríme ju
             if (task == null) {
                 task = Task.fromResultSet(rs);
                 processedTasks.put(id, task);
                 tasks.add(task);
             }
 
+            // Spracovanie užívateľa
             var userId = rs.getLong("us_id");
             var user = processedUsers.get(userId);
             if (user == null) {
@@ -39,6 +44,35 @@ public class MysqlTaskDao implements TaskDao {
                 task.setUser(user);
             }
 
+            // Spracovanie zvieraťa
+            var animalId = rs.getLong("an_id");
+            if (animalId != 0) { // Ak je platné ID zvieraťa
+                var animal = processedAnimals.get(animalId);
+                if (animal == null) {
+                    animal = Animal.fromResultSet(rs, "an_");
+                    processedAnimals.put(animalId, animal);
+                }
+
+                // Priradíme zviera k úlohe
+                if (task.getAnimals().add(animal)) { // Ak sa zviera pridá
+                    // zviera bolo pridané (množina zabraňuje duplicite)
+                }
+            }
+
+            // Spracovanie výbehu
+            var enclosureId = rs.getLong("en_id");
+            if (enclosureId != 0) { // Ak je platné ID výbehu
+                var enclosure = processedEnclosures.get(enclosureId);
+                if (enclosure == null) {
+                    enclosure = Enclosure.fromResultSet(rs, "en_");
+                    processedEnclosures.put(enclosureId, enclosure);
+                }
+
+                // Priradíme výbeh k úlohe
+                if (task.getEnclosures().add(enclosure)) { // Ak sa výbeh pridá
+                    // výbeh bol pridaný (množina zabraňuje duplicite)
+                }
+            }
         }
 
         return tasks;
@@ -46,14 +80,19 @@ public class MysqlTaskDao implements TaskDao {
 
     private final String selectTaskQuery =
             "SELECT ta.id, ta.name, ta.description, ta.deadline, " +
-                    "us.id AS us_id, us.first_name AS us_first_name, us.last_name AS us_last_name, us.gender AS us_gender, us.birth_day AS us_birth_day, us.role AS us_role, us.email AS us_email, us.password AS us_password " +
+                    "us.id AS us_id, us.first_name AS us_first_name, us.last_name AS us_last_name, us.gender AS us_gender,us.birth_day AS us_birth_day, us.role AS us_role, us.email AS us_email, us.password AS us_password, " +
+                    "an.id AS an_id, an.nickname AS an_nickname, an.species AS an_species, an.sex AS an_sex, an.birth_day AS an_birth_day, an.last_check AS an_last_check, " +
+                    "en.id AS en_id, en.name AS en_name, en.zone AS en_zone, en.last_maintainance AS en_last_maintainance " +
                     "FROM task ta " +
-                    "LEFT JOIN user us ON ta.user_id = us.id";
+                    "LEFT JOIN user us ON ta.user_id = us.id " +
+                    "LEFT JOIN task_has_animal tha ON ta.id = tha.task_id " +
+                    "LEFT JOIN animal an ON tha.animal_id = an.id " +
+                    "LEFT JOIN task_has_enclosure the ON ta.id = the.task_id " +
+                    "LEFT JOIN enclosure en ON the.enclosure_id = en.id";
 
     public MysqlTaskDao(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
-
 
     @Override
     public List<Task> getAll() {

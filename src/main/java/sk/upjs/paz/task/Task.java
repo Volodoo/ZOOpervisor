@@ -8,6 +8,7 @@ import sk.upjs.paz.user.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -19,7 +20,6 @@ public class Task {
     private Set<Animal> animals;
     private Set<Enclosure> enclosures;
     private User user;
-
 
     public static Task fromResultSet(ResultSet rs) throws SQLException {
         return fromResultSet(rs, "");
@@ -36,12 +36,10 @@ public class Task {
         task.setName(rs.getString(aliasPrefix + "name"));
         task.setDescription(rs.getString(aliasPrefix + "description"));
         task.setDeadline(rs.getTimestamp(aliasPrefix + "deadline").toLocalDateTime());
-        task.setAnimals(null);
-        task.setEnclosures(null);
+        task.setAnimals(new HashSet<>());
+        task.setEnclosures(new HashSet<>());
         task.setUser(null);
 
         return task;
     }
-
-
 }
