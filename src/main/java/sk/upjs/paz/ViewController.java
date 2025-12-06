@@ -44,8 +44,10 @@ public class ViewController {
         itemsListView.getItems().clear();
         List<Animal> animals = animalDao.getAll();
         System.out.println("-----");
+        System.out.println("getAll(): ");
         System.out.println(animals);
         System.out.println("-----");
+        System.out.println("getAllSortedBySpecies(): ");
         System.out.println(animalDao.getAllSortedBySpecies());
         System.out.println("-----");
         for (long id = 1L; id <= 8L; id++) {
@@ -59,15 +61,18 @@ public class ViewController {
         itemsListView.getItems().clear();
         List<Enclosure> enclosures = enclosureDao.getAll();
         System.out.println("-----");
+        System.out.println("getAll(): ");
         System.out.println(enclosures);
         System.out.println("-----");
+        System.out.println("getAllSortedByZone(): ");
         System.out.println(enclosureDao.getAllSortedByZone());
         System.out.println("-----");
 
         for (long id = 1L; id <= (long) enclosures.size(); id++) {
             System.out.println(enclosureDao.getById(id));
+            System.out.println("getAnimals(): ");
             System.out.println(enclosureDao.getAnimals(id));
-            System.out.println("Pocet zvierat vo vybehu: " + enclosureDao.getAnimalsCount(id));
+            System.out.println("getAnimalsCount(): " + enclosureDao.getAnimalsCount(id));
             System.out.println("-----");
         }
 
@@ -79,8 +84,10 @@ public class ViewController {
         itemsListView.getItems().clear();
         List<Task> tasks = taskDao.getAll();
         System.out.println("-----");
+        System.out.println("getAll(): ");
         System.out.println(tasks);
         System.out.println("-----");
+        System.out.println("getAllSortedByDeadline(): ");
         System.out.println(taskDao.getAllSortedByDeadline());
         System.out.println("-----");
 

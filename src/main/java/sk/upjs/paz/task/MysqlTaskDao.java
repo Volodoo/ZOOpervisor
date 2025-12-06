@@ -44,32 +44,30 @@ public class MysqlTaskDao implements TaskDao {
             }
 
             var animalId = rs.getLong("an_id");
-            if (animalId != 0) {
-                var animal = processedAnimals.get(animalId);
-                if (animal == null) {
-                    animal = Animal.fromResultSet(rs, "an_");
-                    processedAnimals.put(animalId, animal);
-                }
-
-                if (task.getAnimals().add(animal)) {
-
-                }
+            var animal = processedAnimals.get(animalId);
+            if (animal == null) {
+                animal = Animal.fromResultSet(rs, "an_");
+                processedAnimals.put(animalId, animal);
             }
+
+            if (task.getAnimals() == null) {
+                task.getAnimals().add(animal);
+            }
+
 
             var enclosureId = rs.getLong("en_id");
-            if (enclosureId != 0) {
-                var enclosure = processedEnclosures.get(enclosureId);
-                if (enclosure == null) {
-                    enclosure = Enclosure.fromResultSet(rs, "en_");
-                    processedEnclosures.put(enclosureId, enclosure);
-                }
+            var enclosure = processedEnclosures.get(enclosureId);
+            if (enclosure == null) {
+                enclosure = Enclosure.fromResultSet(rs, "en_");
+                processedEnclosures.put(enclosureId, enclosure);
+            }
 
 
-                if (task.getEnclosures().add(enclosure)) {
-
-                }
+            if (task.getEnclosures() == null) {
+                task.getEnclosures().add(enclosure);
             }
         }
+
 
         return tasks;
     };

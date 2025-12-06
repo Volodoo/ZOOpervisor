@@ -64,7 +64,7 @@ public class MysqlAnimalDao implements AnimalDao {
 
     @Override
     public List<Animal> getAllSortedBySpecies() {
-        String selectAnimalsSortedBySpeciesQuery = selectAnimalQuery + " ORDER BY an.species";
+        String selectAnimalsSortedBySpeciesQuery = selectAnimalQuery + " ORDER BY en.zone, an.species";
 
         return jdbcOperations.query(selectAnimalsSortedBySpeciesQuery, resultSetExtractor);
     }
