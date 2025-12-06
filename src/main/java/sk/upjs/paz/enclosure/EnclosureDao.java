@@ -11,6 +11,8 @@ public interface EnclosureDao {
 
     Set<Animal> getAnimals(long id);
 
+    Integer getAnimalsCount(long id);
+
     Enclosure getById(long id);
 
     Enclosure create(Enclosure enclosure);

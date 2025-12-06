@@ -2,10 +2,7 @@ package sk.upjs.paz;
 
 
 import sk.upjs.paz.animal.Animal;
-import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.enclosure.EnclosureDao;
-import sk.upjs.paz.enclosure.MysqlEnclosureDao;
-import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
 import java.util.Set;
@@ -19,7 +16,8 @@ public class IDELauncher {
 
 // Získame výbeh
         var enclosure = enclosureDao.getById(enclosureId);
-        System.out.println(enclosure.getAnimalCount());
+        System.out.println(enclosureDao.getAnimalsCount(enclosureId));
+
 
         if (enclosure != null) {
             // Získame zvieratá pre tento výbeh pomocou DAO
@@ -29,6 +27,8 @@ public class IDELauncher {
             for (Animal animal : animals) {
                 System.out.println(animal.getNickname());
             }
+
+
 
         } else {
             System.out.println("Výbeh s ID " + enclosureId + " neexistuje.");

@@ -4,11 +4,9 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.exceptions.NotFoundException;
+import sk.upjs.paz.user.User;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MysqlEnclosureDao implements EnclosureDao {
 
@@ -16,21 +14,26 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     private final ResultSetExtractor<List<Enclosure>> resultSetExtractor = rs -> {
         var enclosures = new ArrayList<Enclosure>();
+        var processedEnclosures = new HashMap<Long, Enclosure>();
+
         while (rs.next()) {
-            var enclosure = Enclosure.fromResultSet(rs);
-            int animalCount = rs.getInt("animal_count");
-            enclosure.setAnimalCount(animalCount);
-            enclosures.add(enclosure);
+            var id = rs.getLong("id");
+            var enclosure = processedEnclosures.get(id);
+
+            if (enclosure == null) {
+                enclosure = Enclosure.fromResultSet(rs);
+                processedEnclosures.put(id, enclosure);
+                enclosures.add(enclosure);
+            }
+
         }
         return enclosures;
     };
 
     private final String selectEnclosureQuery =
-            "SELECT en.id, en.name, en.zone, en.last_maintainance, " +
-                    "COUNT(an.id) AS animal_count " +
+            "SELECT en.id, en.name, en.zone, en.last_maintainance " +
                     "FROM enclosure en " +
-                    "LEFT JOIN animal an ON an.enclosure_id = en.id " +
-                    "GROUP BY en.id";
+                    "LEFT JOIN animal an ON an.enclosure_id = en.id";
 
     public MysqlEnclosureDao(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
@@ -38,36 +41,41 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     @Override
     public List<Enclosure> getAll() {
-        return jdbcOperations.query(selectEnclosureQuery, resultSetExtractor);
+        List<Enclosure> enclosures = jdbcOperations.query(selectEnclosureQuery, resultSetExtractor);
+        return enclosures;
     }
 
     @Override
     public Set<Animal> getAnimals(long id) {
-        String selectAnimalsQuery = "SELECT an.id, an.nickname, an.species, an.sex, an.birth_day, an.last_check " +
-                "FROM animal an " +
-                "WHERE an.enclosure_id = ?";
+        String selectAnimalsQuery =
+                "SELECT an.id, an.nickname, an.species, an.sex, an.birth_day, an.last_check " +
+                        "FROM animal an " +
+                        "WHERE an.enclosure_id = ?";
 
         Set<Animal> animals = new HashSet<>(jdbcOperations.query(selectAnimalsQuery, (rs, rowNum) -> Animal.fromResultSet(rs), id));
         return animals;
     }
 
+    @Override
+    public Integer getAnimalsCount(long id) {
+        String selectAnimalsCountQuery =
+                "SELECT COUNT(*) " +
+                        "FROM animal an " +
+                        "WHERE an.enclosure_id = ?";
+
+        return jdbcOperations.queryForObject(selectAnimalsCountQuery, Integer.class, id);
+    }
 
     @Override
     public Enclosure getById(long id) {
-        String selectEnclosureByIdQuery =
-                "SELECT en.id, en.name, en.zone, en.last_maintainance, " +
-                        "COUNT(an.id) AS animal_count " +
-                        "FROM enclosure en " +
-                        "LEFT JOIN animal an ON an.enclosure_id = en.id " +
-                        "WHERE en.id = ? " +
-                        "GROUP BY en.id";
+        String selectAnimalsByIdQuery = "SELECT en.id, en.name, en.zone, en.last_maintainance " +
+                "FROM enclosure en " +
+                "WHERE id = ?";
 
-        List<Enclosure> enclosures = jdbcOperations.query(selectEnclosureByIdQuery, resultSetExtractor, id);
-
-        if (enclosures.isEmpty()) {
-            return null;  // Ak neexistuje žiadne enclosure s daným ID, vrátime null.
+        var enclosures = jdbcOperations.query(selectAnimalsByIdQuery, resultSetExtractor, id);
+        if (enclosures == null || enclosures.isEmpty()) {
+            throw new NotFoundException("Enclosure with id " + id + " not found.");
         }
-
         return enclosures.get(0);
     }
 
