@@ -2,6 +2,7 @@ package sk.upjs.paz.task;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.exceptions.NotFoundException;
@@ -113,17 +114,106 @@ public class MysqlTaskDao implements TaskDao {
 
     @Override
     public Task create(Task task) {
-        return null;
+        if (task == null) {
+            throw new IllegalArgumentException("Task is null.");
+        }
+
+        if (task.getId() != null) {
+            throw new IllegalArgumentException("Task id is already set.");
+        }
+
+        var keyHolder = new GeneratedKeyHolder();
+        jdbcOperations.update(connection -> {
+            var ps = connection.prepareStatement(
+                    "INSERT INTO task (name, description, deadline, user_id) VALUES (?, ?, ?, ?)",
+                    new String[]{"id"}
+            );
+            ps.setString(1, task.getName());
+            ps.setString(2, task.getDescription());
+            ps.setObject(3, task.getDeadline());
+            ps.setLong(4, task.getUser().getId());
+            return ps;
+        }, keyHolder);
+
+        var id = keyHolder.getKey().longValue();
+
+        if (task.getAnimals() != null) {
+            for (var animal : task.getAnimals()) {
+                jdbcOperations.update(
+                        "INSERT INTO task_has_animal (task_id, animal_id) VALUES (?, ?)",
+                        id,
+                        animal.getId()
+                );
+            }
+        }
+
+        if (task.getEnclosures() != null) {
+            for (var enclosure : task.getEnclosures()) {
+                jdbcOperations.update(
+                        "INSERT INTO task_has_enclosure (task_id, enclosure_id) VALUES (?, ?)",
+                        id,
+                        enclosure.getId()
+                );
+            }
+        }
+
+        return getById(id);
     }
 
     @Override
     public void delete(long id) {
-
+        jdbcOperations.update("DELETE FROM task_has_animal WHERE task_id = ?", id);
+        jdbcOperations.update("DELETE FROM task_has_enclosure WHERE task_id = ?", id);
+        jdbcOperations.update("DELETE FROM task WHERE id = ?", id);
     }
 
     @Override
     public Task update(Task task) throws NotFoundException, IllegalArgumentException {
-        return null;
+        if (task == null) {
+            throw new IllegalArgumentException("Task is null.");
+        }
+
+        if (task.getId() == null) {
+            throw new IllegalArgumentException("Task id is not set.");
+        }
+
+        jdbcOperations.update(
+                "UPDATE task SET name = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?",
+                task.getName(),
+                task.getDescription(),
+                task.getDeadline(),
+                task.getUser().getId(),
+
+                task.getId()
+        );
+
+        jdbcOperations.update(
+                "DELETE FROM task_has_animal WHERE task_id = ?",
+                task.getId()
+        );
+
+        jdbcOperations.update(
+                "DELETE FROM task_has_enclosure WHERE task_id = ?",
+                task.getId()
+        );
+
+        for (var animal : task.getAnimals()) {
+            jdbcOperations.update(
+                    "INSERT INTO task_has_animal (task_id, animal_id) VALUES (?, ?)",
+                    task.getId(),
+                    animal.getId()
+            );
+        }
+
+        for (var enclosure : task.getEnclosures()) {
+            jdbcOperations.update(
+                    "INSERT INTO task_has_enclosure (task_id, enclosure_id) VALUES (?, ?)",
+                    task.getId(),
+                    enclosure.getId()
+            );
+        }
+
+        return getById(task.getId());
     }
 
     @Override
