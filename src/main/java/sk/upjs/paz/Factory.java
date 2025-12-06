@@ -1,8 +1,18 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import sk.upjs.paz.animal.AnimalDao;
+import sk.upjs.paz.animal.MysqlAnimalDao;
+import sk.upjs.paz.enclosure.EnclosureDao;
+import sk.upjs.paz.enclosure.MysqlEnclosureDao;
+import sk.upjs.paz.security.AuthDao;
+import sk.upjs.paz.security.MysqlAuthDao;
+import sk.upjs.paz.task.MysqlTaskDao;
+import sk.upjs.paz.task.TaskDao;
+import sk.upjs.paz.user.MysqlUserDao;
+import sk.upjs.paz.user.UserDao;
 
 
 public enum Factory {
@@ -18,6 +28,7 @@ public enum Factory {
     private volatile AnimalDao animalDao;
     private volatile TaskDao taskDao;
     private volatile EnclosureDao enclosureDao;
+    private volatile AuthDao authDao;
 
     private final Object lock = new Object();
 
@@ -39,7 +50,7 @@ public enum Factory {
                 // the `synchronized`, is a common performance optimization, because synchronization is costly.
                 if (jdbcOperations == null) {
                     var dataSource = new MysqlDataSource();
-                    dataSource.setUrl(System.getProperty("DB_JDBC", "jdbc:mysql://localhost:3307/zoopervisor"));
+                    dataSource.setUrl(System.getProperty("DB_JDBC", "jdbc:mysql://localhost:3306/zoopervisor"));
                     dataSource.setUser(System.getProperty("DB_USER", "zoopervisor"));
                     dataSource.setPassword(System.getProperty("DB_PASSWORD", "zoopervisor"));
                     jdbcOperations = new JdbcTemplate(dataSource);
@@ -91,6 +102,17 @@ public enum Factory {
             }
         }
         return enclosureDao;
+    }
+
+    public AuthDao getAuthDao() {
+        if (authDao == null) {
+            synchronized (lock) {
+                if (authDao == null) {
+                    authDao = new MysqlAuthDao(getMysqlJdbcOperations());
+                }
+            }
+        }
+        return authDao;
     }
 
 }

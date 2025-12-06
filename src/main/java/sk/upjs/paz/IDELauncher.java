@@ -1,14 +1,9 @@
 package sk.upjs.paz;
 
 
-import sk.upjs.paz.entity.Gender;
-import sk.upjs.paz.entity.Role;
-import sk.upjs.paz.entity.User;
-import sk.upjs.paz.storage.Factory;
-import sk.upjs.paz.storage.UserDao;
+import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class IDELauncher {
 

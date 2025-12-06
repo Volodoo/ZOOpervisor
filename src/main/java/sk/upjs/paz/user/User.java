@@ -1,8 +1,6 @@
-package sk.upjs.paz.entity;
+package sk.upjs.paz.user;
 
 import lombok.Data;
-import sk.upjs.paz.entity.Gender;
-import sk.upjs.paz.entity.Role;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,6 +1,6 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz.animal;
 
-import sk.upjs.paz.entity.Animal;
+import sk.upjs.paz.exceptions.NotFoundException;
 
 import java.util.List;
 

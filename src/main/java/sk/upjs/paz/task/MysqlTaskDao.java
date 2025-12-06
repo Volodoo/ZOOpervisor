@@ -1,9 +1,9 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz.task;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import sk.upjs.paz.entity.Task;
-import sk.upjs.paz.entity.User;
+import sk.upjs.paz.exceptions.NotFoundException;
+import sk.upjs.paz.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

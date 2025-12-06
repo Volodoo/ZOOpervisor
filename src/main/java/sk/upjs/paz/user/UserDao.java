@@ -1,6 +1,6 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz.user;
 
-import sk.upjs.paz.entity.User;
+import sk.upjs.paz.exceptions.NotFoundException;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package sk.upjs.paz.entity;
+package sk.upjs.paz.user;
 
 public enum Gender {
     MALE,

@@ -1,4 +1,6 @@
-package sk.upjs.paz.entity;
+package sk.upjs.paz.task;
+
+import sk.upjs.paz.user.User;
 
 import java.math.BigDecimal;
 

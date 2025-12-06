@@ -1,4 +1,4 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz.ticket;
 
 public interface TicketDao {
 }

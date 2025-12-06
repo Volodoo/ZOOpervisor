@@ -1,6 +1,7 @@
-package sk.upjs.paz.entity;
+package sk.upjs.paz.animal;
 
 import lombok.Data;
+import sk.upjs.paz.enclosure.Enclosure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

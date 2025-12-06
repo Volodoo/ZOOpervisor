@@ -1,4 +1,4 @@
-package sk.upjs.paz.entity;
+package sk.upjs.paz.animal;
 
 public enum Sex {
     MALE,

@@ -1,11 +1,9 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz.enclosure;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import sk.upjs.paz.entity.Enclosure;
+import sk.upjs.paz.exceptions.NotFoundException;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

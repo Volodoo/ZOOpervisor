@@ -3,11 +3,14 @@ package sk.upjs.paz;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import sk.upjs.paz.entity.Animal;
-import sk.upjs.paz.entity.Enclosure;
-import sk.upjs.paz.entity.Task;
-import sk.upjs.paz.entity.User;
-import sk.upjs.paz.storage.*;
+import sk.upjs.paz.animal.Animal;
+import sk.upjs.paz.animal.AnimalDao;
+import sk.upjs.paz.enclosure.Enclosure;
+import sk.upjs.paz.enclosure.EnclosureDao;
+import sk.upjs.paz.task.Task;
+import sk.upjs.paz.task.TaskDao;
+import sk.upjs.paz.user.User;
+import sk.upjs.paz.user.UserDao;
 
 import java.util.List;
 

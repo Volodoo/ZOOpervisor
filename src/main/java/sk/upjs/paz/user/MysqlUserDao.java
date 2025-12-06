@@ -1,11 +1,9 @@
-package sk.upjs.paz.storage;
+package sk.upjs.paz.user;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import sk.upjs.paz.entity.User;
+import sk.upjs.paz.exceptions.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
