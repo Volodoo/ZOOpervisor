@@ -1,11 +1,14 @@
 package sk.upjs.paz.enclosure;
 
 import lombok.Data;
+import sk.upjs.paz.animal.Animal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class Enclosure {
@@ -14,6 +17,7 @@ public class Enclosure {
     private String zone;
     private LocalDateTime lastMaintainance;
     private Integer animalCount;
+    private Set<Animal> animals;
 
     public static Enclosure fromResultSet(ResultSet rs) throws SQLException {
         return fromResultSet(rs, "");
@@ -37,8 +41,8 @@ public class Enclosure {
         }
         enclosure.setLastMaintainance(lastMaint);
 
+        enclosure.setAnimals(new HashSet<>());
+
         return enclosure;
     }
-
-
 }

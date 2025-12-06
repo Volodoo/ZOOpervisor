@@ -1,15 +1,41 @@
 package sk.upjs.paz;
 
 
+import sk.upjs.paz.animal.Animal;
+import sk.upjs.paz.enclosure.Enclosure;
+import sk.upjs.paz.enclosure.EnclosureDao;
+import sk.upjs.paz.enclosure.MysqlEnclosureDao;
 import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class IDELauncher {
 
     public static void main(String[] args) throws IOException {
 
-        UserDao userDao = Factory.INSTANCE.getUserDao();
+        EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
+        long enclosureId = 5L;
+
+// Získame výbeh
+        var enclosure = enclosureDao.getById(enclosureId);
+        System.out.println(enclosure.getAnimalCount());
+
+        if (enclosure != null) {
+            // Získame zvieratá pre tento výbeh pomocou DAO
+            Set<Animal> animals = enclosureDao.getAnimals(enclosureId);
+
+            System.out.println("Zvieratá v výbehu " + enclosure.getName() + ":");
+            for (Animal animal : animals) {
+                System.out.println(animal.getNickname());
+            }
+
+        } else {
+            System.out.println("Výbeh s ID " + enclosureId + " neexistuje.");
+        }
+
+
+        //  UserDao userDao = Factory.INSTANCE.getUserDao();
 /*
         User user = new User();
         user.setFirstName("Janik");
@@ -26,7 +52,6 @@ public class IDELauncher {
 //      userDao.delete(13);
 
         Main.main(args);
-
 
 
     }
