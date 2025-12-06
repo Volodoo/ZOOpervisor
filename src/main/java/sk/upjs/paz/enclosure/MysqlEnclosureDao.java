@@ -2,9 +2,9 @@ package sk.upjs.paz.enclosure;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.exceptions.NotFoundException;
-import sk.upjs.paz.user.User;
 
 import java.util.*;
 
@@ -78,17 +78,58 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     @Override
     public Enclosure create(Enclosure enclosure) {
-        return null;
+        if (enclosure == null) {
+            throw new IllegalArgumentException("Enclosure is null.");
+        }
+
+        if (enclosure.getId() != null) {
+            throw new IllegalArgumentException("Enclosure id is already set.");
+        }
+
+        var keyHolder = new GeneratedKeyHolder();
+        jdbcOperations.update(connection -> {
+            var ps = connection.prepareStatement(
+                    "INSERT INTO enclosure (name, zone, last_maintainance) VALUES (?, ?, ?)",
+                    new String[]{"id"}
+            );
+            ps.setString(1, enclosure.getName());
+            ps.setString(2, enclosure.getZone());
+            ps.setObject(3, enclosure.getLastMaintainance());
+
+            return ps;
+        }, keyHolder);
+
+        var id = keyHolder.getKey().longValue();
+        System.out.println(id);
+        enclosure.setId(id);
+        return enclosure;
     }
 
     @Override
     public void delete(long id) {
-
+        jdbcOperations.update("DELETE FROM enclosure WHERE id = ?", id);
     }
 
     @Override
     public Enclosure update(Enclosure enclosure) throws NotFoundException, IllegalArgumentException {
-        return null;
+        if (enclosure == null) {
+            throw new IllegalArgumentException("Enclosure is null.");
+        }
+
+        if (enclosure.getId() == null) {
+            throw new IllegalArgumentException("Enclosure id is not set.");
+        }
+
+        jdbcOperations.update(
+                "UPDATE enclosure SET name = ?, zone = ?, last_maintainance = ? WHERE id = ?",
+                enclosure.getName(),
+                enclosure.getZone(),
+                enclosure.getLastMaintainance(),
+
+                enclosure.getId()
+        );
+
+        return enclosure;
     }
 
     public List<Enclosure> getAllSortedByZone() {

@@ -75,7 +75,7 @@ public class MysqlUserDao implements UserDao {
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getGender().toString());
-            ps.setDate(4, java.sql.Date.valueOf(user.getBirthDay()));
+            ps.setObject(4, user.getBirthDay());
             ps.setString(5, user.getRole().toString());
             ps.setString(6, user.getEmail());
             ps.setString(7, user.getPassword());

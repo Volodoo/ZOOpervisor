@@ -84,6 +84,7 @@ public class ViewController {
             System.out.println(taskDao.getById(id));
         }
 
+
         System.out.println("*****");
         itemsListView.getItems().addAll(tasks);
 

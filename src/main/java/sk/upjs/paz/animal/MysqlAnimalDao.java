@@ -2,6 +2,7 @@ package sk.upjs.paz.animal;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.exceptions.NotFoundException;
 
@@ -75,17 +76,63 @@ public class MysqlAnimalDao implements AnimalDao {
 
     @Override
     public Animal create(Animal animal) {
-        return null;
+        if (animal == null) {
+            throw new IllegalArgumentException("Animal is null.");
+        }
+
+        if (animal.getId() != null) {
+            throw new IllegalArgumentException("Animal id is already set.");
+        }
+
+        var keyHolder = new GeneratedKeyHolder();
+        jdbcOperations.update(connection -> {
+            var ps = connection.prepareStatement(
+                    "INSERT INTO animal (id, nickname, species, sex, birth_day, last_check, enclosure_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    new String[]{"id"}
+            );
+            ps.setString(1, animal.getNickname());
+            ps.setString(2, animal.getSpecies());
+            ps.setString(3, animal.getSex().toString());
+            ps.setObject(4, animal.getBirthDay());
+            ps.setObject(5, animal.getLastCheck());
+            ps.setLong(6, animal.getEnclosure().getId());
+            return ps;
+        }, keyHolder);
+
+        var id = keyHolder.getKey().longValue();
+
+
+        return getById(id);
     }
 
     @Override
     public void delete(long id) {
-
+        jdbcOperations.update("DELETE FROM animal WHERE id = ?", id);
     }
 
     @Override
     public Animal update(Animal animal) throws NotFoundException, IllegalArgumentException {
-        return null;
+        if (animal == null) {
+            throw new IllegalArgumentException("Animal is null.");
+        }
+
+        if (animal.getId() == null) {
+            throw new IllegalArgumentException("Animal id is not set.");
+        }
+
+        jdbcOperations.update(
+                "UPDATE animal SET nickname = ?, species = ?, sex = ?, birth_day = ?, last_check = ?, enclosure_id = ? WHERE id = ?",
+                animal.getNickname(),
+                animal.getSpecies(),
+                animal.getSex().toString(),
+                animal.getBirthDay(),
+                animal.getLastCheck(),
+                animal.getEnclosure().getId(),
+
+                animal.getId()
+        );
+
+        return getById(animal.getId());
     }
 
     public List<Animal> getAllSortedBySpecies() {
