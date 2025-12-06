@@ -18,6 +18,12 @@ import java.util.Set;
 public class IDELauncher {
 
     public static void main(String[] args) throws IOException {
+        AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
+
+        animalDao.delete(11L);
+        animalDao.delete(12L);
+
+
         Main.main(args);
     }
 }

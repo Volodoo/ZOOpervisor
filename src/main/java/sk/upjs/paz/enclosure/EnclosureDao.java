@@ -9,6 +9,8 @@ import java.util.Set;
 public interface EnclosureDao {
     List<Enclosure> getAll();
 
+    List<Enclosure> getAllSortedByZone();
+
     Set<Animal> getAnimals(long id);
 
     Integer getAnimalsCount(long id);
@@ -17,7 +19,7 @@ public interface EnclosureDao {
 
     Enclosure create(Enclosure enclosure);
 
-    void delete(long id);
-
     Enclosure update(Enclosure enclosure) throws NotFoundException, IllegalArgumentException;
+
+    void delete(long id);
 }

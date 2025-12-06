@@ -63,6 +63,13 @@ public class MysqlAnimalDao implements AnimalDao {
     }
 
     @Override
+    public List<Animal> getAllSortedBySpecies() {
+        String selectAnimalsSortedBySpeciesQuery = selectAnimalQuery + " ORDER BY an.species";
+
+        return jdbcOperations.query(selectAnimalsSortedBySpeciesQuery, resultSetExtractor);
+    }
+
+    @Override
     public Animal getById(long id) {
         String SelectAnimalByIdQuery = selectAnimalQuery + " WHERE an.id = ?";
 
@@ -71,7 +78,6 @@ public class MysqlAnimalDao implements AnimalDao {
             throw new NotFoundException("Animal with id " + id + " not found.");
         }
         return tasks.get(0);
-
     }
 
     @Override
@@ -87,7 +93,7 @@ public class MysqlAnimalDao implements AnimalDao {
         var keyHolder = new GeneratedKeyHolder();
         jdbcOperations.update(connection -> {
             var ps = connection.prepareStatement(
-                    "INSERT INTO animal (id, nickname, species, sex, birth_day, last_check, enclosure_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO animal (nickname, species, sex, birth_day, last_check, enclosure_id) VALUES (?, ?, ?, ?, ?, ?)",
                     new String[]{"id"}
             );
             ps.setString(1, animal.getNickname());
@@ -103,11 +109,6 @@ public class MysqlAnimalDao implements AnimalDao {
 
 
         return getById(id);
-    }
-
-    @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM animal WHERE id = ?", id);
     }
 
     @Override
@@ -135,9 +136,8 @@ public class MysqlAnimalDao implements AnimalDao {
         return getById(animal.getId());
     }
 
-    public List<Animal> getAllSortedBySpecies() {
-        return List.of();
+    @Override
+    public void delete(long id) {
+        jdbcOperations.update("DELETE FROM animal WHERE id = ?", id);
     }
-
-
 }

@@ -15,6 +15,4 @@ public interface UserDao {
 
     User update(User user) throws NotFoundException, IllegalArgumentException;
 
-    User verify(String email, String password);
-
 }

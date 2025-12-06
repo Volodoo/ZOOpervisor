@@ -40,9 +40,15 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     @Override
     public List<Enclosure> getAll() {
-        List<Enclosure> enclosures = jdbcOperations.query(selectEnclosureQuery, resultSetExtractor);
-        return enclosures;
+        return jdbcOperations.query(selectEnclosureQuery, resultSetExtractor);
     }
+
+    @Override
+    public List<Enclosure> getAllSortedByZone() {
+        String selectEnclosuresSortedBySpeciesQuery = selectEnclosureQuery + " ORDER BY `zone`";
+        return jdbcOperations.query(selectEnclosuresSortedBySpeciesQuery, resultSetExtractor);
+    }
+
 
     @Override
     public Set<Animal> getAnimals(long id) {
@@ -130,9 +136,5 @@ public class MysqlEnclosureDao implements EnclosureDao {
         );
 
         return enclosure;
-    }
-
-    public List<Enclosure> getAllSortedByZone() {
-        return List.of();
     }
 }

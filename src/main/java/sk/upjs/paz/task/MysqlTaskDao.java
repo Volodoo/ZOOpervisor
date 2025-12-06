@@ -26,14 +26,12 @@ public class MysqlTaskDao implements TaskDao {
             var id = rs.getLong("id");
             var task = processedTasks.get(id);
 
-            // Ak úloha ešte neexistuje, vytvoríme ju
             if (task == null) {
                 task = Task.fromResultSet(rs);
                 processedTasks.put(id, task);
                 tasks.add(task);
             }
 
-            // Spracovanie užívateľa
             var userId = rs.getLong("us_id");
             var user = processedUsers.get(userId);
             if (user == null) {
@@ -45,33 +43,30 @@ public class MysqlTaskDao implements TaskDao {
                 task.setUser(user);
             }
 
-            // Spracovanie zvieraťa
             var animalId = rs.getLong("an_id");
-            if (animalId != 0) { // Ak je platné ID zvieraťa
+            if (animalId != 0) {
                 var animal = processedAnimals.get(animalId);
                 if (animal == null) {
                     animal = Animal.fromResultSet(rs, "an_");
                     processedAnimals.put(animalId, animal);
                 }
 
-                // Priradíme zviera k úlohe
-                if (task.getAnimals().add(animal)) { // Ak sa zviera pridá
-                    // zviera bolo pridané (množina zabraňuje duplicite)
+                if (task.getAnimals().add(animal)) {
+
                 }
             }
 
-            // Spracovanie výbehu
             var enclosureId = rs.getLong("en_id");
-            if (enclosureId != 0) { // Ak je platné ID výbehu
+            if (enclosureId != 0) {
                 var enclosure = processedEnclosures.get(enclosureId);
                 if (enclosure == null) {
                     enclosure = Enclosure.fromResultSet(rs, "en_");
                     processedEnclosures.put(enclosureId, enclosure);
                 }
 
-                // Priradíme výbeh k úlohe
-                if (task.getEnclosures().add(enclosure)) { // Ak sa výbeh pridá
-                    // výbeh bol pridaný (množina zabraňuje duplicite)
+
+                if (task.getEnclosures().add(enclosure)) {
+
                 }
             }
         }
@@ -99,6 +94,12 @@ public class MysqlTaskDao implements TaskDao {
     @Override
     public List<Task> getAll() {
         return jdbcOperations.query(selectTaskQuery, resultSetExtractor);
+    }
+
+    @Override
+    public List<Task> getAllSortedByDeadline() {
+        String selectTasksSortedByDateTimeQuery = selectTaskQuery + " ORDER BY ta.deadline ASC";
+        return jdbcOperations.query(selectTasksSortedByDateTimeQuery, resultSetExtractor);
     }
 
     @Override
@@ -161,13 +162,6 @@ public class MysqlTaskDao implements TaskDao {
     }
 
     @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM task_has_animal WHERE task_id = ?", id);
-        jdbcOperations.update("DELETE FROM task_has_enclosure WHERE task_id = ?", id);
-        jdbcOperations.update("DELETE FROM task WHERE id = ?", id);
-    }
-
-    @Override
     public Task update(Task task) throws NotFoundException, IllegalArgumentException {
         if (task == null) {
             throw new IllegalArgumentException("Task is null.");
@@ -217,12 +211,11 @@ public class MysqlTaskDao implements TaskDao {
     }
 
     @Override
-    public List<Task> getAllSortedByDate() {
-        return List.of();
+    public void delete(long id) {
+        jdbcOperations.update("DELETE FROM task_has_animal WHERE task_id = ?", id);
+        jdbcOperations.update("DELETE FROM task_has_enclosure WHERE task_id = ?", id);
+        jdbcOperations.update("DELETE FROM task WHERE id = ?", id);
     }
 
-    @Override
-    public List<Task> getAllSortedByEnclosure() {
-        return List.of();
-    }
+
 }

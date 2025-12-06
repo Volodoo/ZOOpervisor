@@ -90,12 +90,6 @@ public class MysqlUserDao implements UserDao {
     }
 
     @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM user WHERE id = ?", id);
-    }
-
-
-    @Override
     public User update(User user) throws NotFoundException, IllegalArgumentException {
         if (user == null) {
             throw new IllegalArgumentException("Attendance is null.");
@@ -121,17 +115,8 @@ public class MysqlUserDao implements UserDao {
     }
 
     @Override
-    public User verify(String email, String password) {
-        String sql = selectUserQuery + " WHERE email = ? AND password = ?";
-
-
-        List<User> users = jdbcOperations.query(sql, resultSetExtractor, email, password);
-
-        if (users != null && !users.isEmpty()) {
-            return users.get(0);
-        }
-
-        return null;
+    public void delete(long id) {
+        jdbcOperations.update("DELETE FROM user WHERE id = ?", id);
     }
 
 
