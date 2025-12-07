@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 public class Animal {
@@ -18,6 +19,21 @@ public class Animal {
     private LocalDate birthDay;
     private LocalDateTime lastCheck;
     private Enclosure enclosure;
+
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String formattedLastCheck = (lastCheck != null) ? lastCheck.format(formatter) : "Ešte neprebehla";
+
+        return String.format("Prezývka: %s\nDruh: %s\nPohlavie: %s\nVýbeh: %s\nPosledná Kontrola: %s",
+                (nickname != null && !nickname.isEmpty()) ? nickname : "Žiadna prezývka",
+                species,
+                sex,
+                (enclosure != null ? enclosure.getName() : "Nezadaný výbeh"),
+                formattedLastCheck);
+    }
+
 
 
     public static Animal fromResultSet(ResultSet rs) throws SQLException {

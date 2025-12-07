@@ -17,6 +17,11 @@ public class User {
     private String email;
     private String password;
 
+    @Override
+    public String toString() {
+        return String.format("%s %s (%s)", firstName, lastName, role);
+    }
+
     public static User fromResultSet(ResultSet rs) throws SQLException {
         return fromResultSet(rs, "");
     }
