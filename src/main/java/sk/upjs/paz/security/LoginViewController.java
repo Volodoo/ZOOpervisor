@@ -86,7 +86,7 @@ public class LoginViewController {
     @FXML
     public void signIn(ActionEvent event) throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Register.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/Register.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) emailTextField.getScene().getWindow();

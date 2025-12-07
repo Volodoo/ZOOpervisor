@@ -2,6 +2,7 @@ package sk.upjs.paz;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.animal.AnimalDao;
@@ -14,6 +15,7 @@ import sk.upjs.paz.ticket.TicketDao;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ViewController {
@@ -129,4 +131,19 @@ public class ViewController {
         itemsListView.getItems().addAll(tickets);
 
     }
+
+    public void logout(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/LoginView.fxml"));
+
+        javafx.scene.Parent root = loader.load();
+
+        javafx.stage.Stage stage = (javafx.stage.Stage) itemsListView.getScene().getWindow();
+        stage.setScene(new javafx.scene.Scene(root));
+        stage.setTitle("Prihlásenie");
+        stage.show();
+
+        System.out.println("Užívateľ bol odhlásený.");
+
+    }
+
 }
