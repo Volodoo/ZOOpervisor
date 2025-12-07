@@ -21,12 +21,23 @@ public class ViewController {
     private EnclosureDao enclosureDao = (EnclosureDao) Factory.INSTANCE.getEnclosureDao();
     private TaskDao taskDao = (TaskDao) Factory.INSTANCE.getTaskDao();
 
+    List<User> users = userDao.getAll();
+
+    List<Animal> animals = animalDao.getAll();
+    List<Animal> animalsSorted = animalDao.getAllSortedBySpecies();
+
+    List<Enclosure> enclosures = enclosureDao.getAll();
+    List<Enclosure> enclosuresSorted = enclosureDao.getAllSortedByZone();
+
+    List<Task> tasks = taskDao.getAll();
+    List<Task> tasksSorted = taskDao.getAllSortedByDeadline();
+
     @FXML
     private ListView<Object> itemsListView;
 
     public void loadUsersButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
-        List<User> users = userDao.getAll();
+        /*
         System.out.println("-----");
         System.out.println(users);
         System.out.println("-----");
@@ -37,13 +48,13 @@ public class ViewController {
         }
 
         System.out.println("-----");
+         */
         itemsListView.getItems().addAll(users);
     }
 
     public void loadAnimalsButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
-        List<Animal> animals = animalDao.getAll();
-        List<Animal> animalsSorted = animalDao.getAllSortedBySpecies();
+        /*
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(animals);
@@ -55,13 +66,14 @@ public class ViewController {
             System.out.println(animalDao.getById(id));
         }
         System.out.println("-----");
+
+         */
         itemsListView.getItems().addAll(animalsSorted);
     }
 
     public void loadEnclosuresButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
-        List<Enclosure> enclosures = enclosureDao.getAll();
-        List<Enclosure> enclosuresSorted = enclosureDao.getAllSortedByZone();
+        /*
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(enclosures);
@@ -79,13 +91,14 @@ public class ViewController {
         }
 
         System.out.println("-----");
+
+         */
         itemsListView.getItems().addAll(enclosuresSorted);
     }
 
     public void loadTasksButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
-        List<Task> tasks = taskDao.getAll();
-        List<Task> tasksSorted = taskDao.getAllSortedByDeadline();
+        /*
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(tasks);
@@ -98,6 +111,8 @@ public class ViewController {
             System.out.println(taskDao.getById(id));
         }
         System.out.println("-----");
+
+         */
         itemsListView.getItems().addAll(tasksSorted);
 
     }
