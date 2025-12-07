@@ -49,24 +49,6 @@ public class LoginViewController {
         Auth.INSTANCE.setPrincipal(principal);
         incorrectPasswordLabel.getScene().getWindow().hide();
         openMainScene();
-
-        /*
-        // 1. Základná kontrola, či niečo zadal
-        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            errorLabel.setText("Vyplňte meno a heslo!");
-            return;
-        }
-
-
-        User user = userDao.verify(email, password);
-
-        if (user != null) {
-            // 3. Ak sme našli usera -> Prepneme scénu
-            System.out.println("Úspešné prihlásenie: " + user.getFirstName());
-            openMainScene();
-        }
-
-         */
     }
 
     private void openMainScene() {

@@ -9,6 +9,7 @@ import sk.upjs.paz.task.Task;
 import sk.upjs.paz.task.TaskDao;
 import sk.upjs.paz.ticket.Ticket;
 import sk.upjs.paz.ticket.TicketDao;
+import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
