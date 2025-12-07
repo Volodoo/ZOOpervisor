@@ -16,15 +16,18 @@ public class Enclosure {
     private String zone;
     private LocalDateTime lastMaintainance;
 
+    private Integer animalsCount;
+
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String formattedLastMaintainance = (lastMaintainance != null) ? lastMaintainance.format(formatter) : "Ešte neprebehla";
 
-        return String.format("Názov: %s\nZóna: %s\nPosledná údržba: %s",
+        return String.format("Názov: %s\nZóna: %s\nPosledná údržba: %s\nPočet zvierat: %d",
                 name,
                 zone,
-                formattedLastMaintainance);
+                formattedLastMaintainance,
+                animalsCount != null ? animalsCount : 0);
     }
 
     public static Enclosure fromResultSet(ResultSet rs) throws SQLException {
@@ -48,6 +51,7 @@ public class Enclosure {
             lastMaint = ts.toLocalDateTime();
         }
         enclosure.setLastMaintainance(lastMaint);
+        enclosure.setAnimalsCount(null);
 
         return enclosure;
     }

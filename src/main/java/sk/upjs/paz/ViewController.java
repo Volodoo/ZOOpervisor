@@ -43,29 +43,31 @@ public class ViewController {
     public void loadAnimalsButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
         List<Animal> animals = animalDao.getAll();
+        List<Animal> animalsSorted = animalDao.getAllSortedBySpecies();
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(animals);
         System.out.println("-----");
         System.out.println("getAllSortedBySpecies(): ");
-        System.out.println(animalDao.getAllSortedBySpecies());
+        System.out.println(animalsSorted);
         System.out.println("-----");
         for (long id = 1L; id <= 8L; id++) {
             System.out.println(animalDao.getById(id));
         }
         System.out.println("-----");
-        itemsListView.getItems().addAll(animals);
+        itemsListView.getItems().addAll(animalsSorted);
     }
 
     public void loadEnclosuresButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
         List<Enclosure> enclosures = enclosureDao.getAll();
+        List<Enclosure> enclosuresSorted = enclosureDao.getAllSortedByZone();
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(enclosures);
         System.out.println("-----");
         System.out.println("getAllSortedByZone(): ");
-        System.out.println(enclosureDao.getAllSortedByZone());
+        System.out.println(enclosuresSorted);
         System.out.println("-----");
 
         for (long id = 1L; id <= (long) enclosures.size(); id++) {
@@ -77,25 +79,26 @@ public class ViewController {
         }
 
         System.out.println("-----");
-        itemsListView.getItems().addAll(enclosures);
+        itemsListView.getItems().addAll(enclosuresSorted);
     }
 
     public void loadTasksButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
         List<Task> tasks = taskDao.getAll();
+        List<Task> tasksSorted = taskDao.getAllSortedByDeadline();
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(tasks);
         System.out.println("-----");
         System.out.println("getAllSortedByDeadline(): ");
-        System.out.println(taskDao.getAllSortedByDeadline());
+        System.out.println(tasksSorted);
         System.out.println("-----");
 
         for (long id = 1L; id <= (long) tasks.size(); id++) {
             System.out.println(taskDao.getById(id));
         }
         System.out.println("-----");
-        itemsListView.getItems().addAll(tasks);
+        itemsListView.getItems().addAll(tasksSorted);
 
     }
 

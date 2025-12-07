@@ -26,6 +26,8 @@ public class MysqlEnclosureDao implements EnclosureDao {
                 enclosures.add(enclosure);
             }
 
+            enclosure.setAnimalsCount(getAnimalsCount(id));
+
         }
         return enclosures;
     };

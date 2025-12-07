@@ -26,14 +26,12 @@ public class MysqlTaskDao implements TaskDao {
             var id = rs.getLong("id");
             var task = processedTasks.get(id);
 
-            // Ak úloha ešte neexistuje, vytvoríme ju
             if (task == null) {
                 task = Task.fromResultSet(rs);
                 processedTasks.put(id, task);
                 tasks.add(task);
             }
 
-            // Spracovanie užívateľa
             var userId = rs.getLong("us_id");
             var user = processedUsers.get(userId);
             if (user == null) {
@@ -45,34 +43,26 @@ public class MysqlTaskDao implements TaskDao {
                 task.setUser(user);
             }
 
-            // Spracovanie zvieraťa
             var animalId = rs.getLong("an_id");
-            if (animalId != 0) { // Ak je platné ID zvieraťa
-                var animal = processedAnimals.get(animalId);
-                if (animal == null) {
-                    animal = Animal.fromResultSet(rs, "an_");
-                    processedAnimals.put(animalId, animal);
-                }
-
-                // Priradíme zviera k úlohe
-                if (task.getAnimals().add(animal)) { // Ak sa zviera pridá
-                    // zviera bolo pridané (množina zabraňuje duplicite)
-                }
+            var animal = processedAnimals.get(animalId);
+            if (animal == null) {
+                animal = Animal.fromResultSet(rs, "an_");
+                processedAnimals.put(animalId, animal);
             }
 
-            // Spracovanie výbehu
-            var enclosureId = rs.getLong("en_id");
-            if (enclosureId != 0) { // Ak je platné ID výbehu
-                var enclosure = processedEnclosures.get(enclosureId);
-                if (enclosure == null) {
-                    enclosure = Enclosure.fromResultSet(rs, "en_");
-                    processedEnclosures.put(enclosureId, enclosure);
-                }
+            if (animal != null) {
+                task.getAnimals().add(animal);
+            }
 
-                // Priradíme výbeh k úlohe
-                if (task.getEnclosures().add(enclosure)) { // Ak sa výbeh pridá
-                    // výbeh bol pridaný (množina zabraňuje duplicite)
-                }
+            var enclosureId = rs.getLong("en_id");
+            var enclosure = processedEnclosures.get(enclosureId);
+            if (enclosure == null) {
+                enclosure = Enclosure.fromResultSet(rs, "en_");
+                processedEnclosures.put(enclosureId, enclosure);
+            }
+
+            if (enclosure != null) {
+                task.getEnclosures().add(enclosure);
             }
         }
 
