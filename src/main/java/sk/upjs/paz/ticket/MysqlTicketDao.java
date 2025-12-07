@@ -3,8 +3,6 @@ package sk.upjs.paz.ticket;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import sk.upjs.paz.animal.Animal;
-import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.exceptions.NotFoundException;
 import sk.upjs.paz.user.User;
 
@@ -48,7 +46,7 @@ public class MysqlTicketDao implements TicketDao {
     };
 
     private final String selectTicketQuery =
-            "SELECT ti.id, ti.type, ti.purchase_timestamp, ti.price, " +
+            "SELECT ti.id, ti.type, ti.purchase_date_time, ti.price, " +
                     "us.id AS us_id, us.first_name AS us_first_name, us.last_name AS us_last_name, us.gender AS us_gender,us.birth_day AS us_birth_day, us.role AS us_role, us.email AS us_email, us.password AS us_password " +
                     "FROM ticket ti " +
                     "LEFT JOIN user us ON ti.user_id = us.id";
@@ -64,8 +62,8 @@ public class MysqlTicketDao implements TicketDao {
     }
 
     @Override
-    public List<Ticket> getAllSortedByPurchaseTimestamp() {
-        String selectTicketSortedByPurchaseTimestamp = selectTicketQuery + " ORDER BY ti.purchase_timestamp ASC";
+    public List<Ticket> getAllSortedByPurchaseDateTime() {
+        String selectTicketSortedByPurchaseTimestamp = selectTicketQuery + " ORDER BY ti.purchase_date_time ASC";
         return jdbcOperations.query(selectTicketSortedByPurchaseTimestamp, resultSetExtractor);
     }
 
@@ -99,11 +97,11 @@ public class MysqlTicketDao implements TicketDao {
         var keyHolder = new GeneratedKeyHolder();
         jdbcOperations.update(connection -> {
             var ps = connection.prepareStatement(
-                    "INSERT INTO ticket (type, purchase_timestamp, price, user_id) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO ticket (type, purchase_date_time, price, user_id) VALUES (?, ?, ?, ?)",
                     new String[]{"id"}
             );
             ps.setString(1, ticket.getType());
-            ps.setObject(2, ticket.getPurchaseTimestamp());
+            ps.setObject(2, ticket.getPurchaseDateTime());
             ps.setBigDecimal(3, ticket.getPrice());
             ps.setLong(4, ticket.getCashier().getId());
             return ps;
@@ -120,13 +118,13 @@ public class MysqlTicketDao implements TicketDao {
             throw new IllegalArgumentException("Ticket is null.");
         }
 
-        if (ticket.getId() != null) {
+        if (ticket.getId() == null) {
             throw new IllegalArgumentException("Ticket id is already set.");
         }
         jdbcOperations.update(
-                "UPDATE ticket SET type = ?, purchase_timestamp = ?, price = ?, user_id = ? WHERE id = ?",
+                "UPDATE ticket SET type = ?, purchase_date_time = ?, price = ?, user_id = ? WHERE id = ?",
                 ticket.getType(),
-                ticket.getPurchaseTimestamp(),
+                ticket.getPurchaseDateTime(),
                 ticket.getPrice(),
                 ticket.getCashier().getId(),
 

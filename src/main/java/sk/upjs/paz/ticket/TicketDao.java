@@ -9,7 +9,7 @@ public interface TicketDao {
 
     List<Ticket> getAll();
 
-    List<Ticket> getAllSortedByPurchaseTimestamp();
+    List<Ticket> getAllSortedByPurchaseDateTime();
 
     List<Ticket> getAllSortedByCashier();
 

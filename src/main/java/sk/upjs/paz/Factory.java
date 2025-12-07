@@ -11,6 +11,8 @@ import sk.upjs.paz.security.AuthDao;
 import sk.upjs.paz.security.MysqlAuthDao;
 import sk.upjs.paz.task.MysqlTaskDao;
 import sk.upjs.paz.task.TaskDao;
+import sk.upjs.paz.ticket.MysqlTicketDao;
+import sk.upjs.paz.ticket.TicketDao;
 import sk.upjs.paz.user.MysqlUserDao;
 import sk.upjs.paz.user.UserDao;
 
@@ -28,6 +30,7 @@ public enum Factory {
     private volatile AnimalDao animalDao;
     private volatile TaskDao taskDao;
     private volatile EnclosureDao enclosureDao;
+    private volatile TicketDao ticketDao;
     private volatile AuthDao authDao;
 
     private final Object lock = new Object();
@@ -102,6 +105,17 @@ public enum Factory {
             }
         }
         return enclosureDao;
+    }
+
+    public TicketDao getTicketDao() {
+        if (ticketDao == null) {
+            synchronized (lock) {
+                if (ticketDao == null) {
+                    ticketDao = new MysqlTicketDao(getMysqlJdbcOperations());
+                }
+            }
+        }
+        return ticketDao;
     }
 
     public AuthDao getAuthDao() {

@@ -9,6 +9,8 @@ import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.enclosure.EnclosureDao;
 import sk.upjs.paz.task.Task;
 import sk.upjs.paz.task.TaskDao;
+import sk.upjs.paz.ticket.Ticket;
+import sk.upjs.paz.ticket.TicketDao;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
@@ -20,6 +22,7 @@ public class ViewController {
     private AnimalDao animalDao = (AnimalDao) Factory.INSTANCE.getAnimalDao();
     private EnclosureDao enclosureDao = (EnclosureDao) Factory.INSTANCE.getEnclosureDao();
     private TaskDao taskDao = (TaskDao) Factory.INSTANCE.getTaskDao();
+    private TicketDao ticketDao =(TicketDao) Factory.INSTANCE.getTicketDao();
 
     List<User> users = userDao.getAll();
 
@@ -31,6 +34,10 @@ public class ViewController {
 
     List<Task> tasks = taskDao.getAll();
     List<Task> tasksSorted = taskDao.getAllSortedByDeadline();
+
+    List<Ticket> tickets = ticketDao.getAll();
+    List<Ticket> ticketsSortedByCashier = ticketDao.getAllSortedByCashier();
+    List<Ticket> ticketsSortedByPurchaseTimestamp= ticketDao.getAllSortedByPurchaseDateTime();
 
     @FXML
     private ListView<Object> itemsListView;
@@ -118,6 +125,8 @@ public class ViewController {
     }
 
     public void loadTicketsButtonAction(ActionEvent actionEvent) {
+        itemsListView.getItems().clear();
+        itemsListView.getItems().addAll(tickets);
 
     }
 }
