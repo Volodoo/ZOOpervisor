@@ -23,36 +23,35 @@ CREATE TABLE IF NOT EXISTS `zoopervisor`.`user` (
     `last_name` VARCHAR(100) NOT NULL,
     `gender` ENUM('MALE', 'FEMALE', 'OTHER', 'UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
     `birth_day` DATE NOT NULL,
-    `role` ENUM('CASHIER', 'MAINTAINER', 'ZOOKEEPER', 'MANAGER', 'ADMIN') NOT NULL,
+    `role` ENUM('CASHIER', 'MAINTAINER', 'ZOOKEEPER', 'MANAGER', 'ADMIN') NULL,
     `email` VARCHAR(100) NULL,
     `password` VARCHAR(100) NULL,
-    PRIMARY KEY (`id`))
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
     ENGINE = InnoDB;
 
 INSERT INTO `user` VALUES
-(1,'Ján','Novák','MALE','1990-05-12','MAINTAINER',NULL,NULL),
-(2,'Eva','Hrušková','FEMALE','1985-11-03','CASHIER',NULL,NULL),
-(3,'Alex','Kováč','OTHER','2000-02-20','ZOOKEEPER',NULL,NULL);
-
+    (1,'Ján','Novák','MALE','1990-05-12','MAINTAINER',NULL,NULL),
+    (2,'Eva','Hrušková','FEMALE','1985-11-03','CASHIER',NULL,NULL),
+    (3,'Alex','Kováč','MALE','2000-02-20','ZOOKEEPER',NULL,NULL);
 
 -- -----------------------------------------------------
 -- Table `zoopervisor`.`enclosure`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `zoopervisor`.`enclosure` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(100) NOT NULL,
-    `zone` VARCHAR(100) NOT NULL,
-    `last_maintainance` DATETIME NULL,
-    PRIMARY KEY (`id`))
+     `id` BIGINT NOT NULL AUTO_INCREMENT,
+     `name` VARCHAR(100) NOT NULL,
+     `zone` VARCHAR(100) NOT NULL,
+     `last_maintainance` DATETIME NULL,
+     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 INSERT INTO `enclosure` VALUES
-(1,'Výbeh pre levy','Savana',NULL),
-(2,'Výbeh pre zebry','Savana',NULL),
-(3,'Výbeh pre žirafy','Savana',NULL),
-(4,'Výbeh pre hrochy','Savana',NULL),
-(5,'Výbeh pre tučniaky','Polárna',NULL);
-
+    (1,'Výbeh pre levy','Savana',NULL),
+    (2,'Výbeh pre zebry','Savana',NULL),
+    (3,'Výbeh pre žirafy','Savana',NULL),
+    (4,'Výbeh pre hrochy','Savana',NULL),
+    (5,'Výbeh pre tučniaky','Polárna',NULL);
 
 -- -----------------------------------------------------
 -- Table `zoopervisor`.`animal`
@@ -75,14 +74,14 @@ CREATE TABLE IF NOT EXISTS `zoopervisor`.`animal` (
     ENGINE = InnoDB;
 
 INSERT INTO `animal` VALUES
-(1,'Alex','Lev','MALE','2010-05-20',NULL,1),
-(2,'Marty','Zebra','MALE','2011-03-15',NULL,2),
-(3,'Melman','Žirafa','MALE','2012-01-30',NULL,3),
-(4,'Gloria','Hroch','FEMALE','2009-08-12',NULL,4),
-(5,'Skipper','Tučniak','MALE','2015-03-10',NULL,5),
-(6,'Kowalski','Tučniak','MALE','2015-04-12',NULL,5),
-(7,'Rico','Tučniak','MALE','2015-05-08',NULL,5),
-(8,'Pešiak','Tučniak','MALE','2015-06-20',NULL,5);
+    (1,'Alex','Lev','MALE','2010-05-20',NULL,1),
+    (2,'Marty','Zebra','MALE','2011-03-15',NULL,2),
+    (3,'Melman','Žirafa','MALE','2012-01-30',NULL,3),
+    (4,'Gloria','Hroch','FEMALE','2009-08-12',NULL,4),
+    (5,'Skipper','Tučniak','MALE','2015-03-10',NULL,5),
+    (6,'Kowalski','Tučniak','MALE','2015-04-12',NULL,5),
+    (7,'Rico','Tučniak','MALE','2015-05-08',NULL,5),
+    (8,'Pešiak','Tučniak','MALE','2015-06-20',NULL,5);
 
 -- -----------------------------------------------------
 -- Table `zoopervisor`.`ticket`
@@ -90,8 +89,8 @@ INSERT INTO `animal` VALUES
 CREATE TABLE IF NOT EXISTS `zoopervisor`.`ticket` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `type` VARCHAR(100) NOT NULL,
+    `purchase_date_time` DATETIME NOT NULL,
     `price` DECIMAL(10,2) NOT NULL,
-    `date` DATETIME NOT NULL,
     `user_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_ticket_user_idx` (`user_id` ASC) VISIBLE,
@@ -101,7 +100,6 @@ CREATE TABLE IF NOT EXISTS `zoopervisor`.`ticket` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `zoopervisor`.`task`
@@ -122,9 +120,9 @@ CREATE TABLE IF NOT EXISTS `zoopervisor`.`task` (
     ENGINE = InnoDB;
 
 INSERT INTO `task` VALUES
-(1,'Kontrola výbehu tučniakov','Skontrolovať stav výbehu tučniakov a opraviť svetlo.','2025-12-20 12:00:00',1),
-(2,'Správa účtov','Skontrolovať pokladňu a pripraviť report.','2025-12-21 17:00:00',2),
-(3,'Vakcinácia leva','Zaočkovať leva a skontrolovať či nemá parazitov.','2025-12-19 09:00:00',3);
+    (1,'Kontrola výbehu tučniakov','Skontrolovať stav výbehu tučniakov a opraviť svetlo.','2025-12-20 12:00:00',1),
+    (2,'Správa účtov','Skontrolovať pokladňu a pripraviť report.','2025-12-21 17:00:00',2),
+    (3,'Vakcinácia leva','Zaočkovať leva a skontrolovať či nemá parazitov.','2025-12-19 09:00:00',3);
 
 -- -----------------------------------------------------
 -- Table `zoopervisor`.`task_has_animal`
@@ -148,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `zoopervisor`.`task_has_animal` (
     ENGINE = InnoDB;
 
 INSERT INTO `task_has_animal` VALUES
-(3,1);
+    (3,1);
 
 -- -----------------------------------------------------
 -- Table `zoopervisor`.`task_has_enclosure`
@@ -172,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `zoopervisor`.`task_has_enclosure` (
     ENGINE = InnoDB;
 
 INSERT INTO `task_has_enclosure` VALUES
-(1,5);
+    (1,5);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
