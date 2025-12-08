@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.VybehController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -17,7 +16,6 @@
          <children>
             <Button fx:id="addEnclosureButton" mnemonicParsing="false" onAction="#addEnclosure" text="Pridaj Vybeh" />
             <Button fx:id="removeEnclosureButton" mnemonicParsing="false" onAction="#removeEnclosure" text="Vymaz Vybeh" />
-            <Button fx:id="updateEnclosureButton" mnemonicParsing="false" onAction="#updateEnclosure" text="Uprav Vybeh" />
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBack" text="Chocu iti het" />
          </children>
          <VBox.margin>
