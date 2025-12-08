@@ -47,7 +47,7 @@ public class MysqlAnimalDao implements AnimalDao {
     };
 
     private final String selectAnimalQuery =
-            "SELECT an.id, an.nickname, an.species, an.sex, an.birth_day, an.last_check, " +
+            "SELECT an.id, an.nickname, an.species, an.sex, an.birth_day, an.last_check, an.status, " +
                     "en.id AS en_id, en.name AS en_name, en.zone AS en_zone, en.last_maintainance AS en_last_maintainance " +
                     "FROM animal an " +
                     "LEFT JOIN enclosure en ON an.enclosure_id = en.id";
@@ -93,7 +93,7 @@ public class MysqlAnimalDao implements AnimalDao {
         var keyHolder = new GeneratedKeyHolder();
         jdbcOperations.update(connection -> {
             var ps = connection.prepareStatement(
-                    "INSERT INTO animal (nickname, species, sex, birth_day, last_check, enclosure_id) VALUES (?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO animal (nickname, species, sex, birth_day, last_check, status, enclosure_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     new String[]{"id"}
             );
             ps.setString(1, animal.getNickname());
@@ -101,7 +101,8 @@ public class MysqlAnimalDao implements AnimalDao {
             ps.setString(3, animal.getSex().toString());
             ps.setObject(4, animal.getBirthDay());
             ps.setObject(5, animal.getLastCheck());
-            ps.setLong(6, animal.getEnclosure().getId());
+            ps.setString(6, animal.getStatus().toString());
+            ps.setLong(7, animal.getEnclosure().getId());
             return ps;
         }, keyHolder);
 
@@ -122,12 +123,13 @@ public class MysqlAnimalDao implements AnimalDao {
         }
 
         jdbcOperations.update(
-                "UPDATE animal SET nickname = ?, species = ?, sex = ?, birth_day = ?, last_check = ?, enclosure_id = ? WHERE id = ?",
+                "UPDATE animal SET nickname = ?, species = ?, sex = ?, birth_day = ?, last_check = ?, status = ?, enclosure_id = ? WHERE id = ?",
                 animal.getNickname(),
                 animal.getSpecies(),
                 animal.getSex().toString(),
                 animal.getBirthDay(),
                 animal.getLastCheck(),
+                animal.getStatus().toString(),
                 animal.getEnclosure().getId(),
 
                 animal.getId()

@@ -18,9 +18,11 @@ public class Task {
     private String name;
     private String description;
     private LocalDateTime deadline;
+    private Status status;
+    private User user;
     private Set<Animal> animals;
     private Set<Enclosure> enclosures;
-    private User user;
+
 
 
     @Override
@@ -66,9 +68,11 @@ public class Task {
         task.setName(rs.getString(aliasPrefix + "name"));
         task.setDescription(rs.getString(aliasPrefix + "description"));
         task.setDeadline(rs.getTimestamp(aliasPrefix + "deadline").toLocalDateTime());
+        task.setStatus(Status.valueOf(rs.getString(aliasPrefix + "status")));
+        task.setUser(null);
         task.setAnimals(new HashSet<>());
         task.setEnclosures(new HashSet<>());
-        task.setUser(null);
+
 
         return task;
     }

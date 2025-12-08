@@ -18,6 +18,7 @@ public class Animal {
     private Sex sex;
     private LocalDate birthDay;
     private LocalDateTime lastCheck;
+    private Status status;
     private Enclosure enclosure;
 
 
@@ -59,6 +60,7 @@ public class Animal {
             lastCheck = ts.toLocalDateTime();
         }
         animal.setLastCheck(lastCheck);
+        animal.setStatus(Status.valueOf(rs.getString(aliasPrefix + "status")));
 
         animal.setEnclosure(null);
         return animal;

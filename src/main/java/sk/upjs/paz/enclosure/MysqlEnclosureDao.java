@@ -55,7 +55,7 @@ public class MysqlEnclosureDao implements EnclosureDao {
     @Override
     public Set<Animal> getAnimals(long id) {
         String selectAnimalsQuery =
-                "SELECT an.id, an.nickname, an.species, an.sex, an.birth_day, an.last_check " +
+                "SELECT an.id, an.nickname, an.species, an.sex, an.birth_day, an.last_check, an.status " +
                         "FROM animal an " +
                         "WHERE an.enclosure_id = ?";
 

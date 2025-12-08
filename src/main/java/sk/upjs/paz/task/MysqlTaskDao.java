@@ -70,9 +70,11 @@ public class MysqlTaskDao implements TaskDao {
     };
 
     private final String selectTaskQuery =
-            "SELECT ta.id, ta.name, ta.description, ta.deadline, " +
-                    "us.id AS us_id, us.first_name AS us_first_name, us.last_name AS us_last_name, us.gender AS us_gender,us.birth_day AS us_birth_day, us.role AS us_role, us.email AS us_email, us.password AS us_password, " +
-                    "an.id AS an_id, an.nickname AS an_nickname, an.species AS an_species, an.sex AS an_sex, an.birth_day AS an_birth_day, an.last_check AS an_last_check, " +
+            "SELECT ta.id, ta.name, ta.description, ta.deadline, ta.status, " +
+                    "us.id AS us_id, us.first_name AS us_first_name, us.last_name AS us_last_name, us.gender AS us_gender, " +
+                    "us.birth_day AS us_birth_day, us.role AS us_role, us.email AS us_email, us.password AS us_password, " +
+                    "an.id AS an_id, an.nickname AS an_nickname, an.species AS an_species, an.sex AS an_sex, an.status AS an_status, " +
+                    "an.birth_day AS an_birth_day, an.last_check AS an_last_check, " +
                     "en.id AS en_id, en.name AS en_name, en.zone AS en_zone, en.last_maintainance AS en_last_maintainance " +
                     "FROM task ta " +
                     "LEFT JOIN user us ON ta.user_id = us.id " +
@@ -121,13 +123,14 @@ public class MysqlTaskDao implements TaskDao {
         var keyHolder = new GeneratedKeyHolder();
         jdbcOperations.update(connection -> {
             var ps = connection.prepareStatement(
-                    "INSERT INTO task (name, description, deadline, user_id) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO task (name, description, deadline, status, user_id) VALUES (?, ?, ?, ?, ?)",
                     new String[]{"id"}
             );
             ps.setString(1, task.getName());
             ps.setString(2, task.getDescription());
             ps.setObject(3, task.getDeadline());
-            ps.setLong(4, task.getUser().getId());
+            ps.setString(4, task.getStatus().toString());
+            ps.setLong(5, task.getUser().getId());
             return ps;
         }, keyHolder);
 
@@ -167,10 +170,11 @@ public class MysqlTaskDao implements TaskDao {
         }
 
         jdbcOperations.update(
-                "UPDATE task SET name = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?",
+                "UPDATE task SET name = ?, description = ?, deadline = ?, status = ?, user_id = ? WHERE id = ?",
                 task.getName(),
                 task.getDescription(),
                 task.getDeadline(),
+                task.getStatus().toString(),
                 task.getUser().getId(),
 
                 task.getId()
