@@ -15,7 +15,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/Vybeh.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/View.fxml"));
         Parent parent = fxmlLoader.load();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
