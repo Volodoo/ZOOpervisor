@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import sk.upjs.paz.SceneManager;
 
 public class EnclosureEditController {
 
@@ -35,7 +36,7 @@ public class EnclosureEditController {
 
     @FXML
     void goBackButtonAction(ActionEvent event) {
-
+        SceneManager.changeScene(event,"/sk.upjs.paz/EnclosureView.fxml","Hlavne okno");
     }
 
     @FXML

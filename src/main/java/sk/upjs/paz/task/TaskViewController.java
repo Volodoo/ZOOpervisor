@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import sk.upjs.paz.SceneManager;
 
 public class TaskViewController {
 
@@ -23,7 +24,7 @@ public class TaskViewController {
 
     @FXML
     void goBack(ActionEvent event) {
-
+        SceneManager.changeScene(event,"/sk.upjs.paz/MainView.fxml","Hlavne okno");
     }
 
 }

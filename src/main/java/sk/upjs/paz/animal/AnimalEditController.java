@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import sk.upjs.paz.SceneManager;
 
 public class AnimalEditController {
 
@@ -38,7 +39,7 @@ public class AnimalEditController {
 
     @FXML
     void goBackButtonAction(ActionEvent event) {
-
+        SceneManager.changeScene(event,"/sk.upjs.paz/AnimalView.fxml","Hlavne okno");
     }
 
     @FXML

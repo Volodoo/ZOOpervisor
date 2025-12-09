@@ -19,44 +19,39 @@ public class LoginViewController {
     private final AuthDao authDao = Factory.INSTANCE.getAuthDao();
 
     @FXML
-    private Label incorrectPasswordLabel;
-
-    @FXML
-    private Button loginButton;
+    private Button logInButton;
 
     @FXML
     private Button signInButton;
 
     @FXML
-    private TextField emailTextField;
+    private TextField emailField;
 
     @FXML
-    private PasswordField passwordTextField;
+    private PasswordField passwordField;
 
     @FXML
-    void login(ActionEvent event) {
-        var email = emailTextField.getText();
-        var password = passwordTextField.getText();
+    void logIn(ActionEvent event) {
+        var email = emailField.getText();
+        var password = passwordField.getText();
 
         Principal principal;
 
         try {
             principal = authDao.authenticate(email, password);
         } catch (AuthenticationException e) {
-            incorrectPasswordLabel.setText(e.getMessage());
             return;
         }
         Auth.INSTANCE.setPrincipal(principal);
-        incorrectPasswordLabel.getScene().getWindow().hide();
         openMainScene();
     }
 
     private void openMainScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/View.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/MainView.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) emailTextField.getScene().getWindow();
+            Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("ZOOpervisor - Hlavné okno");
             stage.show();
@@ -71,7 +66,7 @@ public class LoginViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/Register.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) emailTextField.getScene().getWindow();
+            Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Registrácia nového usera");
             stage.show();

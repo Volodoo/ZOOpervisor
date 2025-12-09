@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.MainViewController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
@@ -32,12 +31,18 @@
                </children>
             </VBox>
             <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <HBox prefHeight="70.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="0.0" spacing="20.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="signOutButton" mnemonicParsing="false" onAction="#signOut" text="Odhlasenie" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding></HBox>
          </children>
       </HBox>
    </top>
    <right>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="800.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="500.0" prefWidth="807.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="animalsButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayAnimals" prefHeight="50.0" text="Zvieratá">
                <font>
@@ -54,12 +59,12 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="ticketSellerButton" mnemonicParsing="false" onAction="#displayTicketSeller" prefHeight="50.0" prefWidth="200.0" text="Predavačka">
+            <Button fx:id="userButton" mnemonicParsing="false" onAction="#displayUsers" prefHeight="50.0" prefWidth="200.0" text="Usery">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="dashboardButton" mnemonicParsing="false" onAction="#displayDashboard" prefHeight="50.0" prefWidth="200.0" text="Dashboard">
+            <Button fx:id="ticketButton" mnemonicParsing="false" onAction="#displayTickets" prefHeight="50.0" prefWidth="200.0" text="Lístky">
                <font>
                   <Font size="20.0" />
                </font>
