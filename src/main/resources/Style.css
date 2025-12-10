@@ -1,0 +1,74 @@
+.table-view {
+    -fx-background-color: white; /* Biele pozadie */
+    -fx-border-color: #d0d0d0;   /* Jemný sivý rámik dookola */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    /* Odstránenie vnútornej sivej výplne */
+    -fx-padding: 0;
+}
+
+/* 2. Hlavička (Header) - Aby bola výrazná */
+.table-view .column-header-background {
+    -fx-background-color: #2e7d32; /* Tmavozelená pre ZOO tému */
+    -fx-background-radius: 5px 5px 0 0; /* Zaoblené len horné rohy */
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 40px; /* Vyššia hlavička pre lepšiu čitateľnosť */
+    -fx-border-color: transparent; /* Žiadne čiary medzi nadpismi */
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER-LEFT; /* Text zarovnaný vľavo */
+    -fx-padding: 0 0 0 10px;    /* Odsadenie textu */
+}
+
+/* 3. Bunky (Cells) - Kľúč k prehľadnosti */
+.table-cell {
+    -fx-padding: 10px; /* Dôležité: Vzduch okolo textu! */
+    -fx-border-color: transparent; /* Preč so zvislými čiarami */
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-alignment: CENTER-LEFT; /* Text zarovnaný vľavo */
+}
+
+/* 4. Riadky (Rows) - Zebra efekt pre lepšiu orientáciu */
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e0e0e0 transparent; /* Len spodná čiara */
+}
+
+/* Každý druhý riadok bude jemne sivý (Zebra) */
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+/* 5. Keď na riadok prejdeš myšou (Hover) */
+.table-row-cell:hover {
+    -fx-background-color: #e8f5e9; /* Veľmi jemná zelená */
+    -fx-cursor: hand;
+}
+
+/* 6. Vybraný riadok (Selected) */
+.table-row-cell:selected {
+    -fx-background-color: #81c784; /* Pekná svetlozelená */
+    -fx-text-background-color: black; /* Text ostane čierny (čitateľný) */
+}
+
+/* 7. Odstránenie škaredých prázdnych riadkov */
+.table-row-cell:empty {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent; /* Schovanie škaredého pozadia scrollbaru */
+}

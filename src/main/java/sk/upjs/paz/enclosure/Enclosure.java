@@ -23,11 +23,9 @@ public class Enclosure {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String formattedLastMaintainance = (lastMaintainance != null) ? lastMaintainance.format(formatter) : "Ešte neprebehla";
 
-        return String.format("Názov: %s\nZóna: %s\nPosledná údržba: %s\nPočet zvierat: %d",
+        return String.format("Názov: %s\nZóna: %s",
                 name,
-                zone,
-                formattedLastMaintainance,
-                animalsCount != null ? animalsCount : 0);
+                zone);
     }
 
     public static Enclosure fromResultSet(ResultSet rs) throws SQLException {

@@ -35,7 +35,6 @@ public class Ticket {
             case "Adult":
                 typeSlovak = "Dospelý";
                 break;
-
             default:
                 typeSlovak = type;
         }

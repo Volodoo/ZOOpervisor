@@ -51,6 +51,7 @@ public class AnimalViewController {
 
     private AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
 
+
     @FXML
     void initialize() {
         nicknameCol.setCellValueFactory(new PropertyValueFactory<>("nickname"));
@@ -80,6 +81,13 @@ public class AnimalViewController {
                 new SimpleStringProperty(cellData.getValue().getStatus().toString())
         );
 
+        SceneManager.setupDoubleClick(
+                animalsTable,
+                "/sk.upjs.paz/AnimalEdit.fxml",
+                "Upraviť zviera",
+                (AnimalEditController ctrl, Animal animal) -> ctrl.setAnimal(animal)
+        );
+
         loadAnimals();
     }
 
@@ -91,10 +99,7 @@ public class AnimalViewController {
 
     @FXML
     void addAnimalButtonAction(ActionEvent event) {
-        //Animal newAnimal = new Animal();
-        //loadAnimals();
-        return;
-
+        SceneManager.changeScene(event, "/sk.upjs.paz/AnimalEdit.fxml", "Pridavanie Zvierata");
     }
 
     @FXML
@@ -113,4 +118,5 @@ public class AnimalViewController {
     void goBackButtonAction(ActionEvent event) throws IOException {
         SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
     }
+
 }
