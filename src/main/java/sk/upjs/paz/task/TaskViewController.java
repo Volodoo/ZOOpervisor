@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.enclosure.EnclosureEditController;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.enclosure.Enclosure;
@@ -37,6 +38,7 @@ public class TaskViewController {
 
     @FXML
     private Button goBackButton;
+
 
     private TaskDao taskDao = Factory.INSTANCE.getTaskDao();
 
@@ -81,6 +83,12 @@ public class TaskViewController {
             return new SimpleStringProperty(enclosuresString.isEmpty() ? "" : enclosuresString);
         });
 
+        SceneManager.setupDoubleClick(
+                taskTable,
+                "/sk.upjs.paz/EditTask.fxml",
+                "Upraviť úlohu",
+                (TaskEditController ctrl, Task task) -> ctrl.setTasks(task));
+
         loadTasks();
     }
 
@@ -97,8 +105,7 @@ public class TaskViewController {
 
     @FXML
     void addTaskButtonAction(ActionEvent event) {
-        // Implementácia pre pridanie novej úlohy
-        // Môžeš pridať dialóg na zadanie údajov pre novú úlohu
+        SceneManager.changeScene(event,"/sk.upjs.paz/EditTask.fxml","Pridanie tasku");
     }
 
     @FXML

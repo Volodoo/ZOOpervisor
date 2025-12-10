@@ -15,6 +15,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.animal.Animal;
+import sk.upjs.paz.animal.AnimalEditController;
+import sk.upjs.paz.task.TaskDao;
+import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -46,9 +50,12 @@ public class EnclosureViewController {
     private TableColumn<Enclosure, String> zoneCol;  // Zóna výbehu
 
     private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
+    private TaskDao taskDao = Factory.INSTANCE.getTaskDao();
+    private UserDao userDao = Factory.INSTANCE.getUserDao();
 
     @FXML
     void initialize() {
+
 
         // Pre názov výbehu
         nameCol.setCellValueFactory(cellData ->
@@ -73,6 +80,12 @@ public class EnclosureViewController {
             );
         });
 
+        SceneManager.setupDoubleClick(
+                enclosureTable,
+                "/sk.upjs.paz/EnclosureEdit.fxml",
+                "Upraviť Výbeh",
+                (EnclosureEditController ctrl, Enclosure enclosure) -> ctrl.setEnclosure(enclosure));
+
         loadEnclosures();
     }
 
@@ -86,8 +99,7 @@ public class EnclosureViewController {
 
     @FXML
     void addEnclosureButtonAction(ActionEvent event) {
-        // Implementácia pre pridanie nového výbehu
-        // Môžeš pridať dialóg na zadanie údajov pre nový výbeh
+        SceneManager.changeScene(event, "/sk.upjs.paz/EnclosureEdit.fxml", "Pridavanie vybehu");
     }
 
     @FXML

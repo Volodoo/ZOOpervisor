@@ -43,5 +43,6 @@ public class User {
         user.setPassword(rs.getString(aliasPrefix + "password"));
         return user;
     }
+
 }
 

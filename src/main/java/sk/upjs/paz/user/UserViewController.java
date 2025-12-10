@@ -1,4 +1,4 @@
-package sk.upjs.paz;
+package sk.upjs.paz.user;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -7,8 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import sk.upjs.paz.user.User;
-import sk.upjs.paz.user.UserDao;
+import sk.upjs.paz.Factory;
+import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.enclosure.Enclosure;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -65,6 +66,12 @@ public class UserViewController {
                 new SimpleStringProperty(cellData.getValue().getRole().toString())
         );
 
+        SceneManager.setupDoubleClick(
+                userTable,
+                "/sk.upjs.paz/UserEdit.fxml",
+                "Upraviť usera",
+                (UserEditController ctrl, User user) -> ctrl.setUser(user));
+
         loadUsers();
     }
 
@@ -83,6 +90,6 @@ public class UserViewController {
 
     @FXML
     public void addUser(ActionEvent event) {
-
+        SceneManager.changeScene(event,"/sk.upjs.paz/UserEdit.fxml","Pridavanie usera");
     }
 }

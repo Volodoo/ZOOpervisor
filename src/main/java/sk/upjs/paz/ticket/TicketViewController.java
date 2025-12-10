@@ -1,4 +1,4 @@
-package sk.upjs.paz;
+package sk.upjs.paz.ticket;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -7,8 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import sk.upjs.paz.ticket.Ticket;
-import sk.upjs.paz.ticket.TicketDao;
+import sk.upjs.paz.Factory;
+import sk.upjs.paz.SceneManager;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
