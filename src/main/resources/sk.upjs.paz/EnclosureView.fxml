@@ -26,10 +26,10 @@
       </HBox>
       <TableView fx:id="enclosureTable" prefHeight="338.0" prefWidth="579.0" VBox.vgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="idCol" prefWidth="75.0" text="Názov" />
-          <TableColumn fx:id="nameCol" prefWidth="75.0" text="Zóna" />
-            <TableColumn fx:id="zoneCol" prefWidth="75.0" text="Posledná údržba" />
-            <TableColumn fx:id="lastMaintainanceCol" prefWidth="75.0" text="Počet zvierat" />
+          <TableColumn fx:id="nameCol" prefWidth="75.0" text="Názov" />
+          <TableColumn fx:id="zoneCol" prefWidth="75.0" text="Zóna" />
+            <TableColumn fx:id="lastMaintainanceCol" prefWidth="75.0" text="Posledná údržba" />
+            <TableColumn fx:id="animalsCountCol" prefWidth="75.0" text="Počet zvierat" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

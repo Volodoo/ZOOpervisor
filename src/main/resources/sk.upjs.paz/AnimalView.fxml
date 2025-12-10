@@ -26,13 +26,13 @@
       </HBox>
       <TableView fx:id="animalsTable" prefHeight="412.0" prefWidth="779.0" VBox.vgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" prefWidth="75.0" text="Prezývka" />
+          <TableColumn fx:id="nicknameCol" prefWidth="75.0" text="Prezývka" />
             <TableColumn fx:id="speciesCol" prefWidth="75.0" text="Druh" />
-            <TableColumn fx:id="EnclosureCol" prefWidth="75.0" text="Pohlavie" />
-            <TableColumn fx:id="birthDateCol" prefWidth="100.0" text="Dátum narodenia" />
-            <TableColumn fx:id="sexCol" prefWidth="93.59991455078125" text="Posledná prehliadka" />
-            <TableColumn prefWidth="64.800048828125" text="Stav" />
-            <TableColumn prefWidth="75.0" text="Výbeh" />
+            <TableColumn fx:id="sexCol" prefWidth="75.0" text="Pohlavie" />
+            <TableColumn fx:id="birthdayCol" prefWidth="100.0" text="Dátum narodenia" />
+            <TableColumn fx:id="lastCheckCol" prefWidth="93.59991455078125" text="Posledná prehliadka" />
+            <TableColumn fx:id="enclosureCol" prefWidth="64.800048828125" text="Výbeh" />
+            <TableColumn fx:id="statusCol" prefWidth="75.0" text="Stav" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

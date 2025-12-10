@@ -28,9 +28,9 @@
             <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="Späť" />
          </children>
       </HBox>
-      <TableView prefHeight="424.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="taskTable" prefHeight="424.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" prefWidth="75.0" text="Meno" />
+          <TableColumn fx:id="nameCol" prefWidth="75.0" text="Názov" />
           <TableColumn fx:id="descriptionCol" prefWidth="150.0" text="Popis úlohy" />
             <TableColumn fx:id="deadlineCol" minWidth="6.39996337890625" prefWidth="79.20001220703125" text="Deadline" />
             <TableColumn fx:id="statusCol" prefWidth="75.0" text="Status" />

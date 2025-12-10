@@ -24,7 +24,7 @@ public class ViewController {
     private AnimalDao animalDao = (AnimalDao) Factory.INSTANCE.getAnimalDao();
     private EnclosureDao enclosureDao = (EnclosureDao) Factory.INSTANCE.getEnclosureDao();
     private TaskDao taskDao = (TaskDao) Factory.INSTANCE.getTaskDao();
-    private TicketDao ticketDao =(TicketDao) Factory.INSTANCE.getTicketDao();
+    private TicketDao ticketDao = (TicketDao) Factory.INSTANCE.getTicketDao();
 
     List<User> users = userDao.getAll();
 
@@ -39,7 +39,7 @@ public class ViewController {
 
     List<Ticket> tickets = ticketDao.getAll();
     List<Ticket> ticketsSortedByCashier = ticketDao.getAllSortedByCashier();
-    List<Ticket> ticketsSortedByPurchaseTimestamp= ticketDao.getAllSortedByPurchaseDateTime();
+    List<Ticket> ticketsSortedByPurchaseDateTime = ticketDao.getAllSortedByPurchaseDateTime();
 
     @FXML
     private ListView<Object> itemsListView;
@@ -107,7 +107,7 @@ public class ViewController {
 
     public void loadTasksButtonAction(ActionEvent actionEvent) {
         itemsListView.getItems().clear();
-        /*
+
         System.out.println("-----");
         System.out.println("getAll(): ");
         System.out.println(tasks);
@@ -121,7 +121,7 @@ public class ViewController {
         }
         System.out.println("-----");
 
-         */
+
         itemsListView.getItems().addAll(tasksSorted);
 
     }

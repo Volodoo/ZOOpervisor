@@ -24,7 +24,7 @@ public class Task {
     private Set<Enclosure> enclosures;
 
 
-
+/*
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -49,7 +49,7 @@ public class Task {
     }
 
 
-
+*/
 
     public static Task fromResultSet(ResultSet rs) throws SQLException {
         return fromResultSet(rs, "");
