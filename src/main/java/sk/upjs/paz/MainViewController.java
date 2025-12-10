@@ -41,6 +41,11 @@ public class MainViewController {
         SceneManager.changeScene(event,"/sk.upjs.paz/LoginView.fxml", "Login");
     }
 
+    @FXML
+    public void displayTicketSell(ActionEvent event) {
+        SceneManager.changeScene(event,"/sk.upjs.paz/SellTicketView.fxml", "Predaj Listka");
+    }
+
     private void changeScene(ActionEvent event,String fxmlPath, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();

@@ -64,6 +64,11 @@
                   <Font size="20.0" />
                </font>
             </Button>
+            <Button fx:id="sellTicketButton" mnemonicParsing="false" onAction="#displayTicketSell" prefHeight="50.0" prefWidth="200.0" text="Predaj Lístka">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
             <Button fx:id="ticketButton" mnemonicParsing="false" onAction="#displayTickets" prefHeight="50.0" prefWidth="200.0" text="Lístky">
                <font>
                   <Font size="20.0" />
