@@ -13,7 +13,6 @@ import sk.upjs.paz.enclosure.EnclosureDao;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +107,7 @@ public class TaskEditController {
 
     @FXML
     void goBack(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/TaskView.fxml", "Zobrazenie úloh");
+        SceneManager.changeScene(event, "/sk.upjs.paz/task/TaskView.fxml", "Zobrazenie úloh");
     }
 
     @FXML
@@ -141,7 +140,7 @@ public class TaskEditController {
             taskDao.create(taskToSave);
         }
 
-        SceneManager.changeScene(event, "/sk.upjs.paz/TaskView.fxml", "Zobrazenie úloh");
+        SceneManager.changeScene(event, "/sk.upjs.paz/task/TaskView.fxml", "Zobrazenie úloh");
     }
 
 

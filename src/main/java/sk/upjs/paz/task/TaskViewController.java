@@ -6,13 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.enclosure.EnclosureEditController;
-import sk.upjs.paz.user.User;
 import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.enclosure.Enclosure;
 
@@ -85,7 +82,7 @@ public class TaskViewController {
 
         SceneManager.setupDoubleClick(
                 taskTable,
-                "/sk.upjs.paz/TaskEdit.fxml",
+                "/sk.upjs.paz/task/TaskEdit.fxml",
                 "Upraviť úlohu",
                 (TaskEditController ctrl, Task task) -> ctrl.setTasks(task));
 
@@ -105,7 +102,7 @@ public class TaskViewController {
 
     @FXML
     void addTaskButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/TaskEdit.fxml","Pridanie tasku");
+        SceneManager.changeScene(event, "/sk.upjs.paz/task/TaskEdit.fxml","Pridanie tasku");
     }
 
     @FXML

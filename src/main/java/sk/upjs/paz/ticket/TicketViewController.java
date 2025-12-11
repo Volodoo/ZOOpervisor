@@ -88,6 +88,6 @@ public class TicketViewController {
 
     @FXML
     public void addTicket(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/SellTicketView.fxml", "Predaj lístka");
+        SceneManager.changeScene(event, "/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj lístka");
     }
 }

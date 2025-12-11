@@ -9,7 +9,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.enclosure.Enclosure;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -68,7 +67,7 @@ public class UserViewController {
 
         SceneManager.setupDoubleClick(
                 userTable,
-                "/sk.upjs.paz/UserEdit.fxml",
+                "/sk.upjs.paz/user/UserEdit.fxml",
                 "Upraviť usera",
                 (UserEditController ctrl, User user) -> ctrl.setUser(user));
 
@@ -90,6 +89,6 @@ public class UserViewController {
 
     @FXML
     public void addUser(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/UserEdit.fxml","Pridavanie usera");
+        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserEdit.fxml","Pridavanie usera");
     }
 }

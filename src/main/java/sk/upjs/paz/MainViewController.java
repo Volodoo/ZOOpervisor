@@ -15,35 +15,35 @@ public class MainViewController {
 
     @FXML
     public void displayAnimals(ActionEvent event) throws IOException {
-        SceneManager.changeScene(event,"/sk.upjs.paz/AnimalView.fxml", "Zobrazenie zvierat");
+        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Zobrazenie zvierat");
     }
     @FXML
     public void displayEnclosures(ActionEvent event) throws IOException {
-        SceneManager.changeScene(event,"/sk.upjs.paz/EnclosureView.fxml", "Zobrazenie výbehov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml", "Zobrazenie výbehov");
     }
     @FXML
     public void displayTasks(ActionEvent event) throws IOException {
-        SceneManager.changeScene(event,"/sk.upjs.paz/TaskView.fxml", "Zobrazenie úloh");
+        SceneManager.changeScene(event, "/sk.upjs.paz/task/TaskView.fxml", "Zobrazenie úloh");
     }
 
     @FXML
     public void displayUsers(ActionEvent event) throws IOException {
-        SceneManager.changeScene(event,"/sk.upjs.paz/UserView.fxml", "Zobrazenie používateľov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie používateľov");
 
     }
     @FXML
     public void displayTickets(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/TicketView.fxml", "Zobrazenie lístkov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/ticket/TicketView.fxml", "Zobrazenie lístkov");
     }
 
     @FXML
     public void signOut(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/LoginView.fxml", "Login");
+        SceneManager.changeScene(event, "/sk.upjs.paz/security/LoginView.fxml", "Login");
     }
 
     @FXML
     public void displayTicketSell(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/SellTicketView.fxml", "Predaj Listka");
+        SceneManager.changeScene(event, "/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj Listka");
     }
 
     private void changeScene(ActionEvent event,String fxmlPath, String title) throws IOException {

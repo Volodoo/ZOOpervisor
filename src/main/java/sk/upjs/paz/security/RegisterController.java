@@ -104,7 +104,7 @@ public class RegisterController {
     @FXML
     public void cancelRegistration(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/LoginView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/LoginView.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) chancelRegistrationField.getScene().getWindow();

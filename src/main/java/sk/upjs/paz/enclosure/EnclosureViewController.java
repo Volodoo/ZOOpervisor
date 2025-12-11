@@ -5,23 +5,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.animal.Animal;
-import sk.upjs.paz.animal.AnimalEditController;
 import sk.upjs.paz.task.TaskDao;
 import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class EnclosureViewController {
@@ -82,7 +75,7 @@ public class EnclosureViewController {
 
         SceneManager.setupDoubleClick(
                 enclosureTable,
-                "/sk.upjs.paz/EnclosureEdit.fxml",
+                "/sk.upjs.paz/enclosure/EnclosureEdit.fxml",
                 "Upraviť Výbeh",
                 (EnclosureEditController ctrl, Enclosure enclosure) -> ctrl.setEnclosure(enclosure));
 
@@ -99,7 +92,7 @@ public class EnclosureViewController {
 
     @FXML
     void addEnclosureButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/EnclosureEdit.fxml", "Pridavanie vybehu");
+        SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Pridavanie vybehu");
     }
 
     @FXML

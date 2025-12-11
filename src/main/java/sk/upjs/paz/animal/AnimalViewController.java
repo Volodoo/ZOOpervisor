@@ -13,7 +13,6 @@ import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class AnimalViewController {
 
         SceneManager.setupDoubleClick(
                 animalsTable,
-                "/sk.upjs.paz/AnimalEdit.fxml",
+                "/sk.upjs.paz/animal/AnimalEdit.fxml",
                 "Upraviť zviera",
                 (AnimalEditController ctrl, Animal animal) -> ctrl.setAnimal(animal)
         );
@@ -99,7 +98,7 @@ public class AnimalViewController {
 
     @FXML
     void addAnimalButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/AnimalEdit.fxml", "Pridavanie Zvierata");
+        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalEdit.fxml", "Pridavanie Zvierata");
     }
 
     @FXML

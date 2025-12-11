@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -63,7 +62,7 @@ public class LoginViewController {
     @FXML
     public void signIn(ActionEvent event) throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/Register.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/Register.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) emailField.getScene().getWindow();

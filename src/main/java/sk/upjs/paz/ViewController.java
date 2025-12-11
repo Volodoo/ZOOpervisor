@@ -133,7 +133,7 @@ public class ViewController {
     }
 
     public void logout(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/LoginView.fxml"));
 
         javafx.scene.Parent root = loader.load();
 

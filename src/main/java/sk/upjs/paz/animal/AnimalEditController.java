@@ -2,7 +2,6 @@ package sk.upjs.paz.animal;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -61,7 +60,7 @@ public class AnimalEditController {
 
     @FXML
     void goBackButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/AnimalView.fxml","Hlavne okno");
+        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml","Hlavne okno");
     }
 
     @FXML
@@ -88,7 +87,7 @@ public class AnimalEditController {
             animalDao.create(animal);
         }
 
-        SceneManager.changeScene(event, "/sk.upjs.paz/AnimalView.fxml", "Zvierata");
+        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Zvierata");
     }
 
     public void setAnimal(Animal animal) {

@@ -2,13 +2,11 @@ package sk.upjs.paz.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.animal.Sex;
 
 
 public class UserEditController {
@@ -54,7 +52,7 @@ public class UserEditController {
         }
         this.editMode=false;
         userDao.update(user);
-        SceneManager.changeScene(event,"/sk.upjs.paz/UserView.fxml","Zobrazenie userov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml","Zobrazenie userov");
     }
     else{
         User user=new User();
@@ -71,13 +69,13 @@ public class UserEditController {
             user.setGender(sexComboBox.getValue());
         }
         userDao.create(user);
-        SceneManager.changeScene(event,"/sk.upjs.paz/UserView.fxml","Zobrazenie userov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml","Zobrazenie userov");
     }
     }
 
     @FXML
     public void goBack(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/UserView.fxml","Zobrazenie userov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml","Zobrazenie userov");
     }
 
     public void setUser(User user) {

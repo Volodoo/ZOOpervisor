@@ -10,7 +10,6 @@ import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class EnclosureEditController {
 
@@ -45,7 +44,7 @@ public class EnclosureEditController {
     EnclosureDao enclosureDao= Factory.INSTANCE.getEnclosureDao();
     @FXML
     void goBackButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/EnclosureView.fxml","Zobrazenie výbehov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml","Zobrazenie výbehov");
     }
 
 
@@ -76,7 +75,7 @@ public class EnclosureEditController {
             enclosureDao.create(enclosure);
 
         }
-        SceneManager.changeScene(event,"/sk.upjs.paz/EnclosureView.fxml","Zobrazenie výbehov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml","Zobrazenie výbehov");
     }
 
     public void setEnclosure(Enclosure enclosure) {
