@@ -33,13 +33,7 @@ public class TaskEditController {
     private VBox enclosuresVBox;
 
     @FXML
-    private Button goBackButton;
-
-    @FXML
     private TextField nameField;
-
-    @FXML
-    private Button saveTaskButon;
 
     @FXML
     private ComboBox<Status> statusComboBox;
@@ -62,11 +56,6 @@ public class TaskEditController {
     void initialize() {
         statusComboBox.getItems().setAll(Status.values());
         userComboBox.getItems().setAll(userDao.getAll());
-
-        if (!editMode) {
-            loadAnimals();
-            loadEnclosures();
-        }
     }
 
     private void loadAnimals() {
@@ -101,6 +90,10 @@ public class TaskEditController {
         this.editMode = true;
         this.task = task;
 
+        System.out.println("****************************");
+        System.out.println(task.getAnimals());
+        System.out.println("****************************");
+
         loadAnimals();
         loadEnclosures();
 
@@ -128,14 +121,12 @@ public class TaskEditController {
         taskToSave.setUser(userComboBox.getValue());
         taskToSave.setDeadline(deadlineDatePicker.getValue().atStartOfDay());
 
-        // Zbierame vybrané zvieratá
         taskToSave.setAnimals(animalCheckBoxes.entrySet().stream()
                 .filter(entry -> entry.getValue().isSelected())
                 .map(Map.Entry::getKey)
                 .collect(java.util.stream.Collectors.toSet())
         );
 
-        // Zbierame vybrané výbehy
         taskToSave.setEnclosures(enclosureCheckBoxes.entrySet().stream()
                 .filter(entry -> entry.getValue().isSelected())
                 .map(Map.Entry::getKey)
@@ -152,10 +143,6 @@ public class TaskEditController {
         SceneManager.changeScene(event, "/sk.upjs.paz/TaskView.fxml", "Zobrazenie úloh");
     }
 
-
-
-    @FXML
-    public void saveEdit(){}
 
 
 }

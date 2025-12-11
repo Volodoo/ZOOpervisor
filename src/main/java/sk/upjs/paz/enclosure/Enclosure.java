@@ -1,6 +1,7 @@
 package sk.upjs.paz.enclosure;
 
 import lombok.Data;
+import sk.upjs.paz.animal.Animal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +18,20 @@ public class Enclosure {
     private LocalDateTime lastMaintainance;
 
     private Integer animalsCount;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Enclosure enclosure = (Enclosure) o;
+        return id != null && id.equals(enclosure.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 
     @Override
     public String toString() {

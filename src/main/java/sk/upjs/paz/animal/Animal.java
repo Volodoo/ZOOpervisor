@@ -1,6 +1,7 @@
 package sk.upjs.paz.animal;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import sk.upjs.paz.enclosure.Enclosure;
 
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
+
 public class Animal {
     private Long id;
     private String nickname;
@@ -21,6 +23,20 @@ public class Animal {
     private Status status;
     private Enclosure enclosure;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Animal animal = (Animal) o;
+        return id != null && id.equals(animal.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 
     @Override
     public String toString() {
