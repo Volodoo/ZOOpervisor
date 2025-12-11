@@ -85,7 +85,7 @@ public class TaskViewController {
 
         SceneManager.setupDoubleClick(
                 taskTable,
-                "/sk.upjs.paz/EditTask.fxml",
+                "/sk.upjs.paz/TaskEdit.fxml",
                 "Upraviť úlohu",
                 (TaskEditController ctrl, Task task) -> ctrl.setTasks(task));
 
@@ -105,7 +105,7 @@ public class TaskViewController {
 
     @FXML
     void addTaskButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/EditTask.fxml","Pridanie tasku");
+        SceneManager.changeScene(event,"/sk.upjs.paz/TaskEdit.fxml","Pridanie tasku");
     }
 
     @FXML
