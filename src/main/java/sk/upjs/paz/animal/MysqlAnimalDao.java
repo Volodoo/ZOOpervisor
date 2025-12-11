@@ -70,6 +70,12 @@ public class MysqlAnimalDao implements AnimalDao {
     }
 
     @Override
+    public List<Animal> getByStatus(Status status) {
+        String selectAnimalsByStatusQuery = selectAnimalQuery + " WHERE an.status = ?";
+        return jdbcOperations.query(selectAnimalsByStatusQuery, resultSetExtractor, status.toString());
+    }
+
+    @Override
     public Animal getById(long id) {
         String SelectAnimalByIdQuery = selectAnimalQuery + " WHERE an.id = ?";
 

@@ -47,6 +47,12 @@ public class MysqlUserDao implements UserDao {
     }
 
     @Override
+    public List<User> getByRole(Role role) {
+        String selectUserByRoleQuery = selectUserQuery + " WHERE role = ?";
+        return jdbcOperations.query(selectUserByRoleQuery, resultSetExtractor, role.toString());
+    }
+
+    @Override
     public User getById(long id) {
         var users = jdbcOperations.query(selectUserQuery + " WHERE id = ?", resultSetExtractor, id);
         if (users == null || users.isEmpty()) {

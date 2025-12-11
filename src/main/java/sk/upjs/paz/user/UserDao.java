@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserDao {
     List<User> getAll();
 
+    List<User> getByRole(Role role);
+
     User getById(long id);
 
     User create(User user);

@@ -9,6 +9,8 @@ public interface TaskDao {
 
     List<Task> getAllSortedByDeadline();
 
+    List<Task> getByUser(long userId);
+
     Task getById(long id);
 
     Task create(Task task);

@@ -36,8 +36,6 @@ public class RegisterController {
     @FXML
     private Label statusLabel;
     @FXML
-    private Button confirmSigningInButton;
-    @FXML
     private Button chancelRegistrationField;
 
     private UserDao userDao;
@@ -89,7 +87,7 @@ public class RegisterController {
 
     private void openMainScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/View.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/MainView.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) firstNameField.getScene().getWindow();

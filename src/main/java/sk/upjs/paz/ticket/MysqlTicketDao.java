@@ -62,6 +62,12 @@ public class MysqlTicketDao implements TicketDao {
     }
 
     @Override
+    public List<Ticket> getByCashier(long userId) {
+        String selectTicketByCashierQuery = selectTicketQuery + " WHERE user_id = ?";
+        return jdbcOperations.query(selectTicketByCashierQuery, resultSetExtractor, userId);
+    }
+
+    @Override
     public List<Ticket> getAllSortedByPurchaseDateTime() {
         String selectTicketSortedByPurchaseTimestamp = selectTicketQuery + " ORDER BY ti.purchase_date_time ASC";
         return jdbcOperations.query(selectTicketSortedByPurchaseTimestamp, resultSetExtractor);

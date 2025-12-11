@@ -100,6 +100,12 @@ public class MysqlTaskDao implements TaskDao {
     }
 
     @Override
+    public List<Task> getByUser(long userId) {
+        String selectTasksByUserQuery = selectTaskQuery + " WHERE user_id = ?";
+        return jdbcOperations.query(selectTasksByUserQuery, resultSetExtractor, userId);
+    }
+
+    @Override
     public Task getById(long id) {
         String SelectTaskByIdQuery = selectTaskQuery + " WHERE ta.id = ?";
 

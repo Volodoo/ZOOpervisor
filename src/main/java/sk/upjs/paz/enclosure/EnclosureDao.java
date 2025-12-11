@@ -11,6 +11,8 @@ public interface EnclosureDao {
 
     List<Enclosure> getAllSortedByZone();
 
+    List<Enclosure> getByZone(String zone);
+
     Set<Animal> getAnimals(long id);
 
     Integer getAnimalsCount(long id);

@@ -14,7 +14,6 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.enclosure.EnclosureViewController">
 
     <children>
-
         <HBox fx:id="occupationHbox" alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
             <children>
 

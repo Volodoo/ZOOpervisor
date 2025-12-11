@@ -47,8 +47,14 @@ public class MysqlEnclosureDao implements EnclosureDao {
 
     @Override
     public List<Enclosure> getAllSortedByZone() {
-        String selectEnclosuresSortedBySpeciesQuery = selectEnclosureQuery + " ORDER BY `zone`";
+        String selectEnclosuresSortedBySpeciesQuery = selectEnclosureQuery + " ORDER BY zone";
         return jdbcOperations.query(selectEnclosuresSortedBySpeciesQuery, resultSetExtractor);
+    }
+
+    @Override
+    public List<Enclosure> getByZone(String zone) {
+        String selectEnclosuresByZoneQuery = selectEnclosureQuery + " WHERE zone = ?";
+        return jdbcOperations.query(selectEnclosuresByZoneQuery, resultSetExtractor, zone);
     }
 
 

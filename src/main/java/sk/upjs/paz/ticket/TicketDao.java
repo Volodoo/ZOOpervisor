@@ -8,6 +8,8 @@ import java.util.List;
 public interface TicketDao {
 
     List<Ticket> getAll();
+    
+    List<Ticket> getByCashier(long userId);
 
     List<Ticket> getAllSortedByPurchaseDateTime();
 

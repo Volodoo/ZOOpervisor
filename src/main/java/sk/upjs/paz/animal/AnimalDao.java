@@ -9,6 +9,8 @@ public interface AnimalDao {
 
     List<Animal> getAllSortedBySpecies();
 
+    List<Animal> getByStatus(Status status);
+
     Animal getById(long id);
 
     Animal create(Animal animal);
