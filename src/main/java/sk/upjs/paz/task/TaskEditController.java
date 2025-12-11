@@ -2,11 +2,7 @@ package sk.upjs.paz.task;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
@@ -18,8 +14,9 @@ import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class TaskEditController {
 
@@ -50,13 +47,6 @@ public class TaskEditController {
     @FXML
     private ComboBox<User> userComboBox;
 
-    @FXML
-    private VBox studentsVBox;
-
-    @FXML
-    private VBox studentsVBox1;
-
-
     private Task task;
     private boolean editMode = false;
 
@@ -65,15 +55,62 @@ public class TaskEditController {
     AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
     EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
 
-    List<Animal> animals = animalDao.getAllSortedBySpecies();
-    List<Enclosure> enclosures = enclosureDao.getAllSortedByZone();
+    private Map<Animal, CheckBox> animalCheckBoxes = new HashMap<>();
+    private Map<Enclosure, CheckBox> enclosureCheckBoxes = new HashMap<>();
 
     @FXML
     void initialize() {
         statusComboBox.getItems().setAll(Status.values());
         userComboBox.getItems().setAll(userDao.getAll());
 
+        if (!editMode) {
+            loadAnimals();
+            loadEnclosures();
+        }
     }
+
+    private void loadAnimals() {
+        animalsVBox.getChildren().clear();
+        animalCheckBoxes.clear();
+        List<Animal> animals = animalDao.getAllSortedBySpecies();
+        for (Animal a : animals) {
+            CheckBox cb = new CheckBox(a.getNickname());
+            if (editMode && task != null && task.getAnimals().contains(a)) {
+                cb.setSelected(true);
+            }
+            animalCheckBoxes.put(a, cb);
+            animalsVBox.getChildren().add(cb);
+        }
+    }
+
+    private void loadEnclosures() {
+        enclosuresVBox.getChildren().clear();
+        enclosureCheckBoxes.clear();
+        List<Enclosure> enclosures = enclosureDao.getAllSortedByZone();
+        for (Enclosure e : enclosures) {
+            CheckBox cb = new CheckBox(e.getName());
+            if (editMode && task != null && task.getEnclosures().contains(e)) {
+                cb.setSelected(true);
+            }
+            enclosureCheckBoxes.put(e, cb);
+            enclosuresVBox.getChildren().add(cb);
+        }
+    }
+
+    public void setTasks(Task task) {
+        this.editMode = true;
+        this.task = task;
+
+        loadAnimals();
+        loadEnclosures();
+
+        nameField.setText(task.getName());
+        descriptionTextArea.setText(task.getDescription());
+        statusComboBox.setValue(task.getStatus());
+        userComboBox.setValue(task.getUser());
+        deadlineDatePicker.setValue(task.getDeadline().toLocalDate());
+    }
+
 
     @FXML
     void goBack(ActionEvent event) {
@@ -82,35 +119,39 @@ public class TaskEditController {
 
     @FXML
     void saveTaskButtonAction(ActionEvent event) {
-        Task task = null;
+        Task taskToSave = editMode ? task : new Task();
+
+
+        taskToSave.setName(nameField.getText());
+        taskToSave.setDescription(descriptionTextArea.getText());
+        taskToSave.setStatus(statusComboBox.getValue());
+        taskToSave.setUser(userComboBox.getValue());
+        taskToSave.setDeadline(deadlineDatePicker.getValue().atStartOfDay());
+
+        // Zbierame vybrané zvieratá
+        taskToSave.setAnimals(animalCheckBoxes.entrySet().stream()
+                .filter(entry -> entry.getValue().isSelected())
+                .map(Map.Entry::getKey)
+                .collect(java.util.stream.Collectors.toSet())
+        );
+
+        // Zbierame vybrané výbehy
+        taskToSave.setEnclosures(enclosureCheckBoxes.entrySet().stream()
+                .filter(entry -> entry.getValue().isSelected())
+                .map(Map.Entry::getKey)
+                .collect(java.util.stream.Collectors.toSet())
+        );
+
         if (editMode) {
-            task.setName(nameField.getText());
-            task.setDescription(descriptionTextArea.getText());
-            task.setStatus(statusComboBox.getValue());
-            task.setUser(userComboBox.getValue());
-            task.setDeadline(deadlineDatePicker.getValue().atStartOfDay());
-            taskDao.update(task);
+            taskDao.update(taskToSave);
             editMode = false;
         } else {
-            task = new Task();
-            task.setName(nameField.getText());
-            task.setDescription(descriptionTextArea.getText());
-            task.setStatus(statusComboBox.getValue());
-            task.setUser(userComboBox.getValue());
-            task.setDeadline(deadlineDatePicker.getValue().atStartOfDay());
-            taskDao.create(task);
+            taskDao.create(taskToSave);
         }
+
         SceneManager.changeScene(event, "/sk.upjs.paz/TaskView.fxml", "Zobrazenie úloh");
     }
 
-    public void setTasks(Task task) {
-        this.editMode = true;
-        this.task = task;
-        nameField.setText(task.getName());
-        descriptionTextArea.setText(task.getDescription());
-        statusComboBox.setValue(task.getStatus());
-        userComboBox.setValue(task.getUser());
-        deadlineDatePicker.setValue(LocalDate.from(task.getDeadline()));
-    }
+
 
 }
