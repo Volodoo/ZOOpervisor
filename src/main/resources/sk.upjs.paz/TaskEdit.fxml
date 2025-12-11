@@ -15,118 +15,110 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.task.TaskEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.task.TaskEditController">
+
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
     <children>
-        <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="500.0" spacing="85.0" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_RIGHT" spacing="20.0">
             <children>
-                <Label text="Edit tasku">
+                <Label maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="718.0" text="Editácia úlohy" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
                 <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="Späť" />
             </children>
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </padding>
             <VBox.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" />
             </VBox.margin>
         </HBox>
-        <GridPane vgap="20.0" VBox.vgrow="ALWAYS">
+
+        
+        <GridPane hgap="10.0" prefHeight="278.0" prefWidth="779.0" vgap="10.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="15.0" />
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="600.0" />
+                <ColumnConstraints hgrow="NEVER" minWidth="80.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label text="Názov" />
-                <Label text="Popis" GridPane.rowIndex="4" />
-                <Label text="Deadline" GridPane.rowIndex="1" />
-                <Label text="Status" GridPane.rowIndex="3" />
-                <Label text="User" GridPane.rowIndex="2" />
-                <TextField fx:id="nameField" prefHeight="26.0" prefWidth="436.0" GridPane.columnIndex="1" />
-                <ComboBox fx:id="statusComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="Názov:" />
+                <TextField fx:id="nameField" GridPane.columnIndex="1" />
+
+                <Label text="Deadline:" GridPane.rowIndex="1" />
                 <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextArea fx:id="descriptionTextArea" prefHeight="22.0" prefWidth="380.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <ComboBox fx:id="userComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="User:" GridPane.rowIndex="2" />
+                <ComboBox fx:id="userComboBox" prefHeight="26.0" prefWidth="177.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="Status:" GridPane.rowIndex="3" />
+                <ComboBox fx:id="statusComboBox" prefHeight="26.0" prefWidth="178.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Popis:" GridPane.rowIndex="4">
+                    <GridPane.margin>
+                        <Insets top="5.0" />
+                    </GridPane.margin></Label>
+                <TextArea fx:id="descriptionTextArea" prefHeight="60.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             </children>
-            <VBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </VBox.margin>
-            <padding>
-                <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-            </padding>
         </GridPane>
-        <GridPane prefHeight="200.0" prefWidth="800.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="162.79996337890626" minHeight="10.0" prefHeight="162.79996337890626" vgrow="SOMETIMES" />
-            </rowConstraints>
+
+
+        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
             <children>
-                <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1">
-                    <content>
-                        <VBox fx:id="studentsVBox" spacing="5.0" />
-                    </content>
-                    <GridPane.margin>
-                        <Insets right="10.0" />
-                    </GridPane.margin>
-                </ScrollPane>
-                <VBox fx:id="animalsVBox" spacing="5.0" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets />
-                    </GridPane.margin>
+
+
+                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Priradiť zvieratá:">
+                            <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                            <content>
+
+                                <VBox fx:id="animalsVBox" spacing="5.0">
+                                    <padding><Insets bottom="5.0" left="5.0" top="5.0" /></padding>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
                 </VBox>
-                <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <content>
-                        <VBox fx:id="studentsVBox1" spacing="5.0" />
-                    </content>
-                    <GridPane.margin>
-                        <Insets left="10.0" />
-                    </GridPane.margin>
-                </ScrollPane>
-                <VBox fx:id="enclosuresVBox" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+
+
+                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label text="Zvieratá">
-                            <HBox.margin>
-                                <Insets right="10.0" />
-                            </HBox.margin></Label>
+                        <Label text="Priradiť výbehy:">
+                            <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                            <content>
+
+                                <VBox fx:id="enclosuresVBox" spacing="5.0">
+                                    <padding><Insets bottom="5.0" left="5.0" top="5.0" /></padding>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
                     </children>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
-                    <children>
-                        <Label text="Výbehy">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin></Label>
-                    </children>
-                </HBox>
+                </VBox>
             </children>
             <VBox.margin>
-                <Insets left="20.0" right="20.0" />
+                <Insets top="10.0" />
             </VBox.margin>
-        </GridPane>
-        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="779.0" VBox.vgrow="ALWAYS">
-            <VBox.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </VBox.margin>
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </padding>
+        </HBox>
+
+
+        <HBox alignment="CENTER" prefHeight="50.0">
             <children>
-                <Button fx:id="saveTaskButon" mnemonicParsing="false" onAction="#saveTaskButtonAction" text="Uložiť" />
+                <Button fx:id="saveTaskButon" mnemonicParsing="false" onAction="#saveTaskButtonAction" prefHeight="30.0" prefWidth="120.0" text="Uložiť" />
             </children>
         </HBox>
+
     </children>
 </VBox>
