@@ -56,6 +56,11 @@ public class TaskEditController {
     void initialize() {
         statusComboBox.getItems().setAll(Status.values());
         userComboBox.getItems().setAll(userDao.getAll());
+
+        if(!editMode){
+            loadAnimals();
+            loadEnclosures();
+        }
     }
 
     private void loadAnimals() {
@@ -89,10 +94,6 @@ public class TaskEditController {
     public void setTasks(Task task) {
         this.editMode = true;
         this.task = task;
-
-        System.out.println("****************************");
-        System.out.println(task.getAnimals());
-        System.out.println("****************************");
 
         loadAnimals();
         loadEnclosures();

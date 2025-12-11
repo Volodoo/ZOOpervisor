@@ -71,7 +71,6 @@ public class SceneManager {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     T selectedItem = row.getItem();
-                    System.out.println(selectedItem);
 
                     changeSceneWithData(
                             tableView,
