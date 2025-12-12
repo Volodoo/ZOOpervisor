@@ -11,11 +11,11 @@ import sk.upjs.paz.SceneManager;
 
 public class UserEditController {
     @FXML
-    private TextField nameField;
+    private TextField firstNameField;
     @FXML
     private TextField emailField;
     @FXML
-    private TextField surnameField;
+    private TextField lastNameField;
     @FXML
     private ComboBox<Gender> genderComboBox;
     @FXML
@@ -39,12 +39,16 @@ public class UserEditController {
     public void saveUser(ActionEvent event) {
         if (editMode) {
             boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
-            if(!suhlas){
+            if (!suhlas) {
                 return;
             }
-            user.setFirstName(nameField.getText());
-            user.setLastName(nameField.getText());
-            user.setEmail(emailField.getText());
+            user.setFirstName(firstNameField.getText());
+            if (lastNameField.getText() != null && !lastNameField.getText().equals("")) {
+                user.setLastName(lastNameField.getText());
+            }
+            if (emailField.getText() != null && !emailField.getText().equals("")) {
+                user.setEmail(emailField.getText());
+            }
             user.setBirthDay(birthDatePicker.getValue());
             user.setRole(roleComboBox.getValue());
             user.setGender(genderComboBox.getValue());
@@ -64,8 +68,8 @@ public class UserEditController {
         this.editMode = true;
         this.user = user;
 
-        nameField.setText(user.getFirstName());
-        surnameField.setText(user.getLastName());
+        firstNameField.setText(user.getFirstName());
+        lastNameField.setText(user.getLastName());
         emailField.setText(user.getEmail());
         birthDatePicker.setValue(user.getBirthDay());
         roleComboBox.setValue(user.getRole());

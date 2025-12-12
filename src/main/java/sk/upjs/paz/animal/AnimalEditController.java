@@ -2,25 +2,27 @@ package sk.upjs.paz.animal;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.enclosure.EnclosureDao;
 
 import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 public class AnimalEditController {
+
+    @FXML
+    public Spinner<Integer> hourSpinner;
+    @FXML
+    public Spinner<Integer> minuteSpinner;
 
     @FXML
     private DatePicker birthDayPicker;
 
     @FXML
-    private DatePicker birthDayPicker1;
+    private DatePicker lastCheckPicker;
 
     @FXML
     private Button goBackButton;
@@ -45,10 +47,8 @@ public class AnimalEditController {
 
     private Animal animal;
 
-    private AnimalDao animalDao= Factory.INSTANCE.getAnimalDao();
-
+    private AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
     private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
-
     private boolean editMode = false;
 
     @FXML
@@ -56,76 +56,93 @@ public class AnimalEditController {
         sexComboBox1.getItems().setAll(Sex.values());
         statusComboBox.getItems().setAll(Status.values());
         enclosureComboBox.getItems().setAll(enclosureDao.getAll());
+
+        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
+        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+
+        lastCheckPicker.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            if (newText == null || newText.isBlank()) {
+                lastCheckPicker.setValue(null);
+            }
+        });
+
+        if (editMode && animal != null && animal.getLastCheck() != null) {
+            LocalDateTime dt = animal.getLastCheck();
+            lastCheckPicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
+        }
     }
 
     @FXML
     void goBackButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml","Hlavne okno");
+        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Hlavne okno");
     }
 
     @FXML
     void updateAnimalButtonAction(ActionEvent event) {
+        Animal animalToSave;
+
         if (editMode) {
-            if (animal == null) {
-                System.out.println("error");
+            if (!SceneManager.confirm("Naozaj chcete uložiť zmeny zvieraťa?")) {
                 return;
             }
 
-            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
-            if(!suhlas) {
-                return;
-            }
-            this.editMode = false;
-            animal.setNickname(nicknameField.getText());
-            animal.setSpecies(speciesField.getText());
-            animal.setStatus(statusComboBox.getValue());
-            animal.setEnclosure(enclosureComboBox.getValue());
-            animal.setSex(sexComboBox1.getSelectionModel().getSelectedItem());
-            animal.setBirthDay(birthDayPicker.getValue());
-            animalDao.update(animal);
-        }
-        else {
-            boolean suhlas = SceneManager.confirm("Naozaj chcete pridať nové zviera?");
-            if (!suhlas) {
+            animalToSave = animal;
+
+        } else {
+            if (!SceneManager.confirm("Naozaj chcete vytvoriť nové zviera?")) {
                 return;
             }
 
-            Animal newAnimal = new Animal();
-            newAnimal.setNickname(nicknameField.getText());
-            newAnimal.setSpecies(speciesField.getText());
-            newAnimal.setStatus(statusComboBox.getValue());
-            newAnimal.setEnclosure(enclosureComboBox.getValue());
-            newAnimal.setSex(sexComboBox1.getSelectionModel().getSelectedItem());
-            newAnimal.setBirthDay(birthDayPicker.getValue());
-            animalDao.create(newAnimal);
+            animalToSave = new Animal();
         }
 
-        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Zvierata");
+        animalToSave.setNickname(nicknameField.getText());
+        if(speciesField.getText() != null && !speciesField.getText().equals("")) {
+            animalToSave.setSpecies(speciesField.getText());
+        }
+        animalToSave.setStatus(statusComboBox.getValue());
+        animalToSave.setEnclosure(enclosureComboBox.getValue());
+        animalToSave.setSex(sexComboBox1.getValue());
+        animalToSave.setBirthDay(birthDayPicker.getValue());
+
+        LocalDate lastCheckDate = lastCheckPicker.getValue();
+        if (lastCheckDate != null) {
+            int hour = hourSpinner.getValue();
+            int minute = minuteSpinner.getValue();
+            animalToSave.setLastCheck(
+                    LocalDateTime.of(lastCheckDate, java.time.LocalTime.of(hour, minute))
+            );
+        } else {
+            animalToSave.setLastCheck(null);
+        }
+
+        if (editMode) {
+            animalDao.update(animalToSave);
+            editMode = false;
+        } else {
+            animalDao.create(animalToSave);
+        }
+
+        SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Zvieratá");
     }
 
     public void setAnimal(Animal animal) {
+        this.editMode = true;
         this.animal = animal;
-        if(animal.getId()!= null){
-            this.editMode = true;
-            updateAnimalButton.setText("Uložiť");
-        }
         nicknameField.setText(animal.getNickname());
         speciesField.setText(animal.getSpecies());
         sexComboBox1.setValue(animal.getSex());
         statusComboBox.setValue(animal.getStatus());
-
-        if (animal.getEnclosure() != null) {
-
-                    enclosureComboBox.setValue(animal.getEnclosure());
-
-                }
-        if (animal.getBirthDay() != null) {
-            birthDayPicker.setValue(animal.getBirthDay());
-        }
+        enclosureComboBox.setValue(animal.getEnclosure());
+        birthDayPicker.setValue(animal.getBirthDay());
 
         if (animal.getLastCheck() != null) {
-            birthDayPicker1.setValue(LocalDate.from(animal.getLastCheck()));
+            LocalDateTime dt = animal.getLastCheck();
+            lastCheckPicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
         }
     }
-
 }

@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import sk.upjs.paz.Factory;
+import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.exceptions.AuthenticationException;
 import sk.upjs.paz.user.Gender;
 import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
@@ -39,6 +41,8 @@ public class RegisterController {
 
     private UserDao userDao;
 
+    private final AuthDao authDao = Factory.INSTANCE.getAuthDao();
+
 
     public RegisterController() {
         this.userDao = Factory.INSTANCE.getUserDao();
@@ -55,7 +59,7 @@ public class RegisterController {
         String passwordAgain = passwordAgainField.getText();
 
         if (firstName.isEmpty() || lastName.isEmpty() || gender == null || birthDay == null || email.isEmpty() || password.isEmpty() || passwordAgain.isEmpty()) {
-            Alert alert= new Alert(Alert.AlertType.WARNING);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Upozornenie");
             alert.setHeaderText(null);
             alert.setContentText("Všetky polia musia byť vyplnené!");
@@ -64,16 +68,15 @@ public class RegisterController {
         }
 
 
-        if(passwordAgain.length()<8) {
-                Alert alert= new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Upozornenie");
-                alert.setHeaderText(null);
-                alert.setContentText("Heslo musí byť dĺžky 8 znakov a obsahovať aspon jednu číslicu a jeden špeciálny znak!");
-                alert.showAndWait();
-                return;
-        }
-        else if(!password.matches("\\d+") && !passwordAgain.matches(".*[^a-zA-Z0-9].*")) {
-            Alert alert= new Alert(Alert.AlertType.WARNING);
+        if (passwordAgain.length() < 8) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Upozornenie");
+            alert.setHeaderText(null);
+            alert.setContentText("Heslo musí byť dĺžky 8 znakov a obsahovať aspon jednu číslicu a jeden špeciálny znak!");
+            alert.showAndWait();
+            return;
+        } else if (!password.matches("\\d+") && !passwordAgain.matches(".*[^a-zA-Z0-9].*")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Upozornenie");
             alert.setHeaderText(null);
             alert.setContentText("Heslo musí obsahovať aspon jeden špeciálny znak a jednu číslicu!");
@@ -82,7 +85,7 @@ public class RegisterController {
         }
 
         if (!password.equals(passwordAgain)) {
-            Alert alert= new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("Hesla sa nezhodujú!");
@@ -101,32 +104,23 @@ public class RegisterController {
         newUser.setEmail(email);
         newUser.setPassword(hashedPassword);
 
+
+
+
+
         try {
             User createdUser = userDao.create(newUser);
-            Alert alert= new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Uspech");
             alert.setHeaderText(null);
             alert.setContentText("Registrácia bola úspešná");
             alert.showAndWait();
-            openMainScene();
+            SceneManager.changeScene(event, "/sk.upjs.paz/security/LoginView.fxml", "ZOOpervisor");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void openMainScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/MainView.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) firstNameField.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("ZOOpervisor - Hlavné okno");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void cancelRegistration(ActionEvent event) {

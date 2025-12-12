@@ -13,71 +13,79 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Spinner?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.animal.AnimalEditController">
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-   <children>
-      <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="360.0" spacing="50.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Label alignment="CENTER" text="Úprava Zvieraťa" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBackButtonAction" text="Späť" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-      </HBox>
-      <GridPane vgap="20.0" VBox.vgrow="ALWAYS">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Nickname" />
-            <Label text="Species" GridPane.rowIndex="1" />
-            <Label text="Sex" GridPane.rowIndex="2" />
-            <Label text="Birth day" GridPane.rowIndex="3" />
-            <TextField fx:id="nicknameField" GridPane.columnIndex="1" />
-            <TextField fx:id="speciesField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <DatePicker fx:id="birthDayPicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="enclosureComboBox" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label text="Enclosure" GridPane.rowIndex="5" />
-            <Label text="Status" GridPane.rowIndex="6" />
-            <ComboBox fx:id="statusComboBox" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <ComboBox fx:id="sexComboBox1" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="Last check" GridPane.rowIndex="4" />
-            <DatePicker fx:id="birthDayPicker1" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-         </children>
-         <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-      </GridPane>
-      <HBox alignment="CENTER" prefHeight="49.0" prefWidth="360.0" spacing="15.0" VBox.vgrow="ALWAYS">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-         <children>
-            <Button fx:id="updateAnimalButton" mnemonicParsing="false" onAction="#updateAnimalButtonAction" text="Pridať" HBox.hgrow="ALWAYS" />
-         </children>
-      </HBox>
-   </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="360.0" spacing="50.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label alignment="CENTER" text="Úprava Zvieraťa" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </Label>
+                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBackButtonAction" text="Späť" />
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </HBox>
+        <GridPane vgap="20.0" VBox.vgrow="ALWAYS">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Nickname" />
+                <Label text="Species" GridPane.rowIndex="1" />
+                <Label text="Sex" GridPane.rowIndex="2" />
+                <Label text="Birth day" GridPane.rowIndex="3" />
+                <Label text="Last check" GridPane.rowIndex="4" />
+                <Label text="Enclosure" GridPane.rowIndex="5" />
+                <Label text="Status" GridPane.rowIndex="6" />
+
+                <TextField fx:id="nicknameField" GridPane.columnIndex="1" />
+                <TextField fx:id="speciesField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ComboBox fx:id="sexComboBox1" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <DatePicker fx:id="birthDayPicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <!-- HBox pre Last Check s DatePicker + spinnery -->
+                <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <children>
+                        <DatePicker fx:id="lastCheckPicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" />
+                        <Spinner fx:id="hourSpinner" prefWidth="60.0" />
+                        <Spinner fx:id="minuteSpinner" prefWidth="60.0" />
+                    </children>
+                </HBox>
+
+                <ComboBox fx:id="enclosureComboBox" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <ComboBox fx:id="statusComboBox" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            </children>
+            <VBox.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </VBox.margin>
+        </GridPane>
+        <HBox alignment="CENTER" prefHeight="49.0" prefWidth="360.0" spacing="15.0" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </VBox.margin>
+            <children>
+                <Button fx:id="updateAnimalButton" mnemonicParsing="false" onAction="#updateAnimalButtonAction" text="Uložiť " HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </children>
 </VBox>

@@ -114,7 +114,6 @@ public class MysqlEnclosureDao implements EnclosureDao {
         }, keyHolder);
 
         var id = keyHolder.getKey().longValue();
-        System.out.println(id);
         enclosure.setId(id);
         return enclosure;
     }

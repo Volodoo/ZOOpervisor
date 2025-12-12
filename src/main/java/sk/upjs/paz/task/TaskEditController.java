@@ -78,7 +78,6 @@ public class TaskEditController {
             loadEnclosures();
         }
 
-        // Inicializácia spinnerov pre hodiny a minúty
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
     }
@@ -144,7 +143,11 @@ public class TaskEditController {
     @FXML
     void saveTaskButtonAction(ActionEvent event) {
         Task taskToSave = editMode ? task : new Task();
-        taskToSave.setName(nameField.getText());
+
+
+        if(nameField.getText() != null && !nameField.getText().equals("")) {
+            taskToSave.setName(nameField.getText());
+        }
         taskToSave.setDescription(descriptionTextArea.getText());
         taskToSave.setStatus(statusComboBox.getValue());
         taskToSave.setUser(userComboBox.getValue());
