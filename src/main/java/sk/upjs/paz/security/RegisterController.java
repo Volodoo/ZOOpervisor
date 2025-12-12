@@ -39,6 +39,7 @@ public class RegisterController {
 
     private UserDao userDao;
 
+
     public RegisterController() {
         this.userDao = Factory.INSTANCE.getUserDao();
     }
@@ -62,7 +63,23 @@ public class RegisterController {
             return;
         }
 
-        //TODO: dokincity heslo aby bylo dajakej zlozitosti
+
+        if(passwordAgain.length()<8) {
+                Alert alert= new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Upozornenie");
+                alert.setHeaderText(null);
+                alert.setContentText("Heslo musí byť dĺžky 8 znakov a obsahovať aspon jednu číslicu a jeden špeciálny znak!");
+                alert.showAndWait();
+                return;
+        }
+        else if(!password.matches("\\d+") && !passwordAgain.matches(".*[^a-zA-Z0-9].*")) {
+            Alert alert= new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Upozornenie");
+            alert.setHeaderText(null);
+            alert.setContentText("Heslo musí obsahovať aspon jeden špeciálny znak a jednu číslicu!");
+            alert.showAndWait();
+            return;
+        }
 
         if (!password.equals(passwordAgain)) {
             Alert alert= new Alert(Alert.AlertType.ERROR);
