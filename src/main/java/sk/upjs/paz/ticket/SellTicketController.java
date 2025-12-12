@@ -2,8 +2,9 @@ package sk.upjs.paz.ticket;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.security.Auth;
@@ -13,32 +14,44 @@ import sk.upjs.paz.user.UserDao;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 public class SellTicketController {
 
     @FXML
-    private CheckBox childCheckBox;
+    private Spinner<Integer> childSpinner;
 
     @FXML
-    private CheckBox seniorStudentCheckBox;
+    private Spinner<Integer> seniorStudentSpinner;
 
     @FXML
-    private CheckBox adultCheckBox;
+    private Spinner<Integer> adultSpinner;
 
     @FXML
-    public Label userNameLabel;
+    private Label userNameLabel;
 
     @FXML
-    public Label roleLabel;
+    private Label roleLabel;
 
+    @FXML
+    private Label childTotalPrice;
+
+    @FXML
+    private Label seniorStudentTotalPrice;
+
+    @FXML
+    private Label adultTotalPrice;
+
+    @FXML
+    private Label totalPriceLabel;
+
+    @FXML
+    private Label successLabel;  // Label pre úspešnú správu
+
+    private static final BigDecimal PRICE_CHILD = new BigDecimal("4.00");
+    private static final BigDecimal PRICE_SENIOR_STUDENT = new BigDecimal("7.00");
+    private static final BigDecimal PRICE_ADULT = new BigDecimal("10.00");
 
     TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
     UserDao userDao = Factory.INSTANCE.getUserDao();
-
-    @FXML
-    public void goBack(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
-    }
 
     @FXML
     public void initialize() {
@@ -46,58 +59,90 @@ public class SellTicketController {
         userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
         roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-        childCheckBox.setOnAction(e -> {
-            if (childCheckBox.isSelected()) {
-                adultCheckBox.setSelected(false);
-                seniorStudentCheckBox.setSelected(false);
-            }
-        });
+        // Nastavenie Spinnerov
+        childSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
+        seniorStudentSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
+        adultSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
 
-        adultCheckBox.setOnAction(e -> {
-            if (adultCheckBox.isSelected()) {
-                childCheckBox.setSelected(false);
-                seniorStudentCheckBox.setSelected(false);
-            }
-        });
+        // Počúvanie zmien hodnôt v Spinneroch
+        childSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
+        seniorStudentSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
+        adultSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
+    }
 
-        seniorStudentCheckBox.setOnAction(e -> {
-            if (seniorStudentCheckBox.isSelected()) {
-                childCheckBox.setSelected(false);
-                adultCheckBox.setSelected(false);
-            }
-        });
+    // Metóda na výpočet ceny na základe počtu lístkov
+    private void updateTicketPrices() {
+        // Získame počet lístkov pre každý typ
+        int childCount = childSpinner.getValue();
+        int seniorStudentCount = seniorStudentSpinner.getValue();
+        int adultCount = adultSpinner.getValue();
+
+        // Vypočítame cenu pre každý typ lístka
+        BigDecimal childTotal = PRICE_CHILD.multiply(new BigDecimal(childCount));
+        BigDecimal seniorStudentTotal = PRICE_SENIOR_STUDENT.multiply(new BigDecimal(seniorStudentCount));
+        BigDecimal adultTotal = PRICE_ADULT.multiply(new BigDecimal(adultCount));
+
+        // Aktualizujeme text pre jednotlivé ceny
+        childTotalPrice.setText("Cena: " + childTotal + " €");
+        seniorStudentTotalPrice.setText("Cena: " + seniorStudentTotal + " €");
+        adultTotalPrice.setText("Cena: " + adultTotal + " €");
+
+        // Celková cena
+        BigDecimal totalPrice = childTotal.add(seniorStudentTotal).add(adultTotal);
+        totalPriceLabel.setText("Celková cena: " + totalPrice + " €");
     }
 
     @FXML
     public void sellTicket(ActionEvent event) {
+        boolean ticketsSold = false;
 
-        if (seniorStudentCheckBox.isSelected()) {
-            this.createTicket("Študent/Senior", new BigDecimal("7.00"));
+        if (childSpinner.getValue() > 0) {
+            createTicket("Child", PRICE_CHILD, childSpinner.getValue());
+            ticketsSold = true;
         }
 
-        if (childCheckBox.isSelected()) {
-            this.createTicket("Child", new BigDecimal("5.00"));
+        if (seniorStudentSpinner.getValue() > 0) {
+            createTicket("Student_Senior", PRICE_SENIOR_STUDENT, seniorStudentSpinner.getValue());
+            ticketsSold = true;
         }
 
-        if (adultCheckBox.isSelected()) {
-            this.createTicket("Dospelý", new BigDecimal("10.00"));
+        if (adultSpinner.getValue() > 0) {
+            createTicket("Adult", PRICE_ADULT, adultSpinner.getValue());
+            ticketsSold = true;
         }
 
-        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
+        if (ticketsSold) {
+            successLabel.setText("Lístky boli úspešne predané!");
+            successLabel.setVisible(true);
+            clearSpinners();
+        } else {
+            successLabel.setText("Neboli predané žiadne lístky.");
+            successLabel.setVisible(true);
+        }
     }
 
-    private void createTicket(String type, BigDecimal price) {
-        UserDao userDao = Factory.INSTANCE.getUserDao();
-        Ticket ticket = new Ticket();
-
+    private void createTicket(String type, BigDecimal price, int count) {
         User currentCashier = userDao.getById(Auth.INSTANCE.getPrincipal().getId());
 
-        ticket.setType(type);
-        ticket.setPrice(price);
-        ticket.setPurchaseDateTime(LocalDateTime.now());
-        ticket.setCashier(currentCashier);
+        for (int i = 0; i < count; i++) {
+            Ticket ticket = new Ticket();
+            ticket.setType(type);
+            ticket.setPrice(price);
+            ticket.setPurchaseDateTime(LocalDateTime.now());
+            ticket.setCashier(currentCashier);
 
-        ticketDao.create(ticket);
+            ticketDao.create(ticket);
+        }
     }
 
+    private void clearSpinners() {
+        childSpinner.getValueFactory().setValue(0);
+        seniorStudentSpinner.getValueFactory().setValue(0);
+        adultSpinner.getValueFactory().setValue(0);
+    }
+
+    @FXML
+    public void goBack(ActionEvent event) {
+        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
+    }
 }

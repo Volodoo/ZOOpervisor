@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.embed.swing.SwingNode?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="sk.upjs.paz.ticket.TicketStatsController"
+            minWidth="800" minHeight="600">
+
+    <top>
+        <VBox spacing="5" style="-fx-padding: 10;">
+            <HBox spacing="10">
+                <Button text="Predaje podľa dní" fx:id="btnDailySales"/>
+                <Button text="Predaje podľa typu lístka" fx:id="btnTypeSales"/>
+            </HBox>
+            <Label fx:id="statsLabel" text="Štatistiky sa zobrazia tu..." wrapText="true"/>
+        </VBox>
+    </top>
+
+    <center>
+        <SwingNode fx:id="chartContainer"/>
+    </center>
+
+</BorderPane>
