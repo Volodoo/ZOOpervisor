@@ -6,21 +6,27 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.task.TaskDao;
-import sk.upjs.paz.user.UserDao;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EnclosureViewController {
 
     @FXML
     public TableColumn<Enclosure, String> animalsCountCol;
+
+    @FXML
+    public ComboBox<String> zoneFilterComboBox;  // Filter pre zóny
+
     @FXML
     private Button addEnclosureButton;
 
@@ -43,35 +49,19 @@ public class EnclosureViewController {
     private TableColumn<Enclosure, String> zoneCol;  // Zóna výbehu
 
     private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
-    private TaskDao taskDao = Factory.INSTANCE.getTaskDao();
-    private UserDao userDao = Factory.INSTANCE.getUserDao();
 
     @FXML
     void initialize() {
 
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        zoneCol.setCellValueFactory(new PropertyValueFactory<>("zone"));
 
-        // Pre názov výbehu
-        nameCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getName())
-        );
+        animalsCountCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAnimalsCount())));
 
-        // Pre zónu
-        zoneCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getZone())
-        );
-
-        // Pre počet zvierat v výbehu
-        animalsCountCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getAnimalsCount()))
-        );
-
-        lastMaintainanceCol.setCellValueFactory(cellData -> {
-            return new SimpleStringProperty(
-                    cellData.getValue().getLastMaintainance() != null ?
-                            cellData.getValue().getLastMaintainance().toLocalDate().toString() :
-                            "Ešte Neprebehla"
-            );
-        });
+        lastMaintainanceCol.setCellValueFactory(cellData -> new SimpleStringProperty(
+                cellData.getValue().getLastMaintainance() != null ?
+                        cellData.getValue().getLastMaintainance().toLocalDate().toString() :
+                        "Ešte Neprebehla"));
 
         SceneManager.setupDoubleClick(
                 enclosureTable,
@@ -79,14 +69,43 @@ public class EnclosureViewController {
                 "Upraviť Výbeh",
                 (EnclosureEditController ctrl, Enclosure enclosure) -> ctrl.setEnclosure(enclosure));
 
+
+        loadZones();
         loadEnclosures();
+
+        zoneFilterComboBox.setOnAction(event -> filterEnclosuresByZone());
+    }
+
+    private void loadZones() {
+        List<Enclosure> enclosures = enclosureDao.getAll();
+        Set<String> zones = new HashSet<>();
+
+        for (Enclosure enclosure : enclosures) {
+            zones.add(enclosure.getZone());
+        }
+
+        zoneFilterComboBox.getItems().add("Všetky");
+        zoneFilterComboBox.getItems().addAll(zones);
+        zoneFilterComboBox.getSelectionModel().select("Všetky");
+    }
+
+    private void filterEnclosuresByZone() {
+        String selectedZone = zoneFilterComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedZone != null) {
+            if (selectedZone.equals("Všetky")) {
+                loadEnclosures();
+            } else {
+                List<Enclosure> enclosures = enclosureDao.getByZone(selectedZone);
+                ObservableList<Enclosure> enclosureObservableList = FXCollections.observableArrayList(enclosures);
+                enclosureTable.setItems(enclosureObservableList);
+            }
+        }
     }
 
     private void loadEnclosures() {
         List<Enclosure> enclosures = enclosureDao.getAllSortedByZone();
-
         ObservableList<Enclosure> enclosureObservableList = FXCollections.observableArrayList(enclosures);
-
         enclosureTable.setItems(enclosureObservableList);
     }
 

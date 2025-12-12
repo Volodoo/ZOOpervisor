@@ -13,14 +13,6 @@ public class IDELauncher {
 
 
     public static void main(String[] args) throws IOException {
-        AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
-        EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
-        TaskDao taskDao = Factory.INSTANCE.getTaskDao();
-        UserDao userDao = Factory.INSTANCE.getUserDao();
-        TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
-
-
-        System.out.println(ticketDao.getByCashier(4L));
         Main.main(args);
     }
 }

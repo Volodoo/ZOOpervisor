@@ -20,7 +20,7 @@
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
                         <Label fx:id="filterLabel" text="Filter:" />
-                        <ComboBox fx:id="filterComboBox" prefWidth="130.0" />
+                        <ComboBox fx:id="zoneFilterComboBox" prefWidth="130.0" />
                     </children>
                 </HBox>
 

@@ -5,10 +5,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.user.Role;
+import sk.upjs.paz.user.User;
+import sk.upjs.paz.user.UserDao;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,14 +34,17 @@ public class TicketViewController {
     @FXML
     public TableColumn<Ticket, String> cashierCol;
 
+    @FXML
+    public ComboBox<String> cashierFilterComboBox;  // Displaying full name + ID
+
     private TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
+    private UserDao userDao = Factory.INSTANCE.getUserDao();
 
     @FXML
     public void initialize() {
         typeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(getTypeInSlovak(cellData.getValue().getType()))
         );
-
 
         purchaseDateTimeCol.setCellValueFactory(cellData -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -52,32 +59,71 @@ public class TicketViewController {
                 new SimpleStringProperty(cellData.getValue().getCashier().getFirstName() + " " + cellData.getValue().getCashier().getLastName())
         );
 
+        loadCashiers();
         loadTickets();
+
+        cashierFilterComboBox.setOnAction(event -> filterTicketsByCashier());
     }
 
     private String getTypeInSlovak(String type) {
-        String typeSlovak = "";
         switch (type) {
             case "Child":
-                typeSlovak = "Dieťa";
-                break;
+                return "Dieťa";
             case "Student_Senior":
-                typeSlovak = "Študent/Senior";
-                break;
+                return "Študent/Senior";
             case "Adult":
-                typeSlovak = "Dospelý";
-                break;
+                return "Dospelý";
             default:
-                typeSlovak = type;
+                return type;
         }
-        return typeSlovak;
+    }
+
+    private void loadCashiers() {
+        List<User> users = userDao.getAll();
+
+        cashierFilterComboBox.getItems().clear();
+
+        cashierFilterComboBox.getItems().add("Všetci");
+
+        for (User user : users) {
+            if (user.getRole().equals(Role.CASHIER)) {
+                String cashierFullNameWithId = user.getFirstName() + " " + user.getLastName() + " (" + user.getId() + ")";
+                cashierFilterComboBox.getItems().add(cashierFullNameWithId);
+            }
+        }
+
+        cashierFilterComboBox.getSelectionModel().select("Všetci");
+    }
+
+    private void filterTicketsByCashier() {
+        String selectedCashier = cashierFilterComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedCashier != null) {
+            if (selectedCashier.equals("Všetci")) {
+                loadTickets();
+            } else {
+                Long cashierId = extractCashierIdFromString(selectedCashier);
+                if (cashierId != null) {
+                    List<Ticket> tickets = ticketDao.getByCashier(cashierId);
+                    ObservableList<Ticket> ticketObservableList = FXCollections.observableArrayList(tickets);
+                    ticketTable.setItems(ticketObservableList);
+                }
+            }
+        }
+    }
+
+    private Long extractCashierIdFromString(String fullNameWithId) {
+        String idString = fullNameWithId.substring(fullNameWithId.lastIndexOf('(') + 1, fullNameWithId.lastIndexOf(')'));
+        try {
+            return Long.parseLong(idString);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private void loadTickets() {
         List<Ticket> tickets = ticketDao.getAll();
-
         ObservableList<Ticket> ticketObservableList = FXCollections.observableArrayList(tickets);
-
         ticketTable.setItems(ticketObservableList);
     }
 
@@ -86,8 +132,4 @@ public class TicketViewController {
         SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
     }
 
-    @FXML
-    public void addTicket(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj lístka");
-    }
 }

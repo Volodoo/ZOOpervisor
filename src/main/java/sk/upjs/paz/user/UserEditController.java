@@ -17,65 +17,52 @@ public class UserEditController {
     @FXML
     private TextField surnameField;
     @FXML
-    private ComboBox<Gender> sexComboBox;
+    private ComboBox<Gender> genderComboBox;
     @FXML
     private ComboBox<Role> roleComboBox;
     @FXML
     private DatePicker birthDatePicker;
 
-    UserDao userDao= Factory.INSTANCE.getUserDao();
+    UserDao userDao = Factory.INSTANCE.getUserDao();
 
 
     private User user;
-    private boolean editMode=false;
+    private boolean editMode = false;
 
     @FXML
     void initialize() {
-        sexComboBox.getItems().setAll(Gender.values());
+        genderComboBox.getItems().setAll(Gender.values());
         roleComboBox.getItems().setAll(Role.values());
     }
 
     @FXML
     public void saveUser(ActionEvent event) {
-    if(editMode){
-        user.setFirstName(nameField.getText());
-        user.setLastName(nameField.getText());
-        user.setEmail(emailField.getText());
-        if(birthDatePicker.getValue()!=null){
+        if (editMode) {
+            user.setFirstName(nameField.getText());
+            user.setLastName(nameField.getText());
+            user.setEmail(emailField.getText());
             user.setBirthDay(birthDatePicker.getValue());
-        }
-        if(roleComboBox.getValue()!=null){
             user.setRole(roleComboBox.getValue());
-        }
-        if(sexComboBox.getValue()!=null){
-            user.setGender(sexComboBox.getValue());
-        }
-        this.editMode=false;
-        userDao.update(user);
-        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml","Zobrazenie userov");
-    }
-    else{
-        User user=new User();
-        user.setFirstName(nameField.getText());
-        user.setLastName(nameField.getText());
-        user.setEmail(emailField.getText());
-        if(birthDatePicker.getValue()!=null){
+            user.setGender(genderComboBox.getValue());
+            this.editMode = false;
+            userDao.update(user);
+            SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie userov");
+        } else {
+            User user = new User();
+            user.setFirstName(nameField.getText());
+            user.setLastName(nameField.getText());
+            user.setEmail(emailField.getText());
             user.setBirthDay(birthDatePicker.getValue());
-        }
-        if(roleComboBox.getValue()!=null){
             user.setRole(roleComboBox.getValue());
+            user.setGender(genderComboBox.getValue());
+            userDao.create(user);
+            SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie userov");
         }
-        if(sexComboBox.getValue()!=null){
-            user.setGender(sexComboBox.getValue());
-        }
-        userDao.create(user);
-        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml","Zobrazenie userov");
-    }
     }
 
     @FXML
     public void goBack(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml","Zobrazenie userov");
+        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie userov");
     }
 
     public void setUser(User user) {
@@ -85,16 +72,9 @@ public class UserEditController {
         nameField.setText(user.getFirstName());
         surnameField.setText(user.getLastName());
         emailField.setText(user.getEmail());
-        if(birthDatePicker.getValue() != null) {
-            birthDatePicker.setValue(birthDatePicker.getValue());
-        }
-        if(roleComboBox.getValue() != null) {
-            roleComboBox.setValue(roleComboBox.getValue());
-        }
-        if (sexComboBox.getValue() != null) {
-            sexComboBox.setValue(sexComboBox.getValue());
-        }
-
+        birthDatePicker.setValue(user.getBirthDay());
+        roleComboBox.setValue(user.getRole());
+        genderComboBox.setValue(user.getGender());
     }
 
 }

@@ -23,7 +23,7 @@
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
                         <Label fx:id="filterLabel" text="Filter:" />
-                        <ComboBox fx:id="filterComboBox" prefWidth="130.0" />
+                        <ComboBox fx:id="cashierFilterComboBox" prefWidth="130.0" />
                     </children>
                 </HBox>
 
@@ -37,7 +37,6 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="addButton" mnemonicParsing="false" onAction="#addTicket" text="Pridaj lístok" />
                 <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="Späť" />
             </children>
 

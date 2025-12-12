@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
@@ -34,61 +35,100 @@ public class UserViewController {
     public TableColumn<User, String> roleCol;
 
     @FXML
-    public TableView userTable;
+    public TableView<User> userTable;
+
+    @FXML
+    public ComboBox<String> roleFilterComboBox;
 
     private UserDao userDao = Factory.INSTANCE.getUserDao();
 
     @FXML
     public void initialize() {
-        firstNameCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getFirstName())
-        );
+        roleFilterComboBox.getItems().add("Všetky");
+        roleFilterComboBox.getItems().add("Admin");
+        roleFilterComboBox.getItems().add("Manažér");
+        roleFilterComboBox.getItems().add("Ošetrovateľ");
+        roleFilterComboBox.getItems().add("Údržbár");
+        roleFilterComboBox.getItems().add("Predavač");
+        roleFilterComboBox.getItems().add("Neaktívny");
 
-        lastNameCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getLastName())
-        );
 
-        genderCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getGender().toString())
-        );
 
+        roleFilterComboBox.getSelectionModel().select("Všetky");
+
+        roleFilterComboBox.setOnAction(event -> filterUsersByRole());
+
+        firstNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
+        lastNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
+        genderCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGender().toString()));
         birthdayCol.setCellValueFactory(cellData -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             return new SimpleStringProperty(cellData.getValue().getBirthDay().format(formatter));
         });
-
-        emailCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getEmail())
-        );
-
-        roleCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRole().toString())
-        );
+        emailCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+        roleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRole().toString()));
 
         SceneManager.setupDoubleClick(
                 userTable,
                 "/sk.upjs.paz/user/UserEdit.fxml",
-                "Upraviť usera",
-                (UserEditController ctrl, User user) -> ctrl.setUser(user));
+                "Upraviť usera", // "Edit User"
+                (UserEditController ctrl, User user) -> ctrl.setUser(user)
+        );
 
         loadUsers();
     }
 
+    private void filterUsersByRole() {
+        String selectedRole = roleFilterComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedRole != null) {
+            if (selectedRole.equals("Všetky")) {
+                loadUsers();
+            } else {
+                Role role = convertStringToRole(selectedRole);
+                List<User> users = userDao.getByRole(role);
+                ObservableList<User> userObservableList = FXCollections.observableArrayList(users);
+                userTable.setItems(userObservableList);
+            }
+        }
+    }
+
+    private Role convertStringToRole(String roleString) {
+        switch (roleString) {
+            case "Admin":
+                return Role.ADMIN;
+            case "Manažér":
+                return Role.MANAGER;
+            case "Ošetrovateľ":
+                return Role.ZOOKEEPER;
+            case "Údržbár":
+                return Role.MAINTAINER;
+            case "Predavač":
+                return Role.CASHIER;
+            case "Neaktívny":
+                return Role.INACTIVE;
+            default:
+                throw new IllegalArgumentException("Neznáma rola: " + roleString);
+        }
+    }
+
     private void loadUsers() {
-        List<User> users = userDao.getAll();
+        String selectedRole = roleFilterComboBox.getSelectionModel().getSelectedItem();
+
+        List<User> users;
+        if (selectedRole == null || selectedRole.equals("Všetky")) {
+            users = userDao.getAll();
+        } else {
+            Role role = convertStringToRole(selectedRole);
+            users = userDao.getByRole(role);
+        }
 
         ObservableList<User> userObservableList = FXCollections.observableArrayList(users);
-
         userTable.setItems(userObservableList);
     }
 
     @FXML
     public void goBack(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
-    }
-
-    @FXML
-    public void addUser(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/user/UserEdit.fxml","Pridavanie usera");
+        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno"); // "Main Window"
     }
 }
