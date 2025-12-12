@@ -97,4 +97,25 @@ public class SceneManager {
 
         return result.isPresent() && result.get() == ButtonType.OK;
     }
+
+    public static void openNewWindow(String fxmlPath, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle(title);
+            stage.setResizable(true);
+            stage.setMaximized(true);
+
+            stage.show();
+
+            stage.setFullScreenExitHint("");
+
+        } catch (IOException e) {
+            System.err.println("Chyba pri načítaní FXML: " + fxmlPath);
+            e.printStackTrace();
+        }
+    }
 }

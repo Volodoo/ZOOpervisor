@@ -93,7 +93,7 @@ public class MainViewController {
 
     @FXML
     public void displayTicketSell(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj Listka");
+        SceneManager.changeScene( event,"/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj Lístkov");
     }
 
     private void changeScene(ActionEvent event, String fxmlPath, String title) throws IOException {

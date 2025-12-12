@@ -66,8 +66,13 @@ public class AnimalEditController {
     @FXML
     void updateAnimalButtonAction(ActionEvent event) {
         if (editMode) {
+            if (animal == null) {
+                System.out.println("error");
+                return;
+            }
+
             boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
-            if(!suhlas){
+            if(!suhlas) {
                 return;
             }
             this.editMode = false;
@@ -79,18 +84,19 @@ public class AnimalEditController {
             animal.setBirthDay(birthDayPicker.getValue());
             animalDao.update(animal);
         }
-        else{
+        else {
             boolean suhlas = SceneManager.confirm("Naozaj chcete pridať nové zviera?");
-            if(!suhlas){
+            if (!suhlas) {
                 return;
             }
-            Animal newAnimal=new Animal();
-            animal.setNickname(nicknameField.getText());
-            animal.setSpecies(speciesField.getText());
-            animal.setStatus(statusComboBox.getValue());
-            animal.setEnclosure(enclosureComboBox.getValue());
-            animal.setSex(sexComboBox1.getSelectionModel().getSelectedItem());
-            animal.setBirthDay(birthDayPicker.getValue());
+
+            Animal newAnimal = new Animal();
+            newAnimal.setNickname(nicknameField.getText());
+            newAnimal.setSpecies(speciesField.getText());
+            newAnimal.setStatus(statusComboBox.getValue());
+            newAnimal.setEnclosure(enclosureComboBox.getValue());
+            newAnimal.setSex(sexComboBox1.getSelectionModel().getSelectedItem());
+            newAnimal.setBirthDay(birthDayPicker.getValue());
             animalDao.create(newAnimal);
         }
 

@@ -72,13 +72,12 @@ public class EnclosureEditController {
                 return;
             }
             Enclosure newEnclosure = new Enclosure();
-            enclosure.setName(nameField.getText());
-            enclosure.setZone(zoneField.getText());
+            newEnclosure.setName(nameField.getText());
+            newEnclosure.setZone(zoneField.getText());
             if (lastMaintainanceDatePicker.getValue() != null) {
-
-                enclosure.setLastMaintainance(lastMaintainanceDatePicker.getValue().atStartOfDay());
+                newEnclosure.setLastMaintainance(lastMaintainanceDatePicker.getValue().atStartOfDay());
             } else {
-                enclosure.setLastMaintainance(null);
+                newEnclosure.setLastMaintainance(null);
             }
             enclosureDao.create(newEnclosure);
 

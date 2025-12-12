@@ -4,16 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.security.Auth;
-import sk.upjs.paz.task.TaskEditController;
 import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
@@ -44,6 +39,7 @@ public class TicketViewController {
     public Label userNameLabel;
     @FXML
     public Label roleLabel;
+    public Spinner ticket1CountSpinner;
 
     private TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
     private UserDao userDao = Factory.INSTANCE.getUserDao();
@@ -146,4 +142,9 @@ public class TicketViewController {
         SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
     }
 
+    @FXML
+    public void showStatisticButton(ActionEvent event) {
+        SceneManager.openNewWindow("/sk.upjs.paz/ticket/TicketStatsView.fxml", "Štatistika");
+
+    }
 }
