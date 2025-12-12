@@ -30,8 +30,9 @@ public class MainViewController {
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
 
-        // VYTVOR SI ADMINA A TU SI PO PRIHLASINU JAK ADMIN MOZES ZMINITY ROLU A UVIDIS JAK TO VYZERAT
-        principal.setRole(Role.MAINTAINER);
+
+        // TU SI NASTAVUJ A MEN ROLU, SIMULUJES PRIHLASENEHO USERA S ROLOU
+        principal.setRole(Role.ADMIN);
 
         if (principal == null) {
             usernameField.setText("Neprihlásený");

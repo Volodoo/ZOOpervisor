@@ -10,6 +10,7 @@ import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.animal.AnimalDao;
 import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.enclosure.EnclosureDao;
+import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
@@ -54,7 +55,16 @@ public class TaskEditController {
     @FXML
     void initialize() {
         statusComboBox.getItems().setAll(Status.values());
-        userComboBox.getItems().setAll(userDao.getAll());
+
+
+        List<User> users = userDao.getAll();
+
+        for (User user : users) {
+            if (user.getRole() == Role.MANAGER || user.getRole() == Role.ADMIN || user.getRole() == Role.CASHIER || user.getRole() == Role.INACTIVE) {
+                continue;
+            }
+            userComboBox.getItems().add(user);
+        }
 
         if(!editMode){
             loadAnimals();

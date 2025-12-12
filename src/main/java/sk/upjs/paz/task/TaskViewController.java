@@ -54,7 +54,7 @@ public class TaskViewController {
         if (principal == null || (principal.getRole() != Role.ADMIN && principal.getRole() != Role.MANAGER)) {
             addTaskButton.setDisable(true);
             userFilterComboBox.setDisable(true);
-            taskTable.setOnMouseClicked(Event::consume);
+            taskTable.setOnMouseClicked(Event::consume);  // readonly
         } else {
             SceneManager.setupDoubleClick(taskTable, "/sk.upjs.paz/task/TaskEdit.fxml", "Upraviť výbeh", TaskEditController::setTask);
         }
@@ -96,7 +96,7 @@ public class TaskViewController {
         userFilterComboBox.getItems().add("Všetci");
 
         for (User user : users) {
-            if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN)) {
+            if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.CASHIER) || user.getRole().equals(Role.INACTIVE)) {
                 continue;
             }
             String displayString = String.format("%s %s (%s) (%d)",
@@ -109,7 +109,16 @@ public class TaskViewController {
     }
 
     private void loadTasks() {
-        List<Task> tasks = taskDao.getAll();
+        var principal = Auth.INSTANCE.getPrincipal();
+
+        List<Task> tasks;
+
+        if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
+            tasks = taskDao.getAll();
+        } else {
+            tasks = taskDao.getByUser(principal.getId());
+        }
+
         ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
         taskTable.setItems(taskObservableList);
     }

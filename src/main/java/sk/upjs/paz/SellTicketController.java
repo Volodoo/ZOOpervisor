@@ -3,6 +3,7 @@ package sk.upjs.paz;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import sk.upjs.paz.security.Auth;
 import sk.upjs.paz.ticket.Ticket;
 import sk.upjs.paz.ticket.TicketDao;
 import sk.upjs.paz.user.User;
@@ -24,39 +25,66 @@ public class SellTicketController {
     private CheckBox adultCheckBox;
 
 
-
-    TicketDao ticketDao=Factory.INSTANCE.getTicketDao();
-    UserDao userDao=Factory.INSTANCE.getUserDao();
+    TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
+    UserDao userDao = Factory.INSTANCE.getUserDao();
 
     @FXML
     public void goBack(ActionEvent event) {
-        SceneManager.changeScene(event,"/sk.upjs.paz/MainView.fxml","Hlavne okno");
+        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
+    }
+
+    @FXML
+    public void initialize() {
+        childCheckBox.setOnAction(e -> {
+            if (childCheckBox.isSelected()) {
+                adultCheckBox.setSelected(false);
+                seniorStudentCheckBox.setSelected(false);
+            }
+        });
+
+        adultCheckBox.setOnAction(e -> {
+            if (adultCheckBox.isSelected()) {
+                childCheckBox.setSelected(false);
+                seniorStudentCheckBox.setSelected(false);
+            }
+        });
+
+        seniorStudentCheckBox.setOnAction(e -> {
+            if (seniorStudentCheckBox.isSelected()) {
+                childCheckBox.setSelected(false);
+                adultCheckBox.setSelected(false);
+            }
+        });
     }
 
     @FXML
     public void sellTicket(ActionEvent event) {
 
-        if(seniorStudentCheckBox.isSelected()) {
-            this.createTicket("Študent/Senior",new BigDecimal("7.00"));
+        if (seniorStudentCheckBox.isSelected()) {
+            this.createTicket("Študent/Senior", new BigDecimal("7.00"));
         }
 
-        if(childCheckBox.isSelected()) {
-            this.createTicket("Child",new BigDecimal("5.00"));
+        if (childCheckBox.isSelected()) {
+            this.createTicket("Child", new BigDecimal("5.00"));
         }
 
-        if(adultCheckBox.isSelected()) {
-            this.createTicket("Dospelý",new BigDecimal("10.00"));
+        if (adultCheckBox.isSelected()) {
+            this.createTicket("Dospelý", new BigDecimal("10.00"));
         }
 
-        SceneManager.changeScene(event,"/sk.upjs.paz/MainView.fxml","Hlavne okno");
+        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "Hlavne okno");
     }
 
     private void createTicket(String type, BigDecimal price) {
+        UserDao userDao = Factory.INSTANCE.getUserDao();
         Ticket ticket = new Ticket();
+
+        User currentCashier = userDao.getById(Auth.INSTANCE.getPrincipal().getId());
 
         ticket.setType(type);
         ticket.setPrice(price);
         ticket.setPurchaseDateTime(LocalDateTime.now());
+        ticket.setCashier(currentCashier);
 
         ticketDao.create(ticket);
     }
