@@ -30,8 +30,7 @@ public class MainViewController {
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
 
-
-        // TU SI NASTAVUJ A MEN ROLU, SIMULUJES PRIHLASENEHO USERA S ROLOU
+        // VYTVOR SI ADMINA A TU SI PO PRIHLASINU JAK ADMIN MOZES ZMINITY ROLU A UVIDIS JAK TO VYZERAT
         principal.setRole(Role.ADMIN);
 
         if (principal == null) {
