@@ -16,12 +16,14 @@ public class MysqlAuthDao implements AuthDao {
         this.jdbcOperations = jdbcOperations;
     }
 
-    private final String selectUserQuery = "SELECT id, email, role, password " +
+    private final String selectUserQuery = "SELECT id, first_name, last_name, email, role, password " +
             "FROM user WHERE email = ?";
 
     private final RowMapper<PrincipalWithPassword> rowMapper = (rs, rowNum) -> {
         var principal = new Principal();
         principal.setId(rs.getLong("id"));
+        principal.setFirstName(rs.getString("first_name"));
+        principal.setLastName(rs.getString("last_name"));
         principal.setEmail(rs.getString("email"));
         principal.setRole(Role.valueOf(rs.getString("role")));
 

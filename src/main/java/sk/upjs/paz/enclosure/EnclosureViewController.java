@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -13,6 +14,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.animal.AnimalEditController;
+import sk.upjs.paz.security.Auth;
+import sk.upjs.paz.user.Role;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -25,7 +29,7 @@ public class EnclosureViewController {
     public TableColumn<Enclosure, String> animalsCountCol;
 
     @FXML
-    public ComboBox<String> zoneFilterComboBox;  // Filter pre zóny
+    public ComboBox<String> zoneFilterComboBox;
 
     @FXML
     private Button addEnclosureButton;
@@ -33,8 +37,6 @@ public class EnclosureViewController {
     @FXML
     private TableView<Enclosure> enclosureTable;
 
-    @FXML
-    private Button goBackButton;
 
     @FXML
     private TableColumn<Enclosure, String> lastMaintainanceCol;
@@ -43,15 +45,21 @@ public class EnclosureViewController {
     private TableColumn<Enclosure, String> nameCol;  // Názov výbehu
 
     @FXML
-    private HBox occupationHbox;
-
-    @FXML
     private TableColumn<Enclosure, String> zoneCol;  // Zóna výbehu
 
     private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
 
     @FXML
     void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+        System.out.println(principal);
+
+        if (principal == null || principal.getRole() != Role.ADMIN) {
+            addEnclosureButton.setDisable(true);
+            enclosureTable.setOnMouseClicked(Event::consume);
+        } else {
+            SceneManager.setupDoubleClick(enclosureTable, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Upraviť výbeh", EnclosureEditController::setEnclosure);
+        }
 
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         zoneCol.setCellValueFactory(new PropertyValueFactory<>("zone"));
@@ -62,13 +70,6 @@ public class EnclosureViewController {
                 cellData.getValue().getLastMaintainance() != null ?
                         cellData.getValue().getLastMaintainance().toLocalDate().toString() :
                         "Ešte Neprebehla"));
-
-        SceneManager.setupDoubleClick(
-                enclosureTable,
-                "/sk.upjs.paz/enclosure/EnclosureEdit.fxml",
-                "Upraviť Výbeh",
-                (EnclosureEditController ctrl, Enclosure enclosure) -> ctrl.setEnclosure(enclosure));
-
 
         loadZones();
         loadEnclosures();

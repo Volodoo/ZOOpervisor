@@ -1,26 +1,71 @@
 package sk.upjs.paz;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import sk.upjs.paz.security.Auth;
+import sk.upjs.paz.task.TaskEditController;
+import sk.upjs.paz.user.Role;
 
 import java.io.IOException;
 
 public class MainViewController {
 
 
+    public Button tasksButton;
+    public Button userButton;
+    public Button ticketButton;
+    public Button sellTicketButton;
+    public Label usernameField;
+    public Label roleField;
+
+    @FXML
+    void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+
+        // VYTVOR SI ADMINA A TU SI PO PRIHLASINU JAK ADMIN MOZES ZMINITY ROLU A UVIDIS JAK TO VYZERAT
+        principal.setRole(Role.MAINTAINER);
+
+        if (principal == null) {
+            usernameField.setText("Neprihlásený");
+            roleField.setText("-");
+            return;
+        }
+        usernameField.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleField.setText("(" + principal.getRole().toString() + ")");
+
+        if (principal == null || principal.getRole() == Role.CASHIER) {
+            tasksButton.setDisable(true);
+        }
+        if (principal == null || principal.getRole() == Role.MAINTAINER || principal.getRole() == Role.ZOOKEEPER) {
+            sellTicketButton.setDisable(true);
+        }
+        if (principal == null || principal.getRole() != Role.ADMIN) {
+            userButton.setDisable(true);
+        }
+        if (principal == null || principal.getRole() != Role.ADMIN) {
+            ticketButton.setDisable(true);
+        }
+
+    }
+
     @FXML
     public void displayAnimals(ActionEvent event) throws IOException {
         SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Zobrazenie zvierat");
     }
+
     @FXML
     public void displayEnclosures(ActionEvent event) throws IOException {
         SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml", "Zobrazenie výbehov");
     }
+
     @FXML
     public void displayTasks(ActionEvent event) throws IOException {
         SceneManager.changeScene(event, "/sk.upjs.paz/task/TaskView.fxml", "Zobrazenie úloh");
@@ -31,6 +76,7 @@ public class MainViewController {
         SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie používateľov");
 
     }
+
     @FXML
     public void displayTickets(ActionEvent event) {
         SceneManager.changeScene(event, "/sk.upjs.paz/ticket/TicketView.fxml", "Zobrazenie lístkov");
@@ -46,7 +92,7 @@ public class MainViewController {
         SceneManager.changeScene(event, "/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj Listka");
     }
 
-    private void changeScene(ActionEvent event,String fxmlPath, String title) throws IOException {
+    private void changeScene(ActionEvent event, String fxmlPath, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
 
@@ -56,5 +102,5 @@ public class MainViewController {
         stage.setTitle(title);
         stage.show();
     }
-    }
+}
 

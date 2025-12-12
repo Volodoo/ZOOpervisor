@@ -90,7 +90,7 @@ public class TaskEditController {
         }
     }
 
-    public void setTasks(Task task) {
+    public void setTask(Task task) {
         this.editMode = true;
         this.task = task;
 
