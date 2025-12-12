@@ -2,16 +2,19 @@ package sk.upjs.paz.enclosure;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EnclosureEditController {
+    @FXML
+    public Spinner<Integer> hourSpinner;
+
+    @FXML
+    public Spinner<Integer> minuteSpinner;
 
     @FXML
     private Button goBackButton;
@@ -41,12 +44,27 @@ public class EnclosureEditController {
 
     private Enclosure enclosure;
 
-    EnclosureDao enclosureDao= Factory.INSTANCE.getEnclosureDao();
+    EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
+
+    @FXML
+    void initialize() {
+        // Nastavenie hodín a minút spinnerov
+        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+
+        // Ak je editMode a enclosure má lastMaintainance, nastav hodnoty spinnerov
+        if (editMode && enclosure != null && enclosure.getLastMaintainance() != null) {
+            LocalDateTime dt = enclosure.getLastMaintainance();
+            lastMaintainanceDatePicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
+        }
+    }
+
     @FXML
     void goBackButtonAction(ActionEvent event) {
         SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml","Zobrazenie výbehov");
     }
-
 
     @FXML
     void updateEnclosureButtonAction(ActionEvent event) {
@@ -54,26 +72,28 @@ public class EnclosureEditController {
             enclosure.setName(nameField.getText());
             enclosure.setZone(zoneField.getText());
             if (lastMaintainanceDatePicker.getValue() != null) {
-
-                enclosure.setLastMaintainance(lastMaintainanceDatePicker.getValue().atStartOfDay());
+                enclosure.setLastMaintainance(
+                        lastMaintainanceDatePicker.getValue()
+                                .atTime(hourSpinner.getValue(), minuteSpinner.getValue())
+                );
             } else {
                 enclosure.setLastMaintainance(null);
             }
             this.editMode = false;
             enclosureDao.update(enclosure);
-        }
-        else {
+        } else {
             Enclosure enclosure = new Enclosure();
             enclosure.setName(nameField.getText());
             enclosure.setZone(zoneField.getText());
             if (lastMaintainanceDatePicker.getValue() != null) {
-
-                enclosure.setLastMaintainance(lastMaintainanceDatePicker.getValue().atStartOfDay());
+                enclosure.setLastMaintainance(
+                        lastMaintainanceDatePicker.getValue()
+                                .atTime(hourSpinner.getValue(), minuteSpinner.getValue())
+                );
             } else {
                 enclosure.setLastMaintainance(null);
             }
             enclosureDao.create(enclosure);
-
         }
         SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml","Zobrazenie výbehov");
     }
@@ -84,7 +104,10 @@ public class EnclosureEditController {
         nameField.setText(enclosure.getName());
         zoneField.setText(enclosure.getZone());
         if(enclosure.getLastMaintainance() != null) {
-            lastMaintainanceDatePicker.setValue(LocalDate.from(enclosure.getLastMaintainance()));
+            LocalDateTime dt = enclosure.getLastMaintainance();
+            lastMaintainanceDatePicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
         }
     }
 }

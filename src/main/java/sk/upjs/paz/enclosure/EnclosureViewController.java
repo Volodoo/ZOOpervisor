@@ -16,6 +16,7 @@ import sk.upjs.paz.security.Auth;
 import sk.upjs.paz.user.Role;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,10 +73,14 @@ public class EnclosureViewController {
 
         animalsCountCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAnimalsCount())));
 
-        lastMaintainanceCol.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().getLastMaintainance() != null ?
-                        cellData.getValue().getLastMaintainance().toLocalDate().toString() :
-                        "Ešte Neprebehla"));
+        lastMaintainanceCol.setCellValueFactory(cellData -> {
+            if (cellData.getValue().getLastMaintainance() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                return new SimpleStringProperty(cellData.getValue().getLastMaintainance().format(formatter));
+            } else {
+                return new SimpleStringProperty("");
+            }
+        });
 
         loadZones();
         loadEnclosures();

@@ -10,12 +10,15 @@ import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.animal.Animal;
+import sk.upjs.paz.animal.AnimalDao;
 import sk.upjs.paz.enclosure.Enclosure;
+import sk.upjs.paz.enclosure.EnclosureDao;
 import sk.upjs.paz.security.Auth;
 import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +47,8 @@ public class TaskViewController {
 
     private TaskDao taskDao = Factory.INSTANCE.getTaskDao();
     private UserDao userDao = Factory.INSTANCE.getUserDao();
+    private AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
+    private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
 
     @FXML
     void initialize() {
@@ -117,7 +122,7 @@ public class TaskViewController {
         if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
             tasks = taskDao.getAll();
         } else {
-            tasks = taskDao.getByUser(principal.getId());
+            tasks = taskDao.getByUser(5L);
         }
 
         ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
@@ -163,6 +168,22 @@ public class TaskViewController {
             selectedTask.setStatus(Status.COMPLETED);
 
             taskDao.update(selectedTask);
+
+            if (!selectedTask.getAnimals().isEmpty()) {
+                for (Animal animal : selectedTask.getAnimals()) {
+                    Animal animalToUpdate = animalDao.getById(animal.getId());
+                    animalToUpdate.setLastCheck(LocalDateTime.now());
+                    animalDao.update(animalToUpdate);
+                }
+            }
+
+            if (!selectedTask.getEnclosures().isEmpty()) {
+                for (Enclosure enclosure : selectedTask.getEnclosures()) {
+                    Enclosure  enclosureToUpdate = enclosureDao.getById(enclosure.getId());
+                    enclosureToUpdate.setLastMaintainance(LocalDateTime.now());
+                    enclosureDao.update(enclosureToUpdate);
+                }
+            }
 
             taskTable.refresh();
         } else {

@@ -87,11 +87,12 @@ public class AnimalViewController {
         });
         enclosureCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnclosure().getName()));
         lastCheckCol.setCellValueFactory(cellData -> {
-            return new SimpleStringProperty(
-                    cellData.getValue().getLastCheck() != null ?
-                            cellData.getValue().getLastCheck().toLocalDate().toString() :
-                            "Ešte Neprebehla"
-            );
+            if (cellData.getValue().getLastCheck() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                return new SimpleStringProperty(cellData.getValue().getLastCheck().format(formatter));
+            } else {
+                return new SimpleStringProperty("");
+            }
         });
         statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus().toString()));
 
