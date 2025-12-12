@@ -38,6 +38,7 @@ public class TaskViewController {
     public ComboBox<String> userFilterComboBox;
     public Label userNameLabel;
     public Label roleLabel;
+    public Button deleteTaskButton;
 
     @FXML
     private Button addTaskButton;
@@ -60,7 +61,8 @@ public class TaskViewController {
         if (principal == null || (principal.getRole() != Role.ADMIN && principal.getRole() != Role.MANAGER)) {
             addTaskButton.setDisable(true);
             userFilterComboBox.setDisable(true);
-            taskTable.setOnMouseClicked(Event::consume);  // readonly
+            deleteTaskButton.setDisable(true);
+            taskTable.setOnMouseClicked(Event::consume);
         } else {
             SceneManager.setupDoubleClick(taskTable, "/sk.upjs.paz/task/TaskEdit.fxml", "Upraviť výbeh", TaskEditController::setTask);
         }
@@ -77,7 +79,7 @@ public class TaskViewController {
         animalsCol.setCellValueFactory(cellData -> {
             Set<Animal> animals = cellData.getValue().getAnimals();
             String animalsString = animals.stream()
-                    .map(Animal::getNickname)
+                    .map(animal -> animal.getNickname() + " (" + animal.getId() + ")")
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(animalsString.isEmpty() ? "" : animalsString);
         });
@@ -161,6 +163,11 @@ public class TaskViewController {
 
     @FXML
     public void finishTaskButtonAction(ActionEvent actionEvent) {
+        boolean suhlas = SceneManager.confirm("Naozaj chcete označiť úlohu ako dokončenú?");
+        if (!suhlas) {
+            return;
+        }
+
         Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
 
         if (selectedTask != null) {
@@ -178,7 +185,7 @@ public class TaskViewController {
 
             if (!selectedTask.getEnclosures().isEmpty()) {
                 for (Enclosure enclosure : selectedTask.getEnclosures()) {
-                    Enclosure  enclosureToUpdate = enclosureDao.getById(enclosure.getId());
+                    Enclosure enclosureToUpdate = enclosureDao.getById(enclosure.getId());
                     enclosureToUpdate.setLastMaintainance(LocalDateTime.now());
                     enclosureDao.update(enclosureToUpdate);
                 }
@@ -189,4 +196,25 @@ public class TaskViewController {
             System.out.println("Žiadna úloha nebola vybraná.");
         }
     }
+
+    public void deleteTaskButtonAction(ActionEvent event) {
+        boolean suhlas = SceneManager.confirm("Naozaj chcete vymazať úlohu zo zoznamu?");
+        if (!suhlas) {
+            return;
+        }
+
+        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
+
+        if (selectedTask != null) {
+            taskDao.delete(selectedTask.getId());
+            loadTasks();
+
+
+            List<Task> tasks = taskDao.getAll();
+            ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
+            taskTable.setItems(taskObservableList);
+        }
+    }
+
+
 }

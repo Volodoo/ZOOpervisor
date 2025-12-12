@@ -88,7 +88,10 @@ public class TaskEditController {
         animalCheckBoxes.clear();
         List<Animal> animals = animalDao.getAllSortedBySpecies();
         for (Animal a : animals) {
-            CheckBox cb = new CheckBox(a.getNickname());
+            if (a.getStatus().equals(sk.upjs.paz.animal.Status.INACTIVE)) {
+                continue;
+            }
+            CheckBox cb = new CheckBox(a.getNickname() + " (" + a.getId() + ")");
             if (editMode && task != null && task.getAnimals().contains(a)) {
                 cb.setSelected(true);
             }
@@ -166,14 +169,14 @@ public class TaskEditController {
 
         if (editMode) {
             boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
-            if(!suhlas){
+            if (!suhlas) {
                 return;
             }
             taskDao.update(taskToSave);
             editMode = false;
         } else {
             boolean suhlas = SceneManager.confirm("Naozaj chcete pridať novú úlohu?");
-            if(!suhlas){
+            if (!suhlas) {
                 return;
             }
             taskDao.create(taskToSave);

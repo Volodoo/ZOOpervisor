@@ -94,6 +94,11 @@ public class SellTicketController {
 
     @FXML
     public void sellTicket(ActionEvent event) {
+        boolean suhlas = SceneManager.confirm("Naozaj chcete predať lístok?");
+        if(!suhlas){
+            return;
+        }
+
         boolean ticketsSold = false;
 
         if (childSpinner.getValue() > 0) {
