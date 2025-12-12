@@ -35,6 +35,9 @@ public class TaskEditController {
     private TextField nameField;
 
     @FXML
+    private Button saveTaskButton;
+
+    @FXML
     private ComboBox<Status> statusComboBox;
 
     @FXML
@@ -92,6 +95,7 @@ public class TaskEditController {
 
     public void setTask(Task task) {
         this.editMode = true;
+        this.saveTaskButton.setText("Uložiť");
         this.task = task;
 
         loadAnimals();
@@ -113,8 +117,6 @@ public class TaskEditController {
     @FXML
     void saveTaskButtonAction(ActionEvent event) {
         Task taskToSave = editMode ? task : new Task();
-
-
         taskToSave.setName(nameField.getText());
         taskToSave.setDescription(descriptionTextArea.getText());
         taskToSave.setStatus(statusComboBox.getValue());
@@ -134,9 +136,17 @@ public class TaskEditController {
         );
 
         if (editMode) {
+            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
+            if(!suhlas){
+                return;
+            }
             taskDao.update(taskToSave);
             editMode = false;
         } else {
+            boolean suhlas = SceneManager.confirm("Naozaj chcete pridať novú úlohu?");
+            if(!suhlas){
+                return;
+            }
             taskDao.create(taskToSave);
         }
 

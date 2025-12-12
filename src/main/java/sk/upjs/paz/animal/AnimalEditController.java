@@ -65,8 +65,12 @@ public class AnimalEditController {
 
     @FXML
     void updateAnimalButtonAction(ActionEvent event) {
-
         if (editMode) {
+            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
+            if(!suhlas){
+                return;
+            }
+            this.editMode = false;
             animal.setNickname(nicknameField.getText());
             animal.setSpecies(speciesField.getText());
             animal.setStatus(statusComboBox.getValue());
@@ -74,25 +78,31 @@ public class AnimalEditController {
             animal.setSex(sexComboBox1.getSelectionModel().getSelectedItem());
             animal.setBirthDay(birthDayPicker.getValue());
             animalDao.update(animal);
-            this.editMode = false;
         }
         else{
-            Animal animal=new Animal();
+            boolean suhlas = SceneManager.confirm("Naozaj chcete pridať nové zviera?");
+            if(!suhlas){
+                return;
+            }
+            Animal newAnimal=new Animal();
             animal.setNickname(nicknameField.getText());
             animal.setSpecies(speciesField.getText());
             animal.setStatus(statusComboBox.getValue());
             animal.setEnclosure(enclosureComboBox.getValue());
             animal.setSex(sexComboBox1.getSelectionModel().getSelectedItem());
             animal.setBirthDay(birthDayPicker.getValue());
-            animalDao.create(animal);
+            animalDao.create(newAnimal);
         }
 
         SceneManager.changeScene(event, "/sk.upjs.paz/animal/AnimalView.fxml", "Zvierata");
     }
 
     public void setAnimal(Animal animal) {
-        this.editMode = true;
         this.animal = animal;
+        if(animal.getId()!= null){
+            this.editMode = true;
+            updateAnimalButton.setText("Uložiť");
+        }
         nicknameField.setText(animal.getNickname());
         speciesField.setText(animal.getSpecies());
         sexComboBox1.setValue(animal.getSex());

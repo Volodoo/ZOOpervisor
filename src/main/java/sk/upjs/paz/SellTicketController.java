@@ -35,6 +35,10 @@ public class SellTicketController {
 
     @FXML
     public void sellTicket(ActionEvent event) {
+        boolean suhlas = SceneManager.confirm("Naozaj chcete predať lístok?");
+        if(!suhlas){
+            return;
+        }
 
         if(seniorStudentCheckBox.isSelected()) {
             this.createTicket("Študent/Senior",new BigDecimal("7.00"));

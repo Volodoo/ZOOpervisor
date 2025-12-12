@@ -76,7 +76,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
          <children>
-            <Button fx:id="updateAnimalButton" mnemonicParsing="false" onAction="#updateAnimalButtonAction" text="Uložiť " HBox.hgrow="ALWAYS" />
+            <Button fx:id="updateAnimalButton" mnemonicParsing="false" onAction="#updateAnimalButtonAction" text="Pridať" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
    </children>

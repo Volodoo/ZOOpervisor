@@ -38,6 +38,10 @@ public class UserEditController {
     @FXML
     public void saveUser(ActionEvent event) {
         if (editMode) {
+            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
+            if(!suhlas){
+                return;
+            }
             user.setFirstName(nameField.getText());
             user.setLastName(nameField.getText());
             user.setEmail(emailField.getText());
@@ -47,17 +51,8 @@ public class UserEditController {
             this.editMode = false;
             userDao.update(user);
             SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie userov");
-        } else {
-            User user = new User();
-            user.setFirstName(nameField.getText());
-            user.setLastName(nameField.getText());
-            user.setEmail(emailField.getText());
-            user.setBirthDay(birthDatePicker.getValue());
-            user.setRole(roleComboBox.getValue());
-            user.setGender(genderComboBox.getValue());
-            userDao.create(user);
-            SceneManager.changeScene(event, "/sk.upjs.paz/user/UserView.fxml", "Zobrazenie userov");
         }
+
     }
 
     @FXML

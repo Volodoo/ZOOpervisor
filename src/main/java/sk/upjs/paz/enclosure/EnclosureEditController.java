@@ -51,6 +51,10 @@ public class EnclosureEditController {
     @FXML
     void updateEnclosureButtonAction(ActionEvent event) {
         if(editMode) {
+            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
+            if(!suhlas){
+                return;
+            }
             enclosure.setName(nameField.getText());
             enclosure.setZone(zoneField.getText());
             if (lastMaintainanceDatePicker.getValue() != null) {
@@ -63,7 +67,11 @@ public class EnclosureEditController {
             enclosureDao.update(enclosure);
         }
         else {
-            Enclosure enclosure = new Enclosure();
+            boolean suhlas = SceneManager.confirm("Naozaj chcete pridať nový výbeh?");
+            if(!suhlas){
+                return;
+            }
+            Enclosure newEnclosure = new Enclosure();
             enclosure.setName(nameField.getText());
             enclosure.setZone(zoneField.getText());
             if (lastMaintainanceDatePicker.getValue() != null) {
@@ -72,7 +80,7 @@ public class EnclosureEditController {
             } else {
                 enclosure.setLastMaintainance(null);
             }
-            enclosureDao.create(enclosure);
+            enclosureDao.create(newEnclosure);
 
         }
         SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureView.fxml","Zobrazenie výbehov");
@@ -80,6 +88,7 @@ public class EnclosureEditController {
 
     public void setEnclosure(Enclosure enclosure) {
         this.editMode = true;
+        this.updateEnclosureButton.setText("Uložiť");
         this.enclosure = enclosure;
         nameField.setText(enclosure.getName());
         zoneField.setText(enclosure.getZone());

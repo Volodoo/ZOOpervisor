@@ -116,7 +116,7 @@
 
         <HBox alignment="CENTER" prefHeight="50.0">
             <children>
-                <Button fx:id="saveTaskButon" mnemonicParsing="false" onAction="#saveTaskButtonAction" prefHeight="30.0" prefWidth="120.0" text="Uložiť" />
+                <Button fx:id="saveTaskButton" mnemonicParsing="false" onAction="#saveTaskButtonAction" prefHeight="30.0" prefWidth="120.0" text="Pridať" />
             </children>
         </HBox>
 
