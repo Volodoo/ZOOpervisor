@@ -33,8 +33,7 @@ public class RegisterController {
     private PasswordField passwordField;
     @FXML
     private PasswordField passwordAgainField;
-    @FXML
-    private Label statusLabel;
+
     @FXML
     private Button chancelRegistrationField;
 
@@ -55,14 +54,22 @@ public class RegisterController {
         String passwordAgain = passwordAgainField.getText();
 
         if (firstName.isEmpty() || lastName.isEmpty() || gender == null || birthDay == null || email.isEmpty() || password.isEmpty() || passwordAgain.isEmpty()) {
-            statusLabel.setText("Všetky polia musia byť vyplnené!");
+            Alert alert= new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Upozornenie");
+            alert.setHeaderText(null);
+            alert.setContentText("Všetky polia musia byť vyplnené!");
+            alert.showAndWait();
             return;
         }
 
         //TODO: dokincity heslo aby bylo dajakej zlozitosti
 
         if (!password.equals(passwordAgain)) {
-            statusLabel.setText("Heslá sa nezhodujú!");
+            Alert alert= new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Hesla sa nezhodujú!");
+            alert.showAndWait();
             return;
         }
 
@@ -79,10 +86,13 @@ public class RegisterController {
 
         try {
             User createdUser = userDao.create(newUser);
-            statusLabel.setText("Registrácia bola úspešná!");
+            Alert alert= new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Uspech");
+            alert.setHeaderText(null);
+            alert.setContentText("Registrácia bola úspešná");
+            alert.showAndWait();
             openMainScene();
         } catch (Exception e) {
-            statusLabel.setText("Chyba pri registrácii: " + e.getMessage());
             e.printStackTrace();
         }
     }

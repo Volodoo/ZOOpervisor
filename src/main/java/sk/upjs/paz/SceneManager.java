@@ -97,15 +97,4 @@ public class SceneManager {
 
         return result.isPresent() && result.get() == ButtonType.OK;
     }
-
-    public static void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Upozornenie");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-
-
 }
