@@ -18,12 +18,12 @@
          <children>
             <VBox prefHeight="70.0">
                <children>
-                  <Label fx:id="usernameField" prefHeight="26.0" text="User">
+                  <Label fx:id="userNameLabel" prefHeight="26.0" text="User">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roleField" text="Role">
+                  <Label fx:id="roleLabel" text="Role">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

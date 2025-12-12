@@ -19,8 +19,9 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("%s %s (%s)", firstName, lastName, role);
+        return String.format("%s %s (%s) (%d)", firstName, lastName, role, id);
     }
+
 
     public static User fromResultSet(ResultSet rs) throws SQLException {
         return fromResultSet(rs, "");

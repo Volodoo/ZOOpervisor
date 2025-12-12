@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
@@ -42,6 +43,10 @@ public class UserViewController {
 
     @FXML
     public ComboBox<String> roleFilterComboBox;
+    @FXML
+    public Label userNameLabel;
+    @FXML
+    public Label roleLabel;
 
     private UserDao userDao = Factory.INSTANCE.getUserDao();
 
@@ -52,6 +57,9 @@ public class UserViewController {
         if (principal == null || principal.getRole() == Role.ADMIN) {
             SceneManager.setupDoubleClick(userTable, "/sk.upjs.paz/user/UserEdit.fxml", "Upraviť používateľa", UserEditController::setUser);
         }
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
         roleFilterComboBox.getItems().add("Všetky");
         roleFilterComboBox.getItems().add("Admin");

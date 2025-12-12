@@ -6,19 +6,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.animal.Animal;
+import sk.upjs.paz.animal.AnimalDao;
 import sk.upjs.paz.enclosure.Enclosure;
+import sk.upjs.paz.enclosure.EnclosureDao;
 import sk.upjs.paz.security.Auth;
 import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +36,8 @@ public class TaskViewController {
     public TableColumn<Task, String> animalsCol;
     public TableColumn<Task, String> enclosuresCol;
     public ComboBox<String> userFilterComboBox;
+    public Label userNameLabel;
+    public Label roleLabel;
 
     @FXML
     private Button addTaskButton;
@@ -45,16 +47,20 @@ public class TaskViewController {
 
     private TaskDao taskDao = Factory.INSTANCE.getTaskDao();
     private UserDao userDao = Factory.INSTANCE.getUserDao();
+    private AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
+    private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
 
     @FXML
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
-        System.out.println(principal);
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
         if (principal == null || (principal.getRole() != Role.ADMIN && principal.getRole() != Role.MANAGER)) {
             addTaskButton.setDisable(true);
             userFilterComboBox.setDisable(true);
-            taskTable.setOnMouseClicked(Event::consume);
+            taskTable.setOnMouseClicked(Event::consume);  // readonly
         } else {
             SceneManager.setupDoubleClick(taskTable, "/sk.upjs.paz/task/TaskEdit.fxml", "Upraviť výbeh", TaskEditController::setTask);
         }
@@ -71,16 +77,16 @@ public class TaskViewController {
         animalsCol.setCellValueFactory(cellData -> {
             Set<Animal> animals = cellData.getValue().getAnimals();
             String animalsString = animals.stream()
-                    .map(Animal::getNickname)  // Predpokladáme, že Animal má metódu getNickname
-                    .collect(Collectors.joining(", "));  // Zoznam mien oddelených čiarkami
+                    .map(Animal::getNickname)
+                    .collect(Collectors.joining(", "));
             return new SimpleStringProperty(animalsString.isEmpty() ? "" : animalsString);
         });
 
         enclosuresCol.setCellValueFactory(cellData -> {
             Set<Enclosure> enclosures = cellData.getValue().getEnclosures();
             String enclosuresString = enclosures.stream()
-                    .map(Enclosure::getName)  // Predpokladáme, že Enclosure má metódu getName
-                    .collect(Collectors.joining(", "));  // Zoznam mien oddelených čiarkami
+                    .map(Enclosure::getName)
+                    .collect(Collectors.joining(", "));
             return new SimpleStringProperty(enclosuresString.isEmpty() ? "" : enclosuresString);
         });
 
@@ -96,7 +102,7 @@ public class TaskViewController {
         userFilterComboBox.getItems().add("Všetci");
 
         for (User user : users) {
-            if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN)) {
+            if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.CASHIER) || user.getRole().equals(Role.INACTIVE)) {
                 continue;
             }
             String displayString = String.format("%s %s (%s) (%d)",
@@ -104,12 +110,20 @@ public class TaskViewController {
             userFilterComboBox.getItems().add(displayString);
         }
 
-        // Prednastavenie na "Všetci"
         userFilterComboBox.getSelectionModel().select("Všetci");
     }
 
     private void loadTasks() {
-        List<Task> tasks = taskDao.getAll();
+        var principal = Auth.INSTANCE.getPrincipal();
+
+        List<Task> tasks;
+
+        if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
+            tasks = taskDao.getAll();
+        } else {
+            tasks = taskDao.getByUser(5L);
+        }
+
         ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
         taskTable.setItems(taskObservableList);
     }
@@ -153,6 +167,22 @@ public class TaskViewController {
             selectedTask.setStatus(Status.COMPLETED);
 
             taskDao.update(selectedTask);
+
+            if (!selectedTask.getAnimals().isEmpty()) {
+                for (Animal animal : selectedTask.getAnimals()) {
+                    Animal animalToUpdate = animalDao.getById(animal.getId());
+                    animalToUpdate.setLastCheck(LocalDateTime.now());
+                    animalDao.update(animalToUpdate);
+                }
+            }
+
+            if (!selectedTask.getEnclosures().isEmpty()) {
+                for (Enclosure enclosure : selectedTask.getEnclosures()) {
+                    Enclosure  enclosureToUpdate = enclosureDao.getById(enclosure.getId());
+                    enclosureToUpdate.setLastMaintainance(LocalDateTime.now());
+                    enclosureDao.update(enclosureToUpdate);
+                }
+            }
 
             taskTable.refresh();
         } else {

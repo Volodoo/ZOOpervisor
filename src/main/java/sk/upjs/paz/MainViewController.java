@@ -1,7 +1,6 @@
 package sk.upjs.paz;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import sk.upjs.paz.security.Auth;
-import sk.upjs.paz.task.TaskEditController;
 import sk.upjs.paz.user.Role;
 
 import java.io.IOException;
@@ -23,8 +21,10 @@ public class MainViewController {
     public Button userButton;
     public Button ticketButton;
     public Button sellTicketButton;
-    public Label usernameField;
-    public Label roleField;
+    public Label userNameLabel;
+    public Label roleLabel;
+    public Button animalsButton;
+    public Button enclosuresButton;
 
     @FXML
     void initialize() {
@@ -34,24 +34,28 @@ public class MainViewController {
         principal.setRole(Role.ADMIN);
 
         if (principal == null) {
-            usernameField.setText("Neprihlásený");
-            roleField.setText("-");
+            userNameLabel.setText("Neprihlásený");
+            roleLabel.setText("-");
             return;
         }
-        usernameField.setText(principal.getFirstName() + " " + principal.getLastName());
-        roleField.setText("(" + principal.getRole().toString() + ")");
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-        if (principal == null || principal.getRole() == Role.CASHIER) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() == Role.CASHIER) {
             tasksButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() == Role.MAINTAINER || principal.getRole() == Role.ZOOKEEPER) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() == Role.MAINTAINER || principal.getRole() == Role.ZOOKEEPER) {
             sellTicketButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() != Role.ADMIN) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
             userButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() != Role.ADMIN) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
             ticketButton.setDisable(true);
+        }
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
+            animalsButton.setDisable(true);
+            enclosuresButton.setDisable(true);
         }
 
     }

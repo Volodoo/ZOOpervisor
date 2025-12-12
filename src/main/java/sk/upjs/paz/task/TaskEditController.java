@@ -10,14 +10,21 @@ import sk.upjs.paz.animal.Animal;
 import sk.upjs.paz.animal.AnimalDao;
 import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.enclosure.EnclosureDao;
+import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TaskEditController {
+    @FXML
+    public Spinner hourSpinner;
+
+    @FXML
+    public Spinner minuteSpinner;
 
     @FXML
     private VBox animalsVBox;
@@ -57,12 +64,23 @@ public class TaskEditController {
     @FXML
     void initialize() {
         statusComboBox.getItems().setAll(Status.values());
-        userComboBox.getItems().setAll(userDao.getAll());
 
-        if(!editMode){
+        List<User> users = userDao.getAll();
+        for (User user : users) {
+            if (user.getRole() == Role.MANAGER || user.getRole() == Role.ADMIN || user.getRole() == Role.CASHIER || user.getRole() == Role.INACTIVE) {
+                continue;
+            }
+            userComboBox.getItems().add(user);
+        }
+
+        if (!editMode) {
             loadAnimals();
             loadEnclosures();
         }
+
+        // Inicializácia spinnerov pre hodiny a minúty
+        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
     }
 
     private void loadAnimals() {
@@ -105,7 +123,13 @@ public class TaskEditController {
         descriptionTextArea.setText(task.getDescription());
         statusComboBox.setValue(task.getStatus());
         userComboBox.setValue(task.getUser());
-        deadlineDatePicker.setValue(task.getDeadline().toLocalDate());
+
+        if (task.getDeadline() != null) {
+            LocalDateTime dt = task.getDeadline();
+            deadlineDatePicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
+        }
     }
 
 
@@ -121,7 +145,12 @@ public class TaskEditController {
         taskToSave.setDescription(descriptionTextArea.getText());
         taskToSave.setStatus(statusComboBox.getValue());
         taskToSave.setUser(userComboBox.getValue());
-        taskToSave.setDeadline(deadlineDatePicker.getValue().atStartOfDay());
+        taskToSave.setDeadline(
+                deadlineDatePicker.getValue().atTime(
+                        (Integer) hourSpinner.getValue(),
+                        (Integer) minuteSpinner.getValue()
+                )
+        );
 
         taskToSave.setAnimals(animalCheckBoxes.entrySet().stream()
                 .filter(entry -> entry.getValue().isSelected())
@@ -152,7 +181,6 @@ public class TaskEditController {
 
         SceneManager.changeScene(event, "/sk.upjs.paz/task/TaskView.fxml", "Zobrazenie úloh");
     }
-
 
 
 }

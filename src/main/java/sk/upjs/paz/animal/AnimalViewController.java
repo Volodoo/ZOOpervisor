@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
@@ -36,7 +33,10 @@ public class AnimalViewController {
 
     @FXML
     public Button addAnimalButton;
-
+    @FXML
+    public Label userNameLabel;
+    @FXML
+    public Label roleLabel;
     @FXML
     private TableColumn<Animal, String> enclosureCol;
 
@@ -57,7 +57,9 @@ public class AnimalViewController {
     @FXML
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
-        System.out.println(principal);
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
         if (principal == null || principal.getRole() != Role.ADMIN) {
             addAnimalButton.setDisable(true);
@@ -75,7 +77,6 @@ public class AnimalViewController {
 
         speciesFilterComboBox.setOnAction(event -> filterAnimalsByStatus());
 
-        // Nastavenie stĺpcov pre TableView
         nicknameCol.setCellValueFactory(new PropertyValueFactory<>("nickname"));
         speciesCol.setCellValueFactory(new PropertyValueFactory<>("species"));
         sexCol.setCellValueFactory(new PropertyValueFactory<>("sex"));
@@ -85,11 +86,12 @@ public class AnimalViewController {
         });
         enclosureCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnclosure().getName()));
         lastCheckCol.setCellValueFactory(cellData -> {
-            return new SimpleStringProperty(
-                    cellData.getValue().getLastCheck() != null ?
-                            cellData.getValue().getLastCheck().toLocalDate().toString() :
-                            "Ešte Neprebehla"
-            );
+            if (cellData.getValue().getLastCheck() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                return new SimpleStringProperty(cellData.getValue().getLastCheck().format(formatter));
+            } else {
+                return new SimpleStringProperty("");
+            }
         });
         statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus().toString()));
 
