@@ -13,7 +13,7 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="300.0" prefWidth="400.0"
             xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="sk.upjs.paz.SellTicketController">
+            fx:controller="sk.upjs.paz.ticket.SellTicketController">
 
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" BorderPane.alignment="CENTER">
@@ -23,6 +23,12 @@
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
+                </Label>
+                <Label fx:id="userNameLabel" text="User">
+                    <font><Font name="System Bold" size="14.0" /></font>
+                </Label>
+                <Label fx:id="roleLabel" text="Role" textFill="#666666">
+                    <font><Font size="12.0" /></font>
                 </Label>
 
                 <Region HBox.hgrow="ALWAYS" />

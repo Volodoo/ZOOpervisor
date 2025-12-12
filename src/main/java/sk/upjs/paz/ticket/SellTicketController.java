@@ -1,11 +1,12 @@
-package sk.upjs.paz;
+package sk.upjs.paz.ticket;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import sk.upjs.paz.Factory;
+import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.security.Auth;
-import sk.upjs.paz.ticket.Ticket;
-import sk.upjs.paz.ticket.TicketDao;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
@@ -24,6 +25,12 @@ public class SellTicketController {
     @FXML
     private CheckBox adultCheckBox;
 
+    @FXML
+    public Label userNameLabel;
+
+    @FXML
+    public Label roleLabel;
+
 
     TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
     UserDao userDao = Factory.INSTANCE.getUserDao();
@@ -35,6 +42,10 @@ public class SellTicketController {
 
     @FXML
     public void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
+
         childCheckBox.setOnAction(e -> {
             if (childCheckBox.isSelected()) {
                 adultCheckBox.setSelected(false);

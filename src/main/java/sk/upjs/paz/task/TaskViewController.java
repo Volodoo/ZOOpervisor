@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.animal.Animal;
@@ -36,6 +33,8 @@ public class TaskViewController {
     public TableColumn<Task, String> animalsCol;
     public TableColumn<Task, String> enclosuresCol;
     public ComboBox<String> userFilterComboBox;
+    public Label userNameLabel;
+    public Label roleLabel;
 
     @FXML
     private Button addTaskButton;
@@ -49,7 +48,9 @@ public class TaskViewController {
     @FXML
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
-        System.out.println(principal);
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
         if (principal == null || (principal.getRole() != Role.ADMIN && principal.getRole() != Role.MANAGER)) {
             addTaskButton.setDisable(true);

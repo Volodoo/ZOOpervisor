@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
@@ -36,7 +33,10 @@ public class AnimalViewController {
 
     @FXML
     public Button addAnimalButton;
-
+    @FXML
+    public Label userNameLabel;
+    @FXML
+    public Label roleLabel;
     @FXML
     private TableColumn<Animal, String> enclosureCol;
 
@@ -57,7 +57,9 @@ public class AnimalViewController {
     @FXML
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
-        System.out.println(principal);
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
         if (principal == null || principal.getRole() != Role.ADMIN) {
             addAnimalButton.setDisable(true);

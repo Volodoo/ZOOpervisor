@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
@@ -39,6 +40,10 @@ public class TicketViewController {
 
     @FXML
     public ComboBox<String> cashierFilterComboBox;  // Displaying full name + ID
+    @FXML
+    public Label userNameLabel;
+    @FXML
+    public Label roleLabel;
 
     private TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
     private UserDao userDao = Factory.INSTANCE.getUserDao();
@@ -46,7 +51,9 @@ public class TicketViewController {
     @FXML
     public void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
-        System.out.println(principal);
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
 
         typeCol.setCellValueFactory(cellData ->

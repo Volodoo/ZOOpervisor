@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import sk.upjs.paz.Factory;
@@ -32,6 +29,12 @@ public class EnclosureViewController {
     public ComboBox<String> zoneFilterComboBox;
 
     @FXML
+    public Label userNameLabel;
+
+    @FXML
+    public Label roleLabel;
+
+    @FXML
     private Button addEnclosureButton;
 
     @FXML
@@ -42,17 +45,20 @@ public class EnclosureViewController {
     private TableColumn<Enclosure, String> lastMaintainanceCol;
 
     @FXML
-    private TableColumn<Enclosure, String> nameCol;  // Názov výbehu
+    private TableColumn<Enclosure, String> nameCol;
 
     @FXML
-    private TableColumn<Enclosure, String> zoneCol;  // Zóna výbehu
+    private TableColumn<Enclosure, String> zoneCol;
+
 
     private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
 
     @FXML
     void initialize() {
         var principal = Auth.INSTANCE.getPrincipal();
-        System.out.println(principal);
+
+        userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
+        roleLabel.setText("(" + principal.getRole().toString() + ")");
 
         if (principal == null || principal.getRole() != Role.ADMIN) {
             addEnclosureButton.setDisable(true);
