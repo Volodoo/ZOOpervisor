@@ -63,7 +63,7 @@
                 <!-- HBox pre Last Check s DatePicker + spinnery -->
                 <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <children>
-                        <DatePicker fx:id="birthDayPicker1" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" />
+                        <DatePicker fx:id="lastCheckPicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" />
                         <Spinner fx:id="hourSpinner" prefWidth="60.0" />
                         <Spinner fx:id="minuteSpinner" prefWidth="60.0" />
                     </children>

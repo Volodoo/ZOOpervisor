@@ -22,7 +22,7 @@ public class AnimalEditController {
     private DatePicker birthDayPicker;
 
     @FXML
-    private DatePicker birthDayPicker1;
+    private DatePicker lastCheckPicker;
 
     @FXML
     private Button goBackButton;
@@ -53,13 +53,26 @@ public class AnimalEditController {
 
     @FXML
     void initialize() {
+        // Nastavenie ComboBoxov
         sexComboBox1.getItems().setAll(Sex.values());
         statusComboBox.getItems().setAll(Status.values());
         enclosureComboBox.getItems().setAll(enclosureDao.getAll());
 
-        // Spinner pre hodiny a minúty
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
         minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+
+        lastCheckPicker.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            if (newText == null || newText.isBlank()) {
+                lastCheckPicker.setValue(null);
+            }
+        });
+
+        if (editMode && animal != null && animal.getLastCheck() != null) {
+            LocalDateTime dt = animal.getLastCheck();
+            lastCheckPicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
+        }
     }
 
     @FXML
@@ -69,7 +82,6 @@ public class AnimalEditController {
 
     @FXML
     void updateAnimalButtonAction(ActionEvent event) {
-
         if (!editMode) {
             animal = new Animal();
         }
@@ -81,11 +93,13 @@ public class AnimalEditController {
         animal.setSex(sexComboBox1.getValue());
         animal.setBirthDay(birthDayPicker.getValue());
 
-        LocalDate lastCheckDate = birthDayPicker1.getValue();
+        LocalDate lastCheckDate = lastCheckPicker.getValue();
         if (lastCheckDate != null) {
             int hour = hourSpinner.getValue();
             int minute = minuteSpinner.getValue();
             animal.setLastCheck(LocalDateTime.of(lastCheckDate, java.time.LocalTime.of(hour, minute)));
+        } else {
+            animal.setLastCheck(null); // ak je vymazané, nastavíme null
         }
 
         if (editMode) {
@@ -105,19 +119,14 @@ public class AnimalEditController {
         speciesField.setText(animal.getSpecies());
         sexComboBox1.setValue(animal.getSex());
         statusComboBox.setValue(animal.getStatus());
-
-        if (animal.getEnclosure() != null) {
-            enclosureComboBox.setValue(animal.getEnclosure());
-        }
-        if (animal.getBirthDay() != null) {
-            birthDayPicker.setValue(animal.getBirthDay());
-        }
+        enclosureComboBox.setValue(animal.getEnclosure());
+        birthDayPicker.setValue(animal.getBirthDay());
 
         if (animal.getLastCheck() != null) {
-            birthDayPicker1.setValue(animal.getLastCheck().toLocalDate());
-            hourSpinner.getValueFactory().setValue(animal.getLastCheck().getHour());
-            minuteSpinner.getValueFactory().setValue(animal.getLastCheck().getMinute());
+            LocalDateTime dt = animal.getLastCheck();
+            lastCheckPicker.setValue(dt.toLocalDate());
+            hourSpinner.getValueFactory().setValue(dt.getHour());
+            minuteSpinner.getValueFactory().setValue(dt.getMinute());
         }
     }
-
 }

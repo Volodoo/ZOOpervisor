@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class EnclosureEditController {
@@ -48,17 +47,20 @@ public class EnclosureEditController {
 
     @FXML
     void initialize() {
-        // Nastavenie hodín a minút spinnerov
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
 
-        // Ak je editMode a enclosure má lastMaintainance, nastav hodnoty spinnerov
         if (editMode && enclosure != null && enclosure.getLastMaintainance() != null) {
             LocalDateTime dt = enclosure.getLastMaintainance();
             lastMaintainanceDatePicker.setValue(dt.toLocalDate());
             hourSpinner.getValueFactory().setValue(dt.getHour());
             minuteSpinner.getValueFactory().setValue(dt.getMinute());
         }
+        lastMaintainanceDatePicker.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            if (newText == null || newText.isBlank()) {
+                lastMaintainanceDatePicker.setValue(null);
+            }
+        });
     }
 
     @FXML
@@ -103,6 +105,7 @@ public class EnclosureEditController {
         this.enclosure = enclosure;
         nameField.setText(enclosure.getName());
         zoneField.setText(enclosure.getZone());
+
         if(enclosure.getLastMaintainance() != null) {
             LocalDateTime dt = enclosure.getLastMaintainance();
             lastMaintainanceDatePicker.setValue(dt.toLocalDate());
