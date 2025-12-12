@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.MainViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="841.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.MainViewController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
          <padding>
@@ -49,7 +49,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="tasksButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayTasks" prefHeight="50.0" text="Tásky">
+            <Button fx:id="tasksButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayTasks" prefHeight="50.0" text="Úlohy">
                <font>
                   <Font size="20.0" />
                </font>
@@ -59,7 +59,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="userButton" mnemonicParsing="false" onAction="#displayUsers" prefHeight="50.0" prefWidth="200.0" text="Usery">
+            <Button fx:id="userButton" mnemonicParsing="false" onAction="#displayUsers" prefHeight="50.0" prefWidth="200.0" text="Použivatelia">
                <font>
                   <Font size="20.0" />
                </font>

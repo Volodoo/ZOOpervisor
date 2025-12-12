@@ -11,14 +11,24 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="500.0" prefWidth="800.0"
-      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="sk.upjs.paz.user.UserViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="841.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.user.UserViewController">
 
     <children>
         <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
             <children>
+
+                <VBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label fx:id="userNameLabel" text="User">
+                            <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Label fx:id="roleLabel" text="Role" textFill="#666666">
+                            <font><Font size="12.0" /></font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <Region prefWidth="20.0" />
 
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
@@ -27,7 +37,7 @@
                     </children>
                 </HBox>
 
-                <Region HBox.hgrow="ALWAYS" />
+                <Region maxWidth="-Infinity" prefWidth="100.0" HBox.hgrow="ALWAYS" />
 
                 <Label text="Používatelia">
                     <font>

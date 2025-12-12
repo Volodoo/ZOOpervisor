@@ -59,6 +59,8 @@ public class RegisterController {
             return;
         }
 
+        //TODO: dokincity heslo aby bylo dajakej zlozitosti
+
         if (!password.equals(passwordAgain)) {
             statusLabel.setText("Heslá sa nezhodujú!");
             return;
