@@ -4,13 +4,17 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.security.Auth;
+import sk.upjs.paz.user.Role;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +35,9 @@ public class AnimalViewController {
     public ComboBox<String> speciesFilterComboBox;
 
     @FXML
+    public Button addAnimalButton;
+
+    @FXML
     private TableColumn<Animal, String> enclosureCol;
 
     @FXML
@@ -49,6 +56,16 @@ public class AnimalViewController {
 
     @FXML
     void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+        System.out.println(principal);
+
+        if (principal == null || principal.getRole() != Role.ADMIN) {
+            addAnimalButton.setDisable(true);
+            animalsTable.setOnMouseClicked(Event::consume);
+        } else {
+            SceneManager.setupDoubleClick(animalsTable, "/sk.upjs.paz/animal/AnimalEdit.fxml", "Upraviť zviera", AnimalEditController::setAnimal);
+        }
+
         speciesFilterComboBox.getItems().add("Všetky");
         speciesFilterComboBox.getItems().add("Aktívne");
         speciesFilterComboBox.getItems().add("Neaktívne");
@@ -75,13 +92,6 @@ public class AnimalViewController {
             );
         });
         statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus().toString()));
-
-        SceneManager.setupDoubleClick(
-                animalsTable,
-                "/sk.upjs.paz/animal/AnimalEdit.fxml",
-                "Upraviť zviera",
-                (AnimalEditController ctrl, Animal animal) -> ctrl.setAnimal(animal)
-        );
 
         loadAnimals();
     }

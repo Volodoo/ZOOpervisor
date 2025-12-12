@@ -4,12 +4,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.enclosure.EnclosureEditController;
+import sk.upjs.paz.security.Auth;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -44,6 +47,12 @@ public class UserViewController {
 
     @FXML
     public void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+
+        if (principal == null || principal.getRole() == Role.ADMIN) {
+            SceneManager.setupDoubleClick(userTable, "/sk.upjs.paz/user/UserEdit.fxml", "Upraviť používateľa", UserEditController::setUser);
+        }
+
         roleFilterComboBox.getItems().add("Všetky");
         roleFilterComboBox.getItems().add("Admin");
         roleFilterComboBox.getItems().add("Manažér");
@@ -51,7 +60,6 @@ public class UserViewController {
         roleFilterComboBox.getItems().add("Údržbár");
         roleFilterComboBox.getItems().add("Predavač");
         roleFilterComboBox.getItems().add("Neaktívny");
-
 
 
         roleFilterComboBox.getSelectionModel().select("Všetky");
@@ -67,13 +75,6 @@ public class UserViewController {
         });
         emailCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
         roleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRole().toString()));
-
-        SceneManager.setupDoubleClick(
-                userTable,
-                "/sk.upjs.paz/user/UserEdit.fxml",
-                "Upraviť usera", // "Edit User"
-                (UserEditController ctrl, User user) -> ctrl.setUser(user)
-        );
 
         loadUsers();
     }

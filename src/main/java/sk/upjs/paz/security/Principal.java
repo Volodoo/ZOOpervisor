@@ -8,5 +8,7 @@ import sk.upjs.paz.user.Role;
 public class Principal {
     private Long id;
     private String email;
+    private String firstName;
+    private String lastName;
     private Role role;
 }

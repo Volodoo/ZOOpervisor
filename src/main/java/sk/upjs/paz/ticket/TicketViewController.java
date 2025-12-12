@@ -4,12 +4,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.security.Auth;
+import sk.upjs.paz.task.TaskEditController;
 import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
@@ -42,6 +45,10 @@ public class TicketViewController {
 
     @FXML
     public void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+        System.out.println(principal);
+
+
         typeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(getTypeInSlovak(cellData.getValue().getType()))
         );
