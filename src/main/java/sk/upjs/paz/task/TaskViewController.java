@@ -77,16 +77,16 @@ public class TaskViewController {
         animalsCol.setCellValueFactory(cellData -> {
             Set<Animal> animals = cellData.getValue().getAnimals();
             String animalsString = animals.stream()
-                    .map(Animal::getNickname)  // Predpokladáme, že Animal má metódu getNickname
-                    .collect(Collectors.joining(", "));  // Zoznam mien oddelených čiarkami
+                    .map(Animal::getNickname)
+                    .collect(Collectors.joining(", "));
             return new SimpleStringProperty(animalsString.isEmpty() ? "" : animalsString);
         });
 
         enclosuresCol.setCellValueFactory(cellData -> {
             Set<Enclosure> enclosures = cellData.getValue().getEnclosures();
             String enclosuresString = enclosures.stream()
-                    .map(Enclosure::getName)  // Predpokladáme, že Enclosure má metódu getName
-                    .collect(Collectors.joining(", "));  // Zoznam mien oddelených čiarkami
+                    .map(Enclosure::getName)
+                    .collect(Collectors.joining(", "));
             return new SimpleStringProperty(enclosuresString.isEmpty() ? "" : enclosuresString);
         });
 
@@ -110,7 +110,6 @@ public class TaskViewController {
             userFilterComboBox.getItems().add(displayString);
         }
 
-        // Prednastavenie na "Všetci"
         userFilterComboBox.getSelectionModel().select("Všetci");
     }
 

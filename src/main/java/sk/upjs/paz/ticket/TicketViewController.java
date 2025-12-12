@@ -39,7 +39,7 @@ public class TicketViewController {
     public TableColumn<Ticket, String> cashierCol;
 
     @FXML
-    public ComboBox<String> cashierFilterComboBox;  // Displaying full name + ID
+    public ComboBox<String> cashierFilterComboBox;
     @FXML
     public Label userNameLabel;
     @FXML

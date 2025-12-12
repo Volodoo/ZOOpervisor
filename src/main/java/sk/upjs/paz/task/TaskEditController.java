@@ -62,7 +62,6 @@ public class TaskEditController {
     void initialize() {
         statusComboBox.getItems().setAll(Status.values());
 
-        // Načítanie používateľov
         List<User> users = userDao.getAll();
         for (User user : users) {
             if (user.getRole() == Role.MANAGER || user.getRole() == Role.ADMIN || user.getRole() == Role.CASHIER || user.getRole() == Role.INACTIVE) {
@@ -71,7 +70,6 @@ public class TaskEditController {
             userComboBox.getItems().add(user);
         }
 
-        // Načítanie zvierat a výbehov
         if (!editMode) {
             loadAnimals();
             loadEnclosures();

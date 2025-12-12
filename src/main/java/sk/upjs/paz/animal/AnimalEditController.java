@@ -53,7 +53,6 @@ public class AnimalEditController {
 
     @FXML
     void initialize() {
-        // Nastavenie ComboBoxov
         sexComboBox1.getItems().setAll(Sex.values());
         statusComboBox.getItems().setAll(Status.values());
         enclosureComboBox.getItems().setAll(enclosureDao.getAll());
@@ -99,7 +98,7 @@ public class AnimalEditController {
             int minute = minuteSpinner.getValue();
             animal.setLastCheck(LocalDateTime.of(lastCheckDate, java.time.LocalTime.of(hour, minute)));
         } else {
-            animal.setLastCheck(null); // ak je vymazané, nastavíme null
+            animal.setLastCheck(null);
         }
 
         if (editMode) {

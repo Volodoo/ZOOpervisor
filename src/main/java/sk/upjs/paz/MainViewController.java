@@ -23,6 +23,8 @@ public class MainViewController {
     public Button sellTicketButton;
     public Label userNameLabel;
     public Label roleLabel;
+    public Button animalsButton;
+    public Button enclosuresButton;
 
     @FXML
     void initialize() {
@@ -39,17 +41,21 @@ public class MainViewController {
         userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
         roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-        if (principal == null || principal.getRole() == Role.CASHIER) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() == Role.CASHIER) {
             tasksButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() == Role.MAINTAINER || principal.getRole() == Role.ZOOKEEPER) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() == Role.MAINTAINER || principal.getRole() == Role.ZOOKEEPER) {
             sellTicketButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() != Role.ADMIN) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
             userButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() != Role.ADMIN) {
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
             ticketButton.setDisable(true);
+        }
+        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
+            animalsButton.setDisable(true);
+            enclosuresButton.setDisable(true);
         }
 
     }

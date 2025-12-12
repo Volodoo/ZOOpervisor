@@ -77,7 +77,6 @@ public class AnimalViewController {
 
         speciesFilterComboBox.setOnAction(event -> filterAnimalsByStatus());
 
-        // Nastavenie stĺpcov pre TableView
         nicknameCol.setCellValueFactory(new PropertyValueFactory<>("nickname"));
         speciesCol.setCellValueFactory(new PropertyValueFactory<>("species"));
         sexCol.setCellValueFactory(new PropertyValueFactory<>("sex"));
