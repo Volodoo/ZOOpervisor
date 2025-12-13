@@ -1,10 +1,13 @@
 package sk.upjs.paz.enclosure;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.security.Auth;
+import sk.upjs.paz.user.Role;
 
 import java.time.LocalDateTime;
 
@@ -47,6 +50,13 @@ public class EnclosureEditController {
 
     @FXML
     void initialize() {
+        var principal = Auth.INSTANCE.getPrincipal();
+
+        if (principal == null || principal.getRole() != Role.ADMIN) {
+            nameField.setDisable(true);
+            zoneField.setDisable(true);
+        }
+
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
 

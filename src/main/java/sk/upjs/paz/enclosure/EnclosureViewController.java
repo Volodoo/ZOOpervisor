@@ -60,11 +60,13 @@ public class EnclosureViewController {
         userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
         roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-        if (principal == null || principal.getRole() != Role.ADMIN) {
+        if (principal.getRole() != Role.ADMIN) {
             addEnclosureButton.setDisable(true);
-            enclosuresTable.setOnMouseClicked(Event::consume);
-        } else {
+        }
+        if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
             SceneManager.setupDoubleClick(enclosuresTable, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Upraviť zviera", EnclosureEditController::setEnclosure);
+        } else {
+            enclosuresTable.setOnMouseClicked(Event::consume);
         }
 
 

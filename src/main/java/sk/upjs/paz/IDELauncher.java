@@ -1,5 +1,6 @@
 package sk.upjs.paz;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import sk.upjs.paz.animal.AnimalDao;
 import sk.upjs.paz.enclosure.EnclosureDao;
 import sk.upjs.paz.task.TaskDao;

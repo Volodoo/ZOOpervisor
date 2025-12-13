@@ -152,16 +152,18 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
--- Vloženie užívateľov
+-- -----------------------------------------------------
+-- Kazdy user ma heslo: "email daneho usera" + "1"
+-- -----------------------------------------------------
 INSERT INTO `zoopervisor`.`user` (`first_name`, `last_name`, `gender`, `birth_day`, `role`, `email`, `password`) VALUES
-    ('Marek','Tóth','MALE','1979-06-30','MANAGER','marek.toth@zoo.sk',NULL),
-    ('Jana','Nováková','FEMALE','1985-04-20','CASHIER','jana.novakova@zoo.sk',NULL),
-    ('Tomáš','Kováč','MALE','1992-07-15','CASHIER','tomas.kovac@zoo.sk',NULL),
-    ('Eva','Hrušková','FEMALE','1989-10-10','CASHIER','eva.hrusková@zoo.sk',NULL),
-    ('Peter','Horváth','MALE','1987-05-25','ZOOKEEPER','peter.horvath@zoo.sk',NULL),
-    ('Anna','Kováčová','FEMALE','1980-02-17','ZOOKEEPER','anna.kovacova@zoo.sk',NULL),
-    ('Lukáš','Mikula','MALE','1994-09-02','MAINTAINER','lukas.mikula@zoo.sk',NULL),
-    ('Martin','Doležal','MALE','1982-11-05','MAINTAINER','martin.dolezal@zoo.sk',NULL);
+    ('Marek','Tóth','MALE','1979-06-30','MANAGER','marek.toth@zoo.sk','$2a$10$YpZQuU3S97xRSxeiR2ND/.HGMdbrjFNmMArUh9UJX7wWad.IdPkym'),
+    ('Jana','Nováková','FEMALE','1985-04-20','CASHIER','jana.novakova@zoo.sk','$2a$10$nemoxadZeCzlyz.mGFXXNe/KiI4AZ6QClxU7NKdr2loLaImnS2jxi'),
+    ('Tomáš','Kováč','MALE','1992-07-15','CASHIER','tomas.kovac@zoo.sk','$2a$10$eH7DDvrysIK5wT9zDRDmK.yxlPgOwmjuEBD8d.VTSK40YF0LOTNGa'),
+    ('Eva','Hrušková','FEMALE','1989-10-10','CASHIER','eva.hruskova@zoo.sk','$2a$10$u1CERJt8kf0nXoowH2ydEOg9CLYemNBmhRLB2br4k4fSxlOvh31Fi'),
+    ('Peter','Horváth','MALE','1987-05-25','ZOOKEEPER','peter.horvath@zoo.sk','$2a$10$Azi4gGofai4VQUhFyPRUZ.1sEyU0eSX17naK/iiopUx2iQyLinsFu'),
+    ('Anna','Kováčová','FEMALE','1980-02-17','ZOOKEEPER','anna.kovacova@zoo.sk','$2a$10$lxjnJ8lcTuF1Bam7kzUjMuyoYcLbj77b9f79MKsOUvXCEPgkIId22'),
+    ('Lukáš','Mikula','MALE','1994-09-02','MAINTAINER','lukas.mikula@zoo.sk','$2a$10$2cH6DFH6PaJFs60dxreTE.yuL0z/XRTlv8MJGSUSHizfnmdX5/SKq'),
+    ('Martin','Doležal','MALE','1982-11-05','MAINTAINER','martin.dolezal@zoo.sk','$2a$10$nT22uFGSr5SimWlllx5HDOaIrympazg782BlbByE7oYPl4ElNEUzm');
 
 -- Vloženie výbehov
 INSERT INTO `zoopervisor`.`enclosure` (`name`, `zone`, `last_maintainance`) VALUES
