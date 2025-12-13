@@ -104,7 +104,11 @@ public class MainViewController {
         SceneManager.changeScene( event,"/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj Lístkov");
     }
 
-
+    @FXML
+    void switchLanguage(ActionEvent event) {
+        SceneManager.toggleLanguage();
+        SceneManager.changeScene(event, "/sk.upjs.paz/MainView.fxml", "ZOOpervisor");
+    }
 
     @FXML
     void switchTheme(javafx.event.ActionEvent event) {

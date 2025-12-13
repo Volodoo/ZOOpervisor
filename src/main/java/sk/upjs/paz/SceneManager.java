@@ -12,8 +12,10 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.prefs.Preferences;
@@ -23,8 +25,23 @@ public class SceneManager {
 
     private static final Preferences prefs = Preferences.userNodeForPackage(SceneManager.class);
     private static final String THEME_KEY = "is_dark_mode";
+    private static final String LANG_KEY = "language_code";
+    private static Locale currentLocale = new Locale(prefs.get(LANG_KEY, "sk"));
 
     private static boolean isDarkMode = prefs.getBoolean(THEME_KEY, false);
+
+    public static void toggleLanguage() {
+        if (currentLocale.getLanguage().equals("sk")) {
+            currentLocale = new Locale("en");
+        } else {
+            currentLocale = new Locale("sk");
+        }
+        prefs.put(LANG_KEY, currentLocale.getLanguage());
+    }
+
+    public static ResourceBundle getBundle() {
+        return ResourceBundle.getBundle("preklad", currentLocale);
+    }
 
     public static void toggleTheme() {
         isDarkMode = !isDarkMode;
@@ -46,6 +63,7 @@ public class SceneManager {
         try {
 
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            loader.setResources(getBundle());
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -67,6 +85,7 @@ public class SceneManager {
     public static <T> void changeSceneWithData(Node sourceNode, String fxmlPath, String title, Consumer<T> controllerSetup) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            loader.setResources(getBundle());
             Parent root = loader.load();
 
 
@@ -127,6 +146,7 @@ public class SceneManager {
     public static void openNewWindow(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            loader.setResources(getBundle());
             Parent root = loader.load();
 
             Scene scene = new Scene(root);

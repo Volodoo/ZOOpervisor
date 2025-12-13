@@ -19,6 +19,8 @@ import sk.upjs.paz.user.UserDao;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static sk.upjs.paz.SceneManager.getBundle;
+
 public class RegisterController {
 
     @FXML
@@ -126,6 +128,7 @@ public class RegisterController {
     public void cancelRegistration(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/LoginView.fxml"));
+            loader.setResources(getBundle());
             Parent root = loader.load();
             Scene scene = new Scene(root);
 

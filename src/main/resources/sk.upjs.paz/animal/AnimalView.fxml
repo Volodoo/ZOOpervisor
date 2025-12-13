@@ -42,7 +42,7 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Label text="Zvieratá">
+                <Label text="%menu.animals">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font>
@@ -50,8 +50,8 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="addAnimalButton" mnemonicParsing="false" onAction="#addAnimalButtonAction" text="Pridaj Zviera" />
-                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBackButtonAction" text="Späť" />
+                <Button fx:id="addAnimalButton" mnemonicParsing="false" onAction="#addAnimalButtonAction" text="%addAnimal" />
+                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBackButtonAction" text="%back" />
             </children>
 
             <padding>
@@ -64,13 +64,13 @@
 
         <TableView fx:id="animalsTable" prefHeight="412.0" prefWidth="779.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="nicknameCol" prefWidth="100.0" text="Prezývka" />
-                <TableColumn fx:id="speciesCol" prefWidth="100.0" text="Druh" />
-                <TableColumn fx:id="sexCol" prefWidth="75.0" text="Pohlavie" />
-                <TableColumn fx:id="birthdayCol" prefWidth="100.0" text="Dátum narodenia" />
-                <TableColumn fx:id="lastCheckCol" prefWidth="120.0" text="Posledná prehliadka" />
-                <TableColumn fx:id="enclosureCol" prefWidth="100.0" text="Výbeh" />
-                <TableColumn fx:id="statusCol" prefWidth="75.0" text="Stav" />
+                <TableColumn fx:id="nicknameCol" prefWidth="100.0" text="%nickname" />
+                <TableColumn fx:id="speciesCol" prefWidth="100.0" text="%species" />
+                <TableColumn fx:id="sexCol" prefWidth="75.0" text="%sex" />
+                <TableColumn fx:id="birthdayCol" prefWidth="100.0" text="%birth" />
+                <TableColumn fx:id="lastCheckCol" prefWidth="120.0" text="%lastCheck" />
+                <TableColumn fx:id="enclosureCol" prefWidth="100.0" text="%enclosure" />
+                <TableColumn fx:id="statusCol" prefWidth="75.0" text="%status" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

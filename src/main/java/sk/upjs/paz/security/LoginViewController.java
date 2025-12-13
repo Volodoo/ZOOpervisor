@@ -15,6 +15,8 @@
     import sk.upjs.paz.exceptions.AuthenticationException;
     import java.io.IOException;
 
+    import static sk.upjs.paz.SceneManager.getBundle;
+
 
     public class LoginViewController {
 
@@ -65,6 +67,7 @@
         private void openMainScene() {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/MainView.fxml"));
+                loader.setResources(getBundle());
                 Parent root = loader.load();
 
                 Stage stage = (Stage) emailField.getScene().getWindow();
@@ -83,6 +86,7 @@
         public void signIn(ActionEvent event) throws IOException {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/Register.fxml"));
+                loader.setResources(getBundle());
                 Parent root = loader.load();
 
                 Scene scene = new Scene(root);

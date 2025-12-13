@@ -34,8 +34,9 @@
             <Region prefHeight="70.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
             <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="0.0" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
+                  <ToggleButton fx:id="langButton" mnemonicParsing="false" onAction="#switchLanguage" text="SK/EN" HBox.hgrow="ALWAYS" />
                   <ToggleButton fx:id="themeToggle" mnemonicParsing="false" onAction="#switchTheme" text="Dark Mode" />
-                  <Button fx:id="signOutButton" mnemonicParsing="false" onAction="#signOut" text="Odhlasenie" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="signOutButton" mnemonicParsing="false" onAction="#signOut" text="%menu.logout" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -46,12 +47,12 @@
    <left>
       <VBox alignment="CENTER_RIGHT" prefHeight="220.0" prefWidth="380.0" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="animalsButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayAnimals" prefHeight="50.0" text="Zvieratá" VBox.vgrow="ALWAYS">
+            <Button fx:id="animalsButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayAnimals" prefHeight="50.0" text="%menu.animals" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="enclosuresButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayEnclosures" prefHeight="50.0" text="Výbehy" VBox.vgrow="ALWAYS">
+            <Button fx:id="enclosuresButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayEnclosures" prefHeight="50.0" text="%menu.enclosures" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
@@ -62,12 +63,12 @@
    <right>
       <VBox alignment="CENTER_LEFT" prefHeight="220.0" prefWidth="394.0" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="tasksButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayTasks" prefHeight="50.0" text="Úlohy" VBox.vgrow="ALWAYS">
+            <Button fx:id="tasksButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayTasks" prefHeight="50.0" text="%menu.tasks" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="userButton" mnemonicParsing="false" onAction="#displayUsers" prefHeight="50.0" prefWidth="200.0" text="Použivatelia" VBox.vgrow="ALWAYS">
+            <Button fx:id="userButton" mnemonicParsing="false" onAction="#displayUsers" prefHeight="50.0" prefWidth="200.0" text="%menu.users" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
@@ -78,12 +79,12 @@
    <bottom>
       <VBox alignment="TOP_CENTER" prefHeight="229.0" prefWidth="850.0" spacing="20.0" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Button fx:id="ticketButton" mnemonicParsing="false" onAction="#displayTickets" prefHeight="50.0" prefWidth="200.0" text="Lístky" VBox.vgrow="ALWAYS">
+            <Button fx:id="ticketButton" mnemonicParsing="false" onAction="#displayTickets" prefHeight="50.0" prefWidth="200.0" text="%menu.tickets" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="sellTicketButton" mnemonicParsing="false" onAction="#displayTicketSell" prefHeight="50.0" prefWidth="200.0" text="Predaj Lístka" VBox.vgrow="ALWAYS">
+            <Button fx:id="sellTicketButton" mnemonicParsing="false" onAction="#displayTicketSell" prefHeight="50.0" prefWidth="200.0" text="%menu.sell" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
