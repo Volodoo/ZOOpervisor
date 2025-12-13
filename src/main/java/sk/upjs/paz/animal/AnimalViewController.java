@@ -63,9 +63,11 @@ public class AnimalViewController {
 
         if (principal == null || principal.getRole() != Role.ADMIN) {
             addAnimalButton.setDisable(true);
-            animalsTable.setOnMouseClicked(Event::consume);
-        } else {
+        }
+        if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
             SceneManager.setupDoubleClick(animalsTable, "/sk.upjs.paz/animal/AnimalEdit.fxml", "Upraviť zviera", AnimalEditController::setAnimal);
+        } else {
+            animalsTable.setOnMouseClicked(Event::consume);
         }
 
         speciesFilterComboBox.getItems().add("Všetky");

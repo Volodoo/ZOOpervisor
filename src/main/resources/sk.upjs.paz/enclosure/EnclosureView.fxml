@@ -59,7 +59,7 @@
             </padding>
         </HBox>
 
-        <TableView fx:id="enclosureTable" VBox.vgrow="ALWAYS">
+        <TableView fx:id="enclosuresTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="nameCol" prefWidth="250.0" text="Názov" />
                 <TableColumn fx:id="zoneCol" prefWidth="150.0" text="Zóna" />

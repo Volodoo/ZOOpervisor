@@ -8,7 +8,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.animal.AnimalEditController;
@@ -39,7 +38,7 @@ public class EnclosureViewController {
     private Button addEnclosureButton;
 
     @FXML
-    private TableView<Enclosure> enclosureTable;
+    private TableView<Enclosure> enclosuresTable;
 
 
     @FXML
@@ -63,10 +62,11 @@ public class EnclosureViewController {
 
         if (principal == null || principal.getRole() != Role.ADMIN) {
             addEnclosureButton.setDisable(true);
-            enclosureTable.setOnMouseClicked(Event::consume);
+            enclosuresTable.setOnMouseClicked(Event::consume);
         } else {
-            SceneManager.setupDoubleClick(enclosureTable, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Upraviť výbeh", EnclosureEditController::setEnclosure);
+            SceneManager.setupDoubleClick(enclosuresTable, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Upraviť zviera", EnclosureEditController::setEnclosure);
         }
+
 
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         zoneCol.setCellValueFactory(new PropertyValueFactory<>("zone"));
@@ -81,7 +81,6 @@ public class EnclosureViewController {
                 return new SimpleStringProperty("");
             }
         });
-
 
 
         loadZones();
@@ -112,7 +111,7 @@ public class EnclosureViewController {
             } else {
                 List<Enclosure> enclosures = enclosureDao.getByZone(selectedZone);
                 ObservableList<Enclosure> enclosureObservableList = FXCollections.observableArrayList(enclosures);
-                enclosureTable.setItems(enclosureObservableList);
+                enclosuresTable.setItems(enclosureObservableList);
             }
         }
     }
@@ -120,7 +119,7 @@ public class EnclosureViewController {
     private void loadEnclosures() {
         List<Enclosure> enclosures = enclosureDao.getAllSortedByZone();
         ObservableList<Enclosure> enclosureObservableList = FXCollections.observableArrayList(enclosures);
-        enclosureTable.setItems(enclosureObservableList);
+        enclosuresTable.setItems(enclosureObservableList);
     }
 
     @FXML

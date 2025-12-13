@@ -123,7 +123,7 @@ public class TaskViewController {
         if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
             tasks = taskDao.getAll();
         } else {
-            tasks = taskDao.getByUser(5L);
+            tasks = taskDao.getByUser(principal.getId());
         }
 
         ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);

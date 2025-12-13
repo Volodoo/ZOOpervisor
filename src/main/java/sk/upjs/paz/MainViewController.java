@@ -53,7 +53,7 @@ public class MainViewController {
         if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
             ticketButton.setDisable(true);
         }
-        if (principal == null || principal.getRole() == Role.INACTIVE || principal.getRole() != Role.ADMIN) {
+        if (principal == null || principal.getRole() == Role.INACTIVE) {
             animalsButton.setDisable(true);
             enclosuresButton.setDisable(true);
         }
