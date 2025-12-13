@@ -12,12 +12,36 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.prefs.Preferences;
 
 
 public class SceneManager {
+
+    private static final Preferences prefs = Preferences.userNodeForPackage(SceneManager.class);
+    private static final String THEME_KEY = "is_dark_mode";
+
+    private static boolean isDarkMode = prefs.getBoolean(THEME_KEY, false);
+
+    public static void toggleTheme() {
+        isDarkMode = !isDarkMode;
+        prefs.putBoolean(THEME_KEY, isDarkMode);
+    }
+
+    public static boolean isDarkMode() {
+        return isDarkMode;
+    }
+
+    public static void applyTheme(Scene scene) {
+        scene.getStylesheets().clear();
+        if (isDarkMode) {
+            scene.getStylesheets().add(Objects.requireNonNull(SceneManager.class.getResource("/sk.upjs.paz/darkMode.css")).toExternalForm());
+        }
+    }
+
     public static void changeScene(ActionEvent event, String fxmlPath, String title) {
         try {
 
@@ -26,8 +50,9 @@ public class SceneManager {
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            applyTheme(scene);
+            stage.setScene(scene);
             stage.setTitle(title);
             stage.setResizable(true);
 
@@ -52,9 +77,10 @@ public class SceneManager {
                 controllerSetup.accept(controller);
             }
 
-
+            Scene scene = new Scene(root);
+            applyTheme(scene);
             Stage stage = (Stage) sourceNode.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.setTitle(title);
             stage.show();
 
@@ -103,8 +129,11 @@ public class SceneManager {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
             Parent root = loader.load();
 
+            Scene scene = new Scene(root);
+            applyTheme(scene);
+
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.setTitle(title);
             stage.setResizable(true);
             stage.setMaximized(true);

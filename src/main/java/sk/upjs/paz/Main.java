@@ -18,6 +18,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/LoginView.fxml"));
         Parent parent = fxmlLoader.load();
         Scene scene = new Scene(parent);
+        SceneManager.applyTheme(scene);
         stage.setScene(scene);
         stage.setTitle("ZOOpervisor");
         stage.show();

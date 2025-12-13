@@ -7,25 +7,32 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="483.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="sk.upjs.paz.security.RegisterController">
     <children>
         <TextField fx:id="firstNameField" layoutX="128.0" layoutY="71.0"/>
         <TextField fx:id="lastNameField" layoutX="128.0" layoutY="123.0"/>
-        <Text layoutX="128.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meno:" wrappingWidth="149.6"/>
-        <Text layoutX="128.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Priezvisko:" wrappingWidth="150.4"/>
+
+        <Label layoutX="128.0" layoutY="50.0" prefWidth="149.6" text="Meno:" />
+        <Label layoutX="128.0" layoutY="102.0" prefWidth="150.4" text="Priezvisko:" />
+
         <ComboBox fx:id="genderField" layoutX="128.0" layoutY="173.0" prefWidth="150.0"/>
-        <Text layoutX="127.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datum narodenia:" wrappingWidth="150.4"/>
+
+        <Label layoutX="127.0" layoutY="210.0" prefWidth="150.4" text="Datum narodenia:" />
         <DatePicker fx:id="birthDayField" layoutX="128.0" layoutY="231.0" prefHeight="26.0" prefWidth="162.0"/>
-        <Text layoutX="128.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pohlavie:" wrappingWidth="162.4"/>
+
+        <Label layoutX="128.0" layoutY="152.0" prefWidth="162.4" text="Pohlavie:" />
+
         <TextField fx:id="emailField" layoutX="127.0" layoutY="283.0"/>
-        <Text layoutX="128.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" wrappingWidth="149.6"/>
+        <Label layoutX="128.0" layoutY="262.0" prefWidth="149.6" text="Email:" />
+
         <PasswordField fx:id="passwordField" layoutX="128.0" layoutY="333.0"/>
-        <Text layoutX="127.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zadaj heslo:" wrappingWidth="149.6"/>
+        <Label layoutX="127.0" layoutY="312.0" prefWidth="149.6" text="Zadaj heslo:" />
+
         <PasswordField fx:id="passwordAgainField" layoutX="128.0" layoutY="386.0"/>
-        <Text layoutX="127.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zadaj heslo znova:" wrappingWidth="149.6"/>
+        <Label layoutX="127.0" layoutY="365.0" prefWidth="149.6" text="Zadaj heslo znova:" />
+
         <Button fx:id="confirmSigningInButton" layoutX="128.0" layoutY="427.0" mnemonicParsing="false"
                 onAction="#signUserIn" prefHeight="26.0" prefWidth="150.0" text="Zaregistruj"/>
         <Button fx:id="chancelRegistrationField" layoutX="330.0" layoutY="14.0" mnemonicParsing="false"

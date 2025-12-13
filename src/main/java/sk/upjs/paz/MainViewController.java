@@ -8,11 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 import sk.upjs.paz.security.Auth;
 import sk.upjs.paz.user.Role;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainViewController {
 
@@ -25,9 +27,16 @@ public class MainViewController {
     public Label roleLabel;
     public Button animalsButton;
     public Button enclosuresButton;
+    public ToggleButton themeToggle;
 
     @FXML
     void initialize() {
+
+        if (themeToggle != null) {
+            themeToggle.setSelected(SceneManager.isDarkMode());
+            themeToggle.setText(SceneManager.isDarkMode() ? "Svetlý režim" : "Tmavý režim");
+        }
+
         var principal = Auth.INSTANCE.getPrincipal();
 
         // VYTVOR SI ADMINA A TU SI PO PRIHLASINU JAK ADMIN MOZES ZMINITY ROLU A UVIDIS JAK TO VYZERAT
@@ -57,7 +66,6 @@ public class MainViewController {
             animalsButton.setDisable(true);
             enclosuresButton.setDisable(true);
         }
-
     }
 
     @FXML
@@ -96,15 +104,17 @@ public class MainViewController {
         SceneManager.changeScene( event,"/sk.upjs.paz/ticket/SellTicketView.fxml", "Predaj Lístkov");
     }
 
-    private void changeScene(ActionEvent event, String fxmlPath, String title) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-        Parent root = loader.load();
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        stage.setScene(new Scene(root));
-        stage.setTitle(title);
-        stage.show();
+    @FXML
+    void switchTheme(javafx.event.ActionEvent event) {
+        SceneManager.toggleTheme();
+
+        themeToggle.setText(SceneManager.isDarkMode() ? "Svetlý režim" : "Tmavý režim");
+
+        if (themeToggle.getScene() != null) {
+            SceneManager.applyTheme(themeToggle.getScene());
+        }
     }
 }
 

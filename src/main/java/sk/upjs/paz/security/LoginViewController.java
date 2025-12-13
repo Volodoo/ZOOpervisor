@@ -11,6 +11,7 @@
     import javafx.scene.control.TextField;
     import javafx.stage.Stage;
     import sk.upjs.paz.Factory;
+    import sk.upjs.paz.SceneManager;
     import sk.upjs.paz.exceptions.AuthenticationException;
     import java.io.IOException;
 
@@ -67,7 +68,10 @@
                 Parent root = loader.load();
 
                 Stage stage = (Stage) emailField.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                Scene scene = new Scene(root);
+
+                SceneManager.applyTheme(scene);
+                stage.setScene(scene);
                 stage.setTitle("ZOOpervisor - Hlavné okno");
                 stage.show();
             } catch (IOException e) {
@@ -81,8 +85,10 @@
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/Register.fxml"));
                 Parent root = loader.load();
 
+                Scene scene = new Scene(root);
+                SceneManager.applyTheme(scene);
                 Stage stage = (Stage) emailField.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                stage.setScene(scene);
                 stage.setTitle("Registrácia nového usera");
                 stage.show();
             } catch (IOException e) {

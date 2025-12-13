@@ -127,9 +127,12 @@ public class RegisterController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/LoginView.fxml"));
             Parent root = loader.load();
+            Scene scene = new Scene(root);
 
+
+            SceneManager.applyTheme(scene);
             Stage stage = (Stage) chancelRegistrationField.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.setTitle("Prihlásenie");
             stage.show();
         } catch (IOException e) {

@@ -1,44 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml" fx:controller="sk.upjs.paz.ticket.SellTicketController" prefWidth="400.0" prefHeight="400.0">
+<VBox prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.SellTicketController">
     <children>
-        <!-- Užívateľské meno a rola -->
-        <Label fx:id="userNameLabel" text="User Name" prefWidth="200.0" />
-        <Label fx:id="roleLabel" text="Role" prefWidth="200.0" />
+      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0" spacing="20.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="87.0" HBox.hgrow="ALWAYS">
+               <children>
+                    <!-- Užívateľské meno a rola -->
+                    <Label fx:id="userNameLabel" prefWidth="200.0" text="User Name" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                    <Label fx:id="roleLabel" prefWidth="200.0" text="Role" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Label text="Predaj lístka ">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <Region prefHeight="47.0" prefWidth="14.0" />
+              <Button onAction="#goBack" prefHeight="26.0" prefWidth="66.0" text="Späť" />
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </VBox.margin>
+      </HBox>
 
-        <HBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Dieťa" prefWidth="100.0" />
-            <Spinner fx:id="childSpinner" prefWidth="80.0" />
-            <Label fx:id="childTotalPrice" text="Cena: 0 €" prefWidth="100.0" />
+        <HBox prefHeight="36.0" prefWidth="365.0" spacing="40.0" VBox.vgrow="ALWAYS">
+            <Label prefHeight="26.0" prefWidth="114.0" text="Dieťa" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="17.0" />
+            </font></Label>
+            <Spinner fx:id="childSpinner" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.6" prefWidth="80.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="childTotalPrice" prefWidth="100.0" text="Cena: 0 €" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="15.0" />
+            </font></Label>
+         <VBox.margin>
+            <Insets bottom="15.0" left="20.0" right="15.0" top="15.0" />
+         </VBox.margin>
+         <padding>
+            <Insets top="15.0" />
+         </padding>
         </HBox>
 
-        <HBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Študent/Senior" prefWidth="100.0" />
-            <Spinner fx:id="seniorStudentSpinner" prefWidth="80.0" />
-            <Label fx:id="seniorStudentTotalPrice" text="Cena: 0 €" prefWidth="100.0" />
+        <HBox prefHeight="27.0" prefWidth="380.0" spacing="40.0" VBox.vgrow="ALWAYS">
+            <Label prefHeight="26.0" prefWidth="114.0" text="Študent/Senior" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="16.0" />
+            </font></Label>
+            <Spinner fx:id="seniorStudentSpinner" maxWidth="-Infinity" prefWidth="80.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="seniorStudentTotalPrice" prefWidth="100.0" text="Cena: 0 €" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
+         <VBox.margin>
+            <Insets left="20.0" />
+         </VBox.margin>
+         <padding>
+            <Insets top="15.0" />
+         </padding>
         </HBox>
 
-        <HBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Dospelý" prefWidth="100.0" />
-            <Spinner fx:id="adultSpinner" prefWidth="80.0" />
-            <Label fx:id="adultTotalPrice" text="Cena: 0 €" prefWidth="100.0" />
+        <HBox prefHeight="0.0" prefWidth="400.0" spacing="40.0" VBox.vgrow="ALWAYS">
+            <Label prefHeight="26.0" prefWidth="114.0" text="Dospelý" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="16.0" />
+            </font></Label>
+            <Spinner fx:id="adultSpinner" maxHeight="-Infinity" prefWidth="80.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="adultTotalPrice" prefWidth="100.0" text="Cena: 0 €" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
+         <padding>
+            <Insets left="20.0" top="15.0" />
+         </padding>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
         </HBox>
-
-        <!-- Celková cena -->
-        <Label fx:id="totalPriceLabel" text="Celková cena: 0 €" prefWidth="200.0" />
-
-        <!-- Tlačidlá pre akcie -->
-        <Button text="Predať lístok" onAction="#sellTicket" prefWidth="200.0" />
-        <Button text="Späť" onAction="#goBack" prefWidth="200.0" />
+      <VBox alignment="CENTER" prefHeight="54.0" prefWidth="400.0">
+         <children>
+      
+              <!-- Celková cena -->
+              <Label fx:id="totalPriceLabel" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefHeight="22.0" prefWidth="151.0" text="Celková cena: 0 €" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+      
+              <!-- Tlačidlá pre akcie -->
+              <Button alignment="CENTER" contentDisplay="CENTER" onAction="#sellTicket" prefHeight="26.0" prefWidth="161.0" text="Predať lístok" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
 
         <!-- Správa o úspešnom predaji -->
-        <Label fx:id="successLabel" text="" textFill="green" visible="false" prefWidth="200.0" />
+        <Label fx:id="successLabel" prefWidth="200.0" text="" textFill="green" visible="false" />
     </children>
 </VBox>
