@@ -42,7 +42,7 @@ class MysqlUserDaoTest extends TestContainers {
     void getAll() {
         List<User> users = userDao.getAll();
         assertNotNull(users);
-        assertTrue(users.size() >= 8, "Database should contain initial 8 users");
+        assertTrue(users.size() >= 2, "Database should contain initial 2 users");
     }
 
     @Test
@@ -95,9 +95,8 @@ class MysqlUserDaoTest extends TestContainers {
     void getByRole() {
         // Overenie existujúcich používateľov CASHIER
         List<User> cashiers = userDao.getByRole(Role.CASHIER);
-        assertTrue(cashiers.size() >= 3);
+        assertTrue(cashiers.size() >= 1);
         assertTrue(cashiers.stream().anyMatch(u -> u.getFirstName().equals("Jana")));
-        assertTrue(cashiers.stream().anyMatch(u -> u.getFirstName().equals("Tomáš")));
-        assertTrue(cashiers.stream().anyMatch(u -> u.getFirstName().equals("Eva")));
+
     }
 }

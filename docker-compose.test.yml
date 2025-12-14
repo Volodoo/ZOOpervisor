@@ -4,7 +4,7 @@ services:
     container_name: zoopervisor-mysql-test
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: testdb
+      MYSQL_DATABASE: zoopervisor_test
       LANG: C.UTF-8
     ports:
       - "3308:3306"
