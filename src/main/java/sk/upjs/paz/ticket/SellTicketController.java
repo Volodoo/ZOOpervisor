@@ -68,6 +68,8 @@ public class SellTicketController {
         childSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
         seniorStudentSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
         adultSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
+
+        updateTicketPrices();
     }
 
     // Metóda na výpočet ceny na základe počtu lístkov
@@ -82,14 +84,23 @@ public class SellTicketController {
         BigDecimal seniorStudentTotal = PRICE_SENIOR_STUDENT.multiply(new BigDecimal(seniorStudentCount));
         BigDecimal adultTotal = PRICE_ADULT.multiply(new BigDecimal(adultCount));
 
-        // Aktualizujeme text pre jednotlivé ceny
-        childTotalPrice.setText("Cena: " + childTotal + " €");
-        seniorStudentTotalPrice.setText("Cena: " + seniorStudentTotal + " €");
-        adultTotalPrice.setText("Cena: " + adultTotal + " €");
+        String priceLabelText = "Cena:";
+        try {
+            priceLabelText = SceneManager.getBundle().getString("priceSell");
+        } catch (Exception e) { /* Ignorujeme, ostane default */ }
 
+        // Aktualizujeme text pre jednotlivé ceny
+        childTotalPrice.setText(priceLabelText + childTotal + " €");
+        seniorStudentTotalPrice.setText(priceLabelText + seniorStudentTotal + " €");
+        adultTotalPrice.setText(priceLabelText + adultTotal + " €");
+
+        String totalLabelText = "Celková cena:";
+        try {
+            totalLabelText = SceneManager.getBundle().getString("priceTogheder");
+        } catch (Exception e) {  }
         // Celková cena
         BigDecimal totalPrice = childTotal.add(seniorStudentTotal).add(adultTotal);
-        totalPriceLabel.setText("Celková cena: " + totalPrice + " €");
+        totalPriceLabel.setText(totalLabelText + totalPrice + " €");
     }
 
     @FXML

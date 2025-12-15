@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.security.Auth;
@@ -72,6 +73,23 @@ public class TicketViewController {
         loadCashiers();
         loadTickets();
 
+        cashierFilterComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String key) {
+                if (key == null) return "";
+                try {
+                    return SceneManager.getBundle().getString(key);
+                } catch (Exception e) {
+                    return key;
+                }
+            }
+
+            @Override
+            public String fromString(String string) {
+                return null;
+            }
+        });
+
         cashierFilterComboBox.setOnAction(event -> filterTicketsByCashier());
     }
 
@@ -93,7 +111,7 @@ public class TicketViewController {
 
         cashierFilterComboBox.getItems().clear();
 
-        cashierFilterComboBox.getItems().add("Všetci");
+        cashierFilterComboBox.getItems().add("filter.all.task");
 
         for (User user : users) {
             if (user.getRole().equals(Role.CASHIER)) {
@@ -102,14 +120,14 @@ public class TicketViewController {
             }
         }
 
-        cashierFilterComboBox.getSelectionModel().select("Všetci");
+        cashierFilterComboBox.getSelectionModel().select("filter.all.task");
     }
 
     private void filterTicketsByCashier() {
         String selectedCashier = cashierFilterComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedCashier != null) {
-            if (selectedCashier.equals("Všetci")) {
+            if (selectedCashier.equals("filter.all.task")) {
                 loadTickets();
             } else {
                 Long cashierId = extractCashierIdFromString(selectedCashier);

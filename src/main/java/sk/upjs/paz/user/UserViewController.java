@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.enclosure.EnclosureEditController;
@@ -61,16 +62,30 @@ public class UserViewController {
         userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
         roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-        roleFilterComboBox.getItems().add("Všetky");
-        roleFilterComboBox.getItems().add("Admin");
-        roleFilterComboBox.getItems().add("Manažér");
-        roleFilterComboBox.getItems().add("Ošetrovateľ");
-        roleFilterComboBox.getItems().add("Údržbár");
-        roleFilterComboBox.getItems().add("Predavač");
-        roleFilterComboBox.getItems().add("Neaktívny");
+        roleFilterComboBox.getItems().add("filter.all");
+        roleFilterComboBox.getItems().add("filter.admin");
+        roleFilterComboBox.getItems().add("filter.manager");
+        roleFilterComboBox.getItems().add("filter.caretaker");
+        roleFilterComboBox.getItems().add("filter.handyman");
+        roleFilterComboBox.getItems().add("filter.seller");
+        roleFilterComboBox.getItems().add("filter.inactive");
+        roleFilterComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String key) {
+                if (key == null) return "";
+                try {
+                    return SceneManager.getBundle().getString(key);
+                } catch (Exception e) {
+                    return key;
+                }
+            }
 
-
-        roleFilterComboBox.getSelectionModel().select("Všetky");
+            @Override
+            public String fromString(String string) {
+                return null;
+            }
+        });
+        roleFilterComboBox.getSelectionModel().select("filter.all");
 
         roleFilterComboBox.setOnAction(event -> filterUsersByRole());
 
@@ -91,7 +106,7 @@ public class UserViewController {
         String selectedRole = roleFilterComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedRole != null) {
-            if (selectedRole.equals("Všetky")) {
+            if (selectedRole.equals("filter.all")) {
                 loadUsers();
             } else {
                 Role role = convertStringToRole(selectedRole);
@@ -104,17 +119,17 @@ public class UserViewController {
 
     private Role convertStringToRole(String roleString) {
         switch (roleString) {
-            case "Admin":
+            case "filter.admin":
                 return Role.ADMIN;
-            case "Manažér":
+            case "filter.manager":
                 return Role.MANAGER;
-            case "Ošetrovateľ":
+            case "filter.caretaker":
                 return Role.ZOOKEEPER;
-            case "Údržbár":
+            case "filter.handyman":
                 return Role.MAINTAINER;
-            case "Predavač":
+            case "filter.seller":
                 return Role.CASHIER;
-            case "Neaktívny":
+            case "filter.inactive":
                 return Role.INACTIVE;
             default:
                 throw new IllegalArgumentException("Neznáma rola: " + roleString);
@@ -125,7 +140,7 @@ public class UserViewController {
         String selectedRole = roleFilterComboBox.getSelectionModel().getSelectedItem();
 
         List<User> users;
-        if (selectedRole == null || selectedRole.equals("Všetky")) {
+        if (selectedRole == null || selectedRole.equals("filter.all")) {
             users = userDao.getAll();
         } else {
             Role role = convertStringToRole(selectedRole);

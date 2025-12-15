@@ -15,8 +15,8 @@
     <top>
         <VBox spacing="5" style="-fx-padding: 10;">
             <HBox spacing="10">
-                <Button text="Predaje podľa dní" fx:id="btnDailySales"/>
-                <Button text="Predaje podľa typu lístka" fx:id="btnTypeSales"/>
+                <Button text="%statistic.option1" fx:id="btnDailySales"/>
+                <Button text="%statistic.option1" fx:id="btnTypeSales"/>
             </HBox>
             <Label fx:id="statsLabel" text="Štatistiky sa zobrazia tu..." wrapText="true"/>
         </VBox>

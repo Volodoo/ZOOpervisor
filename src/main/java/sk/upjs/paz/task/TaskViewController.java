@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.animal.Animal;
@@ -101,7 +102,24 @@ public class TaskViewController {
     private void loadUsers() {
         List<User> users = userDao.getAll();
 
-        userFilterComboBox.getItems().add("Všetci");
+        userFilterComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String key) {
+                if (key == null) return "";
+                try {
+                    return SceneManager.getBundle().getString(key);
+                } catch (Exception e) {
+                    return key;
+                }
+            }
+
+            @Override
+            public String fromString(String string) {
+                return null;
+            }
+        });
+
+        userFilterComboBox.getItems().add("filter.all.task");
 
         for (User user : users) {
             if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.CASHIER) || user.getRole().equals(Role.INACTIVE)) {
@@ -112,7 +130,7 @@ public class TaskViewController {
             userFilterComboBox.getItems().add(displayString);
         }
 
-        userFilterComboBox.getSelectionModel().select("Všetci");
+        userFilterComboBox.getSelectionModel().select("filter.all.task");
     }
 
     private void loadTasks() {
@@ -134,7 +152,7 @@ public class TaskViewController {
         String selectedUser = userFilterComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedUser != null) {
-            if (selectedUser.equals("Všetci")) {
+            if (selectedUser.equals("filter.all.task")) {
                 loadTasks();
             } else {
                 String userIdString = selectedUser.substring(selectedUser.lastIndexOf("(") + 1, selectedUser.lastIndexOf(")"));

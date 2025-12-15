@@ -8,6 +8,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.animal.AnimalEditController;
@@ -84,10 +85,39 @@ public class EnclosureViewController {
             }
         });
 
-
         loadZones();
-        loadEnclosures();
+        zoneFilterComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String item) {
+                if (item == null) return "";
 
+                // 1. Ak je to kľúč pre "Všetky"
+                if (item.equals("filter.all")) {
+                    try {
+                        return SceneManager.getBundle().getString(item);
+                    } catch (Exception e) {
+                        return item;
+                    }
+                }
+
+                // 2. Ak je to názov zóny (napr. "Savana")
+                // Skúsime nájsť kľúč "zone.Savana"
+                String zoneKey = "zone." + item;
+                try {
+                    return SceneManager.getBundle().getString(zoneKey);
+                } catch (Exception e) {
+                    // Ak preklad neexistuje (zabudol si ho pridať do súboru),
+                    // vráti pôvodný názov z databázy.
+                    return item;
+                }
+            }
+
+            @Override
+            public String fromString(String string) {
+                return null;
+            }
+        });
+        loadEnclosures();
         zoneFilterComboBox.setOnAction(event -> filterEnclosuresByZone());
     }
 
@@ -99,16 +129,16 @@ public class EnclosureViewController {
             zones.add(enclosure.getZone());
         }
 
-        zoneFilterComboBox.getItems().add("Všetky");
+        zoneFilterComboBox.getItems().add("filter.all");
         zoneFilterComboBox.getItems().addAll(zones);
-        zoneFilterComboBox.getSelectionModel().select("Všetky");
+        zoneFilterComboBox.getSelectionModel().select("filter.all");
     }
 
     private void filterEnclosuresByZone() {
         String selectedZone = zoneFilterComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedZone != null) {
-            if (selectedZone.equals("Všetky")) {
+            if (selectedZone.equals("filter.all")) {
                 loadEnclosures();
             } else {
                 List<Enclosure> enclosures = enclosureDao.getByZone(selectedZone);

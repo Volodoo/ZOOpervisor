@@ -5,6 +5,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import sk.upjs.paz.Factory;
+import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.user.User;
 
 import org.jfree.chart.ChartFactory;
@@ -64,7 +65,7 @@ public class TicketStatsController {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        StringBuilder statsText = new StringBuilder("Predaje podľa dní:\n");
+        StringBuilder statsText = new StringBuilder(translate("statistic.option1")+ ":\n");
 
         for (User cashier : stats.keySet()) {
             Map<LocalDate, Long> byDay = stats.get(cashier);
@@ -78,16 +79,17 @@ public class TicketStatsController {
                     .append(" ")
                     .append(cashier.getLastName())
                     .append(": ")
-                    .append(total)
-                    .append(" lístkov\n");
+                    .append(total+" ")
+                    .append(translate("tickets"))
+                    .append(":\n");
         }
 
         statsLabel.setText(statsText.toString());
 
         JFreeChart lineChart = ChartFactory.createLineChart(
-                "Predaje podľa dní",
-                "Dátum",
-                "Počet predaných lístkov",
+                translate("statistic.option1"),
+                translate("date"),
+                translate("ticket.count"),
                 dataset
         );
 
@@ -103,20 +105,20 @@ public class TicketStatsController {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        StringBuilder statsText = new StringBuilder("Predaje podľa typu lístka:\n");
+        StringBuilder statsText = new StringBuilder(translate("statistic.option2")+ ":\n");
 
         for (String type : allTypes) {
             long count = typeCounts.getOrDefault(type, 0L);
-            dataset.addValue(count, "Lístky", getTypeInSlovak(type));
-            statsText.append(getTypeInSlovak(type)).append(": ").append(count).append(" lístkov\n");
+            dataset.addValue(count, translate("menu.tickets"), getTypeInSlovak(type));
+            statsText.append(getTypeInSlovak(type)).append(": ").append(count+" ").append("tickets").append(" \n");
         }
 
         statsLabel.setText(statsText.toString());
 
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Predaje podľa typu lístka",
-                "Typ lístka",
-                "Počet predaných lístkov",
+                translate("statistic.option2"),
+                translate("ticket.type"),
+                translate("ticket.count"),
                 dataset
         );
 
@@ -133,13 +135,21 @@ public class TicketStatsController {
         );
     }
 
+    private String translate(String key) {
+        try {
+            return SceneManager.getBundle().getString(key);
+        } catch (Exception e) {
+            return key;
+        }
+    }
+
     private String getTypeInSlovak(String type) {
         switch (type) {
-            case "Child":
+            case "child":
                 return "Dieťa";
-            case "Student_Senior":
+            case "studentSenior":
                 return "Študent/Senior";
-            case "Adult":
+            case "adult":
                 return "Dospelý";
             default:
                 return type;
