@@ -34,7 +34,7 @@ public class MainViewController {
 
         if (themeToggle != null) {
             themeToggle.setSelected(SceneManager.isDarkMode());
-            themeToggle.setText(SceneManager.isDarkMode() ? "Svetlý režim" : "Tmavý režim");
+            updateThemeButtonText();
         }
 
         var principal = Auth.INSTANCE.getPrincipal();
@@ -114,10 +114,20 @@ public class MainViewController {
     void switchTheme(javafx.event.ActionEvent event) {
         SceneManager.toggleTheme();
 
-        themeToggle.setText(SceneManager.isDarkMode() ? "Svetlý režim" : "Tmavý režim");
+        updateThemeButtonText();
 
         if (themeToggle.getScene() != null) {
             SceneManager.applyTheme(themeToggle.getScene());
+        }
+    }
+
+    private void updateThemeButtonText() {
+        if (themeToggle != null) {
+            String key = SceneManager.isDarkMode() ? "theme.switch.light" : "theme.switch.dark";
+
+            String text = SceneManager.getBundle().getString(key);
+
+            themeToggle.setText(text);
         }
     }
 }

@@ -35,7 +35,7 @@
             <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="0.0" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
                   <ToggleButton fx:id="langButton" mnemonicParsing="false" onAction="#switchLanguage" text="SK/EN" HBox.hgrow="ALWAYS" />
-                  <ToggleButton fx:id="themeToggle" mnemonicParsing="false" onAction="#switchTheme" text="Dark Mode" />
+                  <ToggleButton fx:id="themeToggle" mnemonicParsing="false" onAction="#switchTheme" text="%theme.switch.dark" />
                   <Button fx:id="signOutButton" mnemonicParsing="false" onAction="#signOut" text="%menu.logout" HBox.hgrow="ALWAYS" />
                </children>
                <padding>

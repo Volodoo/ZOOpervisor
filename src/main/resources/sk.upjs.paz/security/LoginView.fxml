@@ -11,14 +11,14 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="305.0" spacing="10.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.security.LoginViewController">
    <children>
-      <Label text="Zadaj email:" />
+      <Label text="%enteremail" />
       <TextField fx:id="emailField" prefHeight="26.0" prefWidth="284.0" />
-      <Label text="Zadaj heslo:" />
+      <Label text="%enterpassword" />
       <PasswordField fx:id="passwordField" />
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="350.0" spacing="20.0">
          <children>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#logIn" text="Prihlasenie" />
-            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#signIn" text="Registrácia" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#logIn" text="%log" />
+            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#signIn" text="%sign" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

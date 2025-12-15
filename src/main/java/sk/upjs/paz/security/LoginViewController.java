@@ -88,7 +88,6 @@
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/sk.upjs.paz/security/Register.fxml"));
                 loader.setResources(getBundle());
                 Parent root = loader.load();
-
                 Scene scene = new Scene(root);
                 SceneManager.applyTheme(scene);
                 Stage stage = (Stage) emailField.getScene().getWindow();

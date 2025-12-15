@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.TicketViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.TicketViewController">
 
     <children>
         <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
@@ -39,16 +39,16 @@
 
                 <Region maxWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS" />
 
-                <Label text="Lístky">
+                <Label text="%menu.tickets">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
 
                 <Region maxWidth="-Infinity" prefWidth="250.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="showStatisticButton" mnemonicParsing="false" onAction="#showStatisticButton" text="Štatistika" />
+            <Button fx:id="showStatisticButton" mnemonicParsing="false" onAction="#showStatisticButton" text="%stats" />
 
-                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="Späť" />
+                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="%back" />
             </children>
 
             <padding>
@@ -61,10 +61,10 @@
 
         <TableView fx:id="ticketTable" prefHeight="338.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="typeCol" prefWidth="100.0" text="Typ lístka" />
-                <TableColumn fx:id="purchaseDateTimeCol" prefWidth="150.0" text="Čas zakúpenia" />
-                <TableColumn fx:id="priceCol" prefWidth="100.0" text="Cena" />
-                <TableColumn fx:id="cashierCol" prefWidth="150.0" text="Predavač(ka)" />
+                <TableColumn fx:id="typeCol" prefWidth="100.0" text="%ticketType" />
+                <TableColumn fx:id="purchaseDateTimeCol" prefWidth="150.0" text="%timeOfBuying" />
+                <TableColumn fx:id="priceCol" prefWidth="100.0" text="%price" />
+                <TableColumn fx:id="cashierCol" prefWidth="150.0" text="%shopAssistant" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

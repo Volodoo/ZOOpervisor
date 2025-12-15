@@ -39,18 +39,18 @@
 
                 <Region maxWidth="-Infinity" prefHeight="70.0" prefWidth="33.0" HBox.hgrow="ALWAYS" />
 
-                <Label fx:id="taskLabel" minWidth="-Infinity" text="Úlohy" HBox.hgrow="ALWAYS">
+                <Label fx:id="taskLabel" minWidth="-Infinity" text="%menu.tasks" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="System Bold" size="30.0" />
                     </font>
                 </Label>
 
                 <Region maxWidth="-Infinity" prefHeight="70.0" prefWidth="46.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="deleteTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteTaskButtonAction" text="Vymaž Úlohu" HBox.hgrow="ALWAYS" />
+            <Button fx:id="deleteTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteTaskButtonAction" text="%deleteTask" HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="finishTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#finishTaskButtonAction" text="Dokončiť Úlohu" HBox.hgrow="ALWAYS" />
-                <Button fx:id="addTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addTaskButtonAction" text="Pridaj úlohu" HBox.hgrow="ALWAYS" />
-                <Button fx:id="goBackButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" text="Späť" HBox.hgrow="ALWAYS" />
+                <Button fx:id="finishTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#finishTaskButtonAction" text="%finishTask" HBox.hgrow="ALWAYS" />
+                <Button fx:id="addTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addTaskButtonAction" text="%addTask" HBox.hgrow="ALWAYS" />
+                <Button fx:id="goBackButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" text="%back" HBox.hgrow="ALWAYS" />
             </children>
 
             <VBox.margin>
@@ -63,13 +63,13 @@
 
         <TableView fx:id="taskTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="856.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="nameCol" prefWidth="150.0" text="Názov" />
-                <TableColumn fx:id="descriptionCol" prefWidth="300.0" text="Popis úlohy" />
-                <TableColumn fx:id="deadlineCol" prefWidth="120.0" text="Deadline" />
-                <TableColumn fx:id="statusCol" prefWidth="100.0" text="Status" />
-                <TableColumn fx:id="userCol" prefWidth="150.0" text="User" />
-                <TableColumn fx:id="animalsCol" prefWidth="150.0" text="Zvieratá" />
-                <TableColumn fx:id="enclosuresCol" prefWidth="150.0" text="Výbehy" />
+                <TableColumn fx:id="nameCol" prefWidth="150.0" text="%name" />
+                <TableColumn fx:id="descriptionCol" prefWidth="300.0" text="%description" />
+                <TableColumn fx:id="deadlineCol" prefWidth="120.0" text="%deadline" />
+                <TableColumn fx:id="statusCol" prefWidth="100.0" text="%status" />
+                <TableColumn fx:id="userCol" prefWidth="150.0" text="%user" />
+                <TableColumn fx:id="animalsCol" prefWidth="150.0" text="%menu.animals" />
+                <TableColumn fx:id="enclosuresCol" prefWidth="150.0" text="%menu.enclosures" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

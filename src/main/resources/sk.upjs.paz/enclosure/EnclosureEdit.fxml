@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -12,17 +13,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.Spinner?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.enclosure.EnclosureEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.enclosure.EnclosureEditController">
     <children>
         <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="379.0" spacing="65.0" VBox.vgrow="ALWAYS">
             <children>
-                <Label alignment="CENTER" text="Úprava výbehu" HBox.hgrow="ALWAYS">
+                <Label alignment="CENTER" text="%enclosureEdit" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
-                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBackButtonAction" text="späť" HBox.hgrow="ALWAYS" />
+                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBackButtonAction" text="%back" HBox.hgrow="ALWAYS" />
             </children>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -31,32 +31,34 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </VBox.margin>
         </HBox>
-        <GridPane vgap="15.0" hgap="10.0" VBox.vgrow="ALWAYS">
+        <GridPane hgap="10.0" vgap="15.0" VBox.vgrow="ALWAYS">
             <columnConstraints>
                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="40.0" />
                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="50.0" />
-                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="50.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
             </rowConstraints>
             <children>
-                <Label fx:id="nameLabel" text="Name" />
-                <Label fx:id="zoneLabel" text="Zone" GridPane.rowIndex="1" />
-                <Label fx:id="lastMaintainanceLabel" text="Last Maintainance" GridPane.rowIndex="2" />
+                <Label fx:id="nameLabel" text="%name" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                <Label fx:id="zoneLabel" text="%zone" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+                <Label fx:id="lastMaintainanceLabel" text="%lastMaintanence" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
 
-                <TextField fx:id="nameField" GridPane.columnIndex="1" />
-                <TextField fx:id="zoneField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                <TextField fx:id="zoneField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
 
                 <!-- DatePicker -->
-                <DatePicker fx:id="lastMaintainanceDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-                <!-- Hodiny a minúty spinnery -->
-                <Spinner fx:id="hourSpinner" GridPane.columnIndex="2" GridPane.rowIndex="2" prefWidth="60.0" />
-                <Spinner fx:id="minuteSpinner" GridPane.columnIndex="3" GridPane.rowIndex="2" prefWidth="60.0" />
+                <DatePicker fx:id="lastMaintainanceDatePicker" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                      <Spinner fx:id="minuteSpinner" prefWidth="60.0" HBox.hgrow="ALWAYS" />
+      
+                      <Spinner fx:id="hourSpinner" prefWidth="60.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
 
             </children>
             <VBox.margin>
@@ -65,7 +67,7 @@
         </GridPane>
         <HBox alignment="CENTER" prefHeight="1.0" prefWidth="379.0" spacing="15.0" VBox.vgrow="ALWAYS">
             <children>
-                <Button fx:id="updateEnclosureButton" mnemonicParsing="false" onAction="#updateEnclosureButtonAction" text="Ulož" HBox.hgrow="ALWAYS" />
+                <Button fx:id="updateEnclosureButton" mnemonicParsing="false" onAction="#updateEnclosureButtonAction" text="%save" HBox.hgrow="ALWAYS" />
             </children>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

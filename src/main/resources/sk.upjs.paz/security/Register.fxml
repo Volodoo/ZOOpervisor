@@ -15,7 +15,7 @@
     <children>
       <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="367.0" VBox.vgrow="ALWAYS">
          <children>
-              <Button fx:id="chancelRegistrationField" mnemonicParsing="false" onAction="#cancelRegistration" text="Zrušiť" HBox.hgrow="ALWAYS">
+              <Button fx:id="chancelRegistrationField" mnemonicParsing="false" onAction="#cancelRegistration" text="%cancel" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets top="10.0" />
                </HBox.margin>
@@ -31,28 +31,28 @@
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
       
-              <Label prefWidth="149.6" text="Meno:" VBox.vgrow="ALWAYS">
+              <Label prefWidth="149.6" text="%userName" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
               <TextField fx:id="firstNameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS" />
-              <Label prefWidth="150.4" text="Priezvisko:" VBox.vgrow="ALWAYS" />
+              <Label prefWidth="150.4" text="%surname" VBox.vgrow="ALWAYS" />
               <TextField fx:id="lastNameField" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS" />
       
-              <Label prefHeight="18.0" prefWidth="154.0" text="Pohlavie:" VBox.vgrow="ALWAYS" />
+              <Label prefHeight="18.0" prefWidth="154.0" text="%sex" VBox.vgrow="ALWAYS" />
       
               <ComboBox fx:id="genderField" prefWidth="150.0" VBox.vgrow="ALWAYS" />
       
-              <Label prefWidth="150.4" text="Datum narodenia:" VBox.vgrow="ALWAYS" />
+              <Label prefWidth="150.4" text="%birth" VBox.vgrow="ALWAYS" />
               <DatePicker fx:id="birthDayField" prefHeight="26.0" prefWidth="154.0" VBox.vgrow="ALWAYS" />
-              <Label prefWidth="149.6" text="Email:" VBox.vgrow="ALWAYS" />
+              <Label prefWidth="149.6" text="%email" VBox.vgrow="ALWAYS" />
       
               <TextField fx:id="emailField" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS" />
-              <Label prefWidth="149.6" text="Zadaj heslo:" VBox.vgrow="ALWAYS" />
+              <Label prefWidth="149.6" text="%enterpassword" VBox.vgrow="ALWAYS" />
       
               <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS" />
-              <Label prefWidth="149.6" text="Zadaj heslo znova:" VBox.vgrow="ALWAYS" />
+              <Label prefWidth="149.6" text="%enterpasswordagain" VBox.vgrow="ALWAYS" />
       
               <PasswordField fx:id="passwordAgainField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="158.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
@@ -70,7 +70,7 @@
       <HBox alignment="CENTER" prefHeight="61.0" prefWidth="367.0" VBox.vgrow="ALWAYS">
          <children>
       
-              <Button fx:id="confirmSigningInButton" mnemonicParsing="false" onAction="#signUserIn" prefHeight="26.0" prefWidth="150.0" text="Zaregistruj" HBox.hgrow="ALWAYS" />
+              <Button fx:id="confirmSigningInButton" mnemonicParsing="false" onAction="#signUserIn" prefHeight="26.0" prefWidth="150.0" text="%signin" HBox.hgrow="ALWAYS" />
          </children>
          <VBox.margin>
             <Insets bottom="20.0" />

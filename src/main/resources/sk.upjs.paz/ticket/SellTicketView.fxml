@@ -28,13 +28,13 @@
                   </Label>
                </children>
             </VBox>
-            <Label text="Predaj lístka ">
+            <Label text="%menu.sell">
                <font>
                   <Font name="System Bold" size="22.0" />
                </font>
             </Label>
             <Region prefHeight="47.0" prefWidth="14.0" />
-              <Button onAction="#goBack" prefHeight="26.0" prefWidth="66.0" text="Späť" />
+              <Button onAction="#goBack" prefHeight="26.0" prefWidth="66.0" text="%back" />
          </children>
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
@@ -42,12 +42,12 @@
       </HBox>
 
         <HBox prefHeight="36.0" prefWidth="365.0" spacing="40.0" VBox.vgrow="ALWAYS">
-            <Label prefHeight="26.0" prefWidth="114.0" text="Dieťa" HBox.hgrow="ALWAYS">
+            <Label prefHeight="26.0" prefWidth="114.0" text="%child" HBox.hgrow="ALWAYS">
             <font>
                <Font size="17.0" />
             </font></Label>
             <Spinner fx:id="childSpinner" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.6" prefWidth="80.0" HBox.hgrow="ALWAYS" />
-            <Label fx:id="childTotalPrice" prefWidth="100.0" text="Cena: 0 €" HBox.hgrow="ALWAYS">
+            <Label fx:id="childTotalPrice" prefWidth="100.0" text="%priceSell" HBox.hgrow="ALWAYS">
             <font>
                <Font size="15.0" />
             </font></Label>
@@ -60,12 +60,12 @@
         </HBox>
 
         <HBox prefHeight="27.0" prefWidth="380.0" spacing="40.0" VBox.vgrow="ALWAYS">
-            <Label prefHeight="26.0" prefWidth="114.0" text="Študent/Senior" HBox.hgrow="ALWAYS">
+            <Label prefHeight="26.0" prefWidth="114.0" text="%studentSenior" HBox.hgrow="ALWAYS">
             <font>
                <Font size="16.0" />
             </font></Label>
             <Spinner fx:id="seniorStudentSpinner" maxWidth="-Infinity" prefWidth="80.0" HBox.hgrow="ALWAYS" />
-            <Label fx:id="seniorStudentTotalPrice" prefWidth="100.0" text="Cena: 0 €" HBox.hgrow="ALWAYS">
+            <Label fx:id="seniorStudentTotalPrice" prefWidth="100.0" text="%priceSell" HBox.hgrow="ALWAYS">
             <font>
                <Font size="14.0" />
             </font></Label>
@@ -78,12 +78,12 @@
         </HBox>
 
         <HBox prefHeight="0.0" prefWidth="400.0" spacing="40.0" VBox.vgrow="ALWAYS">
-            <Label prefHeight="26.0" prefWidth="114.0" text="Dospelý" HBox.hgrow="ALWAYS">
+            <Label prefHeight="26.0" prefWidth="114.0" text="%adult" HBox.hgrow="ALWAYS">
             <font>
                <Font size="16.0" />
             </font></Label>
             <Spinner fx:id="adultSpinner" maxHeight="-Infinity" prefWidth="80.0" HBox.hgrow="ALWAYS" />
-            <Label fx:id="adultTotalPrice" prefWidth="100.0" text="Cena: 0 €" HBox.hgrow="ALWAYS">
+            <Label fx:id="adultTotalPrice" prefWidth="100.0" text="%priceSell" HBox.hgrow="ALWAYS">
             <font>
                <Font size="14.0" />
             </font></Label>
@@ -98,14 +98,14 @@
          <children>
       
               <!-- Celková cena -->
-              <Label fx:id="totalPriceLabel" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefHeight="22.0" prefWidth="151.0" text="Celková cena: 0 €" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+              <Label fx:id="totalPriceLabel" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefHeight="22.0" prefWidth="151.0" text="%priceTogheder" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
       
               <!-- Tlačidlá pre akcie -->
-              <Button alignment="CENTER" contentDisplay="CENTER" onAction="#sellTicket" prefHeight="26.0" prefWidth="161.0" text="Predať lístok" VBox.vgrow="ALWAYS" />
+              <Button alignment="CENTER" contentDisplay="CENTER" onAction="#sellTicket" prefHeight="26.0" prefWidth="161.0" text="%sellTicket" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
 

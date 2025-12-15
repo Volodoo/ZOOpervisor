@@ -6,6 +6,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -15,22 +16,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.Spinner?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.task.TaskEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.task.TaskEditController">
 
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
 
     <children>
-        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+        <HBox alignment="CENTER_RIGHT" prefHeight="74.0" prefWidth="779.0" spacing="20.0">
             <children>
-                <Label maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="718.0" text="Editácia úlohy" HBox.hgrow="ALWAYS">
+                <Label maxWidth="1.7976931348623157E308" prefHeight="74.0" prefWidth="602.0" text="%edit.task" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
-                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="Späť" />
+                <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="%back" />
             </children>
             <VBox.margin>
                 <Insets bottom="10.0" />
@@ -51,10 +51,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label text="Názov:" />
+                <Label text="%name" />
                 <TextField fx:id="nameField" GridPane.columnIndex="1" />
 
-                <Label text="Deadline:" GridPane.rowIndex="1" />
+                <Label text="%deadline" GridPane.rowIndex="1" />
                 <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <DatePicker fx:id="deadlineDatePicker" prefWidth="150.0" />
@@ -63,13 +63,13 @@
                     </children>
                 </HBox>
 
-                <Label text="User:" GridPane.rowIndex="2" />
+                <Label text="%user" GridPane.rowIndex="2" />
                 <ComboBox fx:id="userComboBox" prefHeight="26.0" prefWidth="177.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                <Label text="Status:" GridPane.rowIndex="3" />
+                <Label text="%status" GridPane.rowIndex="3" />
                 <ComboBox fx:id="statusComboBox" prefHeight="26.0" prefWidth="178.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                <Label text="Popis:" GridPane.rowIndex="4">
+                <Label text="%description" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets top="5.0" />
                     </GridPane.margin>
@@ -85,7 +85,7 @@
 
                 <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label text="Priradiť zvieratá:">
+                        <Label text="%assign.animals">
                             <font><Font name="System Bold" size="14.0" /></font>
                         </Label>
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
@@ -102,7 +102,7 @@
 
                 <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label text="Priradiť výbehy:">
+                        <Label text="%assign.enclosures">
                             <font><Font name="System Bold" size="14.0" /></font>
                         </Label>
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
@@ -124,7 +124,7 @@
 
         <HBox alignment="CENTER" prefHeight="50.0">
             <children>
-                <Button fx:id="saveTaskButton" mnemonicParsing="false" onAction="#saveTaskButtonAction" prefHeight="30.0" prefWidth="120.0" text="Pridať" />
+                <Button fx:id="saveTaskButton" mnemonicParsing="false" onAction="#saveTaskButtonAction" prefHeight="30.0" prefWidth="120.0" text="%add" />
             </children>
         </HBox>
 
