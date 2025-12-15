@@ -75,6 +75,7 @@ public class AnimalViewController {
         speciesFilterComboBox.getItems().add("filter.active");
         speciesFilterComboBox.getItems().add("filter.inactive");
         speciesFilterComboBox.getItems().add("filter.treatment");
+
         speciesFilterComboBox.setConverter(new StringConverter<String>() {
             @Override
             public String toString(String key) {

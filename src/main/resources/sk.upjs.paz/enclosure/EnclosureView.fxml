@@ -63,7 +63,7 @@
             <columns>
                 <TableColumn fx:id="nameCol" prefWidth="250.0" text="%name" />
                 <TableColumn fx:id="zoneCol" prefWidth="150.0" text="%zone" />
-                <TableColumn fx:id="lastMaintainanceCol" prefWidth="150.0" text="%lastMaintanence" />
+                <TableColumn fx:id="lastMaintainanceCol" prefWidth="150.0" text="%lastMaintainance" />
                 <TableColumn fx:id="animalsCountCol" prefWidth="80.0" text="%menu.animals" />
             </columns>
             <columnResizePolicy>

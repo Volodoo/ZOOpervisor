@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -13,7 +12,6 @@ import javafx.scene.control.TableView;
 import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.enclosure.EnclosureEditController;
 import sk.upjs.paz.security.Auth;
 
 import java.time.format.DateTimeFormatter;
@@ -65,9 +63,9 @@ public class UserViewController {
         roleFilterComboBox.getItems().add("filter.all");
         roleFilterComboBox.getItems().add("filter.admin");
         roleFilterComboBox.getItems().add("filter.manager");
-        roleFilterComboBox.getItems().add("filter.caretaker");
-        roleFilterComboBox.getItems().add("filter.handyman");
-        roleFilterComboBox.getItems().add("filter.seller");
+        roleFilterComboBox.getItems().add("filter.zookeeper");
+        roleFilterComboBox.getItems().add("filter.maintainer");
+        roleFilterComboBox.getItems().add("filter.cashier");
         roleFilterComboBox.getItems().add("filter.inactive");
         roleFilterComboBox.setConverter(new StringConverter<String>() {
             @Override
@@ -123,11 +121,11 @@ public class UserViewController {
                 return Role.ADMIN;
             case "filter.manager":
                 return Role.MANAGER;
-            case "filter.caretaker":
+            case "filter.zookeeper":
                 return Role.ZOOKEEPER;
-            case "filter.handyman":
+            case "filter.maintainer":
                 return Role.MAINTAINER;
-            case "filter.seller":
+            case "filter.cashier":
                 return Role.CASHIER;
             case "filter.inactive":
                 return Role.INACTIVE;

@@ -45,7 +45,7 @@
             <children>
                 <Label fx:id="nameLabel" text="%name" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
                 <Label fx:id="zoneLabel" text="%zone" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                <Label fx:id="lastMaintainanceLabel" text="%lastMaintanence" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                <Label fx:id="lastMaintainanceLabel" text="%lastMaintainance" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
 
                 <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
                 <TextField fx:id="zoneField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />

@@ -14,9 +14,6 @@ public class IDELauncher {
 
 
     public static void main(String[] args) throws IOException {
-        AnimalDao ad=Factory.INSTANCE.getAnimalDao();
-        System.out.println(ad.getAllSortedByZoneSpecies());
-
         Main.main(args);
     }
 }
