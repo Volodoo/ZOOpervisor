@@ -119,11 +119,6 @@ public class MysqlEnclosureDao implements EnclosureDao {
     }
 
     @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM enclosure WHERE id = ?", id);
-    }
-
-    @Override
     public Enclosure update(Enclosure enclosure) throws NotFoundException, IllegalArgumentException {
         if (enclosure == null) {
             throw new IllegalArgumentException("Enclosure is null.");

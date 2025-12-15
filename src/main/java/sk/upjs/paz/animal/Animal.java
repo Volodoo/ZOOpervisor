@@ -38,6 +38,7 @@ public class Animal {
         return id != null ? id.hashCode() : 0;
     }
 
+
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");

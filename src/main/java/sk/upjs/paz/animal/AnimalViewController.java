@@ -133,7 +133,7 @@ public class AnimalViewController {
 
         List<Animal> animals;
         if (selectedStatus == null || selectedStatus.equals("Všetky")) {
-            animals = animalDao.getAllSortedBySpecies();
+            animals = animalDao.getAllSortedByZoneSpecies();
         } else {
             Status status = convertStringToStatus(selectedStatus);
             animals = animalDao.getByStatus(status);

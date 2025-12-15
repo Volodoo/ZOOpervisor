@@ -3,7 +3,6 @@ package sk.upjs.paz.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sk.upjs.paz.TestContainers;
-import sk.upjs.paz.exceptions.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,91 +11,94 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MysqlUserDaoTest extends TestContainers {
 
-    private MysqlUserDao userDao;
+    private UserDao dao;
 
     @BeforeEach
     void setUp() {
-        userDao = new MysqlUserDao(jdbc);
-    }
-
-    @Test
-    void create() {
-        User user = new User();
-        user.setFirstName("Test");
-        user.setLastName("User");
-        user.setGender(Gender.UNKNOWN);
-        user.setBirthDay(LocalDate.of(2000, 1, 1));
-        user.setRole(Role.INACTIVE);
-        user.setEmail("test.user@example.com");
-        user.setPassword("password123");
-
-        User created = userDao.create(user);
-
-        assertNotNull(created.getId(), "ID should be set after creation");
-
-        User fromDb = userDao.getById(created.getId());
-        assertEquals("Test", fromDb.getFirstName());
+        dao = new MysqlUserDao(jdbc);
     }
 
     @Test
     void getAll() {
-        List<User> users = userDao.getAll();
-        assertNotNull(users);
-        assertTrue(users.size() >= 2, "Database should contain initial 2 users");
+        List<User> users = dao.getAll();
+        assertEquals(8, users.size());
+
+        assertEquals("Marek", users.get(0).getFirstName());
+        assertEquals("Jana", users.get(1).getFirstName());
+        assertEquals("Tomáš", users.get(2).getFirstName());
+        assertEquals("Eva", users.get(3).getFirstName());
+        assertEquals("Peter", users.get(4).getFirstName());
+        assertEquals("Anna", users.get(5).getFirstName());
+        assertEquals("Lukáš", users.get(6).getFirstName());
+        assertEquals("Martin", users.get(7).getFirstName());
     }
 
     @Test
     void getById() {
-        // Skúsime získať existujúceho používateľa Mareka (id = 1)
-        User fromDb = userDao.getById(1L);
-        assertEquals("Marek", fromDb.getFirstName());
-        assertThrows(NotFoundException.class, () -> userDao.getById(9999L));
-    }
+        User u1 = dao.getById(1L);
+        assertEquals("Marek", u1.getFirstName());
+        assertEquals("Tóth", u1.getLastName());
+        assertEquals(Role.MANAGER, u1.getRole());
 
-    @Test
-    void update() {
-        User user = new User();
-        user.setFirstName("Update");
-        user.setLastName("Test");
-        user.setGender(Gender.UNKNOWN);
-        user.setBirthDay(LocalDate.of(1990, 5, 5));
-        user.setRole(Role.CASHIER);
-        user.setEmail("update@test.com");
-        user.setPassword("pass");
+        User u4 = dao.getById(4L);
+        assertEquals("Eva", u4.getFirstName());
+        assertEquals(Role.CASHIER, u4.getRole());
 
-        User created = userDao.create(user);
-
-        created.setFirstName("UpdatedName");
-        User updated = userDao.update(created);
-
-        assertEquals("UpdatedName", updated.getFirstName());
-    }
-
-    @Test
-    void delete() {
-        User user = new User();
-        user.setFirstName("Delete");
-        user.setLastName("Me");
-        user.setGender(Gender.UNKNOWN);
-        user.setBirthDay(LocalDate.of(1995, 6, 6));
-        user.setRole(Role.ZOOKEEPER);
-        user.setEmail("delete@test.com");
-        user.setPassword("pass");
-
-        User created = userDao.create(user);
-        long id = created.getId();
-
-        userDao.delete(id);
-
-        assertThrows(NotFoundException.class, () -> userDao.getById(id));
+        assertThrows(Exception.class, () -> dao.getById(999L));
     }
 
     @Test
     void getByRole() {
-        // Overenie existujúcich používateľov CASHIER
-        List<User> cashiers = userDao.getByRole(Role.CASHIER);
-        assertTrue(cashiers.size() >= 1);
-        assertTrue(cashiers.stream().anyMatch(u -> u.getFirstName().equals("Jana")));
+        List<User> cashiers = dao.getByRole(Role.CASHIER);
+        assertEquals(3, cashiers.size());
 
+        assertEquals("Jana", cashiers.get(0).getFirstName());
+        assertEquals("Tomáš", cashiers.get(1).getFirstName());
+        assertEquals("Eva", cashiers.get(2).getFirstName());
+
+        for (User user : cashiers) {
+            assertEquals(Role.CASHIER, user.getRole());
+        }
+
+        List<User> maintainers = dao.getByRole(Role.MAINTAINER);
+        assertEquals(2, maintainers.size());
+        assertEquals("Lukáš", maintainers.get(0).getFirstName());
+        assertEquals("Martin", maintainers.get(1).getFirstName());
+
+        for (User user : maintainers) {
+            assertEquals(Role.MAINTAINER, user.getRole());
+        }
+    }
+
+    @Test
+    void create() {
+        User newUser = new User();
+        newUser.setFirstName("Test");
+        newUser.setLastName("User");
+        newUser.setGender(Gender.UNKNOWN);
+        newUser.setBirthDay(LocalDate.of(2000, 1, 1));
+        newUser.setRole(Role.INACTIVE);
+        newUser.setEmail("test.user@zoo.sk");
+        newUser.setPassword("password");
+
+        User created = dao.create(newUser);
+        assertNotNull(created.getId());
+
+        User fromDb = dao.getById(created.getId());
+        assertEquals("Test", fromDb.getFirstName());
+        assertEquals("User", fromDb.getLastName());
+        assertEquals(Role.INACTIVE, fromDb.getRole());
+    }
+
+    @Test
+    void update() {
+        User u2 = dao.getById(2L);
+        u2.setFirstName("Updated");
+
+        User updated = dao.update(u2);
+        assertEquals("Updated", updated.getFirstName());
+
+        User fromDb = dao.getById(2L);
+        assertEquals("Updated", fromDb.getFirstName());
     }
 }

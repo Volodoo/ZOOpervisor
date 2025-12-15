@@ -1,6 +1,6 @@
 services:
   mysql-test:
-    image: mysql:8.4.2
+    image: mysql:8.4.6
     container_name: zoopervisor-mysql-test
     environment:
       MYSQL_ROOT_PASSWORD: root

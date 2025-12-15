@@ -23,5 +23,4 @@ public interface EnclosureDao {
 
     Enclosure update(Enclosure enclosure) throws NotFoundException, IllegalArgumentException;
 
-    void delete(long id);
 }

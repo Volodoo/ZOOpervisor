@@ -85,7 +85,7 @@ public class TaskEditController {
     private void loadAnimals() {
         animalsVBox.getChildren().clear();
         animalCheckBoxes.clear();
-        List<Animal> animals = animalDao.getAllSortedBySpecies();
+        List<Animal> animals = animalDao.getAllSortedByZoneSpecies();
         for (Animal a : animals) {
             if (a.getStatus().equals(sk.upjs.paz.animal.Status.INACTIVE)) {
                 continue;
