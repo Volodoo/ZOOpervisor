@@ -1,57 +1,57 @@
 package sk.upjs.paz;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.utility.DockerImageName;
-import org.testcontainers.utility.MountableFile;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
 
 public abstract class TestContainers {
 
-    protected static MySQLContainer<?> mysql;
+    protected JdbcTemplate jdbc;
 
-    @BeforeAll
-    static void startContainer() {
+    /**
+     * Pripojenie na MySQL testovaciu DB a načítanie init_test.sql pred každým testom
+     */
+    @BeforeEach
+    void resetDatabase() {
         try {
-            DockerImageName imageName = DockerImageName.parse("mysql:8.0.34");
-            mysql = new MySQLContainer<>(imageName)
-                    .withDatabaseName("zoopervisor")
-                    .withCopyFileToContainer(
-                            MountableFile.forClasspathResource("init.sql"),
-                            "/docker-entrypoint-initdb.d/init.sql"
-                    );
+            // 1. DataSource na testovaciu databázu
+            DriverManagerDataSource ds = new DriverManagerDataSource(
+                    "jdbc:mysql://localhost:3308/zoopervisor_test",
+                    "root",
+                    "root"
+            );
 
-            mysql.start();
+            // 2. JdbcTemplate na vykonanie DROP a TRUNCATE
+            jdbc = new JdbcTemplate(ds);
+            clearTables();
 
-            // Nastavenie systémových premenných pre JDBC
-            System.setProperty("DB_JDBC", mysql.getJdbcUrl());
-            System.setProperty("DB_USER", mysql.getUsername());
-            System.setProperty("DB_PASSWORD", mysql.getPassword());
+            // 3. Načítanie init_test.sql
+            try (Connection connection = ds.getConnection()) {
+                ScriptUtils.executeSqlScript(connection, new ClassPathResource("init_test.sql"));
+            }
 
         } catch (Exception e) {
-            System.err.println("Docker nie je dostupný. Testy používajúce Testcontainers nebudú fungovať.");
-            e.printStackTrace();
+            throw new RuntimeException("Chyba pri resetovaní testovacej databázy", e);
         }
     }
 
-    // Metóda na vyčistenie tabuliek pred každým testom
-    protected void clearTables() {
-        if (mysql == null) return; // Ak kontajner neběží, preskočíme čistenie
+    private void clearTables() {
+        jdbc.execute("SET FOREIGN_KEY_CHECKS = 0");
 
-        var jdbc = Factory.INSTANCE.getMysqlJdbcOperations();
+        // DROP všetkých testovacích tabuliek, ak existujú
+        jdbc.execute("DROP TABLE IF EXISTS task_has_enclosure");
+        jdbc.execute("DROP TABLE IF EXISTS task_has_animal");
+        jdbc.execute("DROP TABLE IF EXISTS ticket");
+        jdbc.execute("DROP TABLE IF EXISTS task");
+        jdbc.execute("DROP TABLE IF EXISTS animal");
+        jdbc.execute("DROP TABLE IF EXISTS enclosure");
+        jdbc.execute("DROP TABLE IF EXISTS user");
 
-        // Vymazať tabuľky v poradí deti → rodičia kvôli FK
-        jdbc.update("DELETE FROM ticket");               // deti
-        jdbc.update("DELETE FROM task_has_animal");     // deti
-        jdbc.update("DELETE FROM task_has_enclosure");  // deti
-        jdbc.update("DELETE FROM task");                // rodič
-        jdbc.update("DELETE FROM animal");              // rodič
-        jdbc.update("DELETE FROM enclosure");           // rodič
-        jdbc.update("DELETE FROM user");                // rodič
-    }
-
-    @BeforeEach
-    void setUpBase() {
-        clearTables();
+        jdbc.execute("SET FOREIGN_KEY_CHECKS = 1");
     }
 }

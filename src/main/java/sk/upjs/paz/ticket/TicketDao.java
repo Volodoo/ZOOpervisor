@@ -19,7 +19,4 @@ public interface TicketDao {
 
     Ticket create(Ticket ticket);
 
-    Ticket update(Ticket ticket) throws NotFoundException, IllegalArgumentException;
-
-    void delete(long id);
 }

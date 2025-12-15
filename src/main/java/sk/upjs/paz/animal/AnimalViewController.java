@@ -8,7 +8,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.security.Auth;
@@ -71,29 +70,12 @@ public class AnimalViewController {
             animalsTable.setOnMouseClicked(Event::consume);
         }
 
-        speciesFilterComboBox.getItems().add("filter.all");
-        speciesFilterComboBox.getItems().add("filter.active");
-        speciesFilterComboBox.getItems().add("filter.inactive");
-        speciesFilterComboBox.getItems().add("filter.treatment");
+        speciesFilterComboBox.getItems().add("Všetky");
+        speciesFilterComboBox.getItems().add("Aktívne");
+        speciesFilterComboBox.getItems().add("Neaktívne");
+        speciesFilterComboBox.getItems().add("Liečba");
 
-        speciesFilterComboBox.setConverter(new StringConverter<String>() {
-            @Override
-            public String toString(String key) {
-                if (key == null) return "";
-                try {
-                    return SceneManager.getBundle().getString(key);
-                } catch (Exception e) {
-                    return key;
-                }
-            }
-
-            @Override
-            public String fromString(String string) {
-                return null;
-            }
-        });
-
-        speciesFilterComboBox.getSelectionModel().select("filter.all");
+        speciesFilterComboBox.getSelectionModel().select("Všetky");
 
         speciesFilterComboBox.setOnAction(event -> filterAnimalsByStatus());
 
@@ -122,7 +104,7 @@ public class AnimalViewController {
         String selectedStatus = speciesFilterComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedStatus != null) {
-            if (selectedStatus.equals("filter.all")) {
+            if (selectedStatus.equals("Všetky")) {
                 loadAnimals();
             } else {
                 Status status = convertStringToStatus(selectedStatus);
@@ -135,11 +117,11 @@ public class AnimalViewController {
 
     private Status convertStringToStatus(String statusString) {
         switch (statusString) {
-            case "filter.active":
+            case "Aktívne":
                 return Status.ACTIVE;
-            case "filter.inactive":
+            case "Neaktívne":
                 return Status.INACTIVE;
-            case "filter.treatment":
+            case "Liečba":
                 return Status.TREATMENT;
             default:
                 throw new IllegalArgumentException("Neznámy status: " + statusString);
@@ -150,7 +132,7 @@ public class AnimalViewController {
         String selectedStatus = speciesFilterComboBox.getSelectionModel().getSelectedItem();
 
         List<Animal> animals;
-        if (selectedStatus == null || selectedStatus.equals("filter.all")) {
+        if (selectedStatus == null || selectedStatus.equals("Všetky")) {
             animals = animalDao.getAllSortedBySpecies();
         } else {
             Status status = convertStringToStatus(selectedStatus);

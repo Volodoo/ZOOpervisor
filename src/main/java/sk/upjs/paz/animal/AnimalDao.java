@@ -7,7 +7,7 @@ import java.util.List;
 public interface AnimalDao {
     List<Animal> getAll();
 
-    List<Animal> getAllSortedBySpecies();
+    List<Animal> getAllSortedByZoneSpecies();
 
     List<Animal> getByStatus(Status status);
 
@@ -17,5 +17,4 @@ public interface AnimalDao {
 
     Animal update(Animal animal) throws NotFoundException, IllegalArgumentException;
 
-    void delete(long id);
 }

@@ -119,11 +119,4 @@ public class MysqlUserDao implements UserDao {
 
         return user;
     }
-
-    @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM user WHERE id = ?", id);
-    }
-
-
 }

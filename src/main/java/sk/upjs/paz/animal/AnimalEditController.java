@@ -7,6 +7,8 @@ import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.enclosure.Enclosure;
 import sk.upjs.paz.enclosure.EnclosureDao;
+import sk.upjs.paz.security.Auth;
+import sk.upjs.paz.user.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +21,7 @@ public class AnimalEditController {
     public Spinner<Integer> minuteSpinner;
 
     @FXML
-    private DatePicker birthDayPicker;
+    private DatePicker birthDayDatePicker;
 
     @FXML
     private DatePicker lastCheckPicker;
@@ -34,7 +36,7 @@ public class AnimalEditController {
     private ComboBox<Enclosure> enclosureComboBox;
 
     @FXML
-    private ComboBox<Sex> sexComboBox1;
+    private ComboBox<Sex> sexComboBox;
 
     @FXML
     private TextField speciesField;
@@ -53,7 +55,17 @@ public class AnimalEditController {
 
     @FXML
     void initialize() {
-        sexComboBox1.getItems().setAll(Sex.values());
+        var principal = Auth.INSTANCE.getPrincipal();
+
+        if (principal == null || principal.getRole() != Role.ADMIN) {
+            nicknameField.setDisable(true);
+            sexComboBox.setDisable(true);
+            speciesField.setDisable(true);
+            enclosureComboBox.setDisable(true);
+            birthDayDatePicker.setDisable(true);
+        }
+
+        sexComboBox.getItems().setAll(Sex.values());
         statusComboBox.getItems().setAll(Status.values());
         enclosureComboBox.getItems().setAll(enclosureDao.getAll());
 
@@ -104,8 +116,8 @@ public class AnimalEditController {
         }
         animalToSave.setStatus(statusComboBox.getValue());
         animalToSave.setEnclosure(enclosureComboBox.getValue());
-        animalToSave.setSex(sexComboBox1.getValue());
-        animalToSave.setBirthDay(birthDayPicker.getValue());
+        animalToSave.setSex(sexComboBox.getValue());
+        animalToSave.setBirthDay(birthDayDatePicker.getValue());
 
         LocalDate lastCheckDate = lastCheckPicker.getValue();
         if (lastCheckDate != null) {
@@ -133,10 +145,10 @@ public class AnimalEditController {
         this.animal = animal;
         nicknameField.setText(animal.getNickname());
         speciesField.setText(animal.getSpecies());
-        sexComboBox1.setValue(animal.getSex());
+        sexComboBox.setValue(animal.getSex());
         statusComboBox.setValue(animal.getStatus());
         enclosureComboBox.setValue(animal.getEnclosure());
-        birthDayPicker.setValue(animal.getBirthDay());
+        birthDayDatePicker.setValue(animal.getBirthDay());
 
         if (animal.getLastCheck() != null) {
             LocalDateTime dt = animal.getLastCheck();

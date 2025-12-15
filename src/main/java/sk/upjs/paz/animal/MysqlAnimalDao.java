@@ -63,7 +63,7 @@ public class MysqlAnimalDao implements AnimalDao {
     }
 
     @Override
-    public List<Animal> getAllSortedBySpecies() {
+    public List<Animal> getAllSortedByZoneSpecies() {
         String selectAnimalsSortedBySpeciesQuery = selectAnimalQuery + " ORDER BY en.zone, an.species";
 
         return jdbcOperations.query(selectAnimalsSortedBySpeciesQuery, resultSetExtractor);
@@ -144,8 +144,4 @@ public class MysqlAnimalDao implements AnimalDao {
         return getById(animal.getId());
     }
 
-    @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM animal WHERE id = ?", id);
-    }
 }

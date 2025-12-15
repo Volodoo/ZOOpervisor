@@ -117,31 +117,4 @@ public class MysqlTicketDao implements TicketDao {
 
         return getById(id);
     }
-
-    @Override
-    public Ticket update(Ticket ticket) throws NotFoundException, IllegalArgumentException {
-        if (ticket == null) {
-            throw new IllegalArgumentException("Ticket is null.");
-        }
-
-        if (ticket.getId() == null) {
-            throw new IllegalArgumentException("Ticket id is already set.");
-        }
-        jdbcOperations.update(
-                "UPDATE ticket SET type = ?, purchase_date_time = ?, price = ?, user_id = ? WHERE id = ?",
-                ticket.getType(),
-                ticket.getPurchaseDateTime(),
-                ticket.getPrice(),
-                ticket.getCashier().getId(),
-
-                ticket.getId()
-        );
-
-        return getById(ticket.getId());
-    }
-
-    @Override
-    public void delete(long id) {
-        jdbcOperations.update("DELETE FROM ticket WHERE id = ?", id);
-    }
 }
