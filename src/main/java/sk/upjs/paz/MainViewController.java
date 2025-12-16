@@ -39,9 +39,6 @@ public class MainViewController {
 
         var principal = Auth.INSTANCE.getPrincipal();
 
-        // VYTVOR SI ADMINA A TU SI PO PRIHLASINU JAK ADMIN MOZES ZMINITY ROLU A UVIDIS JAK TO VYZERAT
-        //principal.setRole(Role.ADMIN);
-
         if (principal == null) {
             userNameLabel.setText("Neprihlásený");
             roleLabel.setText("-");
