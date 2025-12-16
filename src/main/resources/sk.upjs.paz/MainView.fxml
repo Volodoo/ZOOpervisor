@@ -63,7 +63,7 @@
    <right>
       <VBox alignment="CENTER_LEFT" prefHeight="220.0" prefWidth="394.0" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="tasksButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayTasks" prefHeight="50.0" text="%menu.tasks" VBox.vgrow="ALWAYS">
+            <Button fx:id="ticketButton" mnemonicParsing="false" onAction="#displayTickets" prefHeight="50.0" prefWidth="200.0" text="%menu.tickets" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
@@ -79,7 +79,7 @@
    <bottom>
       <VBox alignment="TOP_CENTER" prefHeight="229.0" prefWidth="850.0" spacing="20.0" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Button fx:id="ticketButton" mnemonicParsing="false" onAction="#displayTickets" prefHeight="50.0" prefWidth="200.0" text="%menu.tickets" VBox.vgrow="ALWAYS">
+            <Button fx:id="tasksButton" maxWidth="200.0" mnemonicParsing="false" onAction="#displayTasks" prefHeight="50.0" text="%menu.tasks" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>

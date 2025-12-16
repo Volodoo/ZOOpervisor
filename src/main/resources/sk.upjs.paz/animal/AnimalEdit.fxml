@@ -14,12 +14,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.animal.AnimalEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="425.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.animal.AnimalEditController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <children>
-        <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="360.0" spacing="50.0" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="360.0" spacing="75.0" VBox.vgrow="ALWAYS">
             <children>
                 <Label alignment="CENTER" text="%animalEdit" textAlignment="CENTER">
                     <font>
@@ -34,8 +34,8 @@
         </HBox>
         <GridPane vgap="20.0" VBox.vgrow="ALWAYS">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints maxWidth="174.39998779296874" minWidth="10.0" prefWidth="128.799951171875" />
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="236.00004882812496" minWidth="10.0" prefWidth="236.00004882812496" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -51,7 +51,7 @@
                 <Label text="%species" GridPane.rowIndex="1" />
                 <Label text="%sex" GridPane.rowIndex="2" />
                 <Label text="%birth" GridPane.rowIndex="3" />
-                <Label text="%lastCheck" GridPane.rowIndex="4" />
+                <Label minWidth="-Infinity" prefHeight="18.0" prefWidth="111.0" text="%lastCheck" GridPane.rowIndex="4" />
                 <Label text="%enclosure" GridPane.rowIndex="5" />
                 <Label text="%status" GridPane.rowIndex="6" />
 
@@ -60,9 +60,9 @@
                 <ComboBox fx:id="sexComboBox" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <DatePicker fx:id="birthDayDatePicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <HBox prefHeight="26.0" prefWidth="267.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <children>
-                        <DatePicker fx:id="lastCheckPicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="140.0" />
+                        <DatePicker fx:id="lastCheckPicker" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="114.0" />
                         <Spinner fx:id="hourSpinner" prefWidth="60.0" />
                         <Spinner fx:id="minuteSpinner" prefWidth="60.0" />
                     </children>
