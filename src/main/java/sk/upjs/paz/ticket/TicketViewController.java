@@ -106,6 +106,9 @@ public class TicketViewController {
         }
     }
 
+    @FXML
+    public void OnActionSearchTextField(){}
+
     private void loadCashiers() {
         List<User> users = userDao.getAll();
 

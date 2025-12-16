@@ -6,15 +6,16 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.task.TaskViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="959.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.task.TaskViewController">
 
     <children>
-        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="920.0" spacing="15.0" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="960.0" spacing="15.0" VBox.vgrow="NEVER">
             <children>
 
                 <VBox alignment="CENTER_LEFT">
@@ -36,8 +37,7 @@
                         <ComboBox fx:id="userFilterComboBox" minHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" promptText="Podľa používateľa" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
-
-                <Region maxWidth="-Infinity" prefHeight="70.0" prefWidth="33.0" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="151.0" promptText="%search" />
 
                 <Label fx:id="taskLabel" minWidth="-Infinity" text="%menu.tasks" HBox.hgrow="ALWAYS">
                     <font>
@@ -61,7 +61,7 @@
             </padding>
         </HBox>
 
-        <TableView fx:id="taskTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="856.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="taskTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="928.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="nameCol" prefWidth="150.0" text="%name" />
                 <TableColumn fx:id="descriptionCol" prefWidth="300.0" text="%description" />

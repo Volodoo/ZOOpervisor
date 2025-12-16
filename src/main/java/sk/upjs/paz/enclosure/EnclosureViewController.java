@@ -121,6 +121,9 @@ public class EnclosureViewController {
         zoneFilterComboBox.setOnAction(event -> filterEnclosuresByZone());
     }
 
+    @FXML
+    public void OnActionSearchTextField(){}
+
     private void loadZones() {
         List<Enclosure> enclosures = enclosureDao.getAll();
         Set<String> zones = new HashSet<>();

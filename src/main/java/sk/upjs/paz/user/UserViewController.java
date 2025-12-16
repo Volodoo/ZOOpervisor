@@ -114,7 +114,8 @@ public class UserViewController {
             }
         }
     }
-
+    @FXML
+    public void OnActionSearchTextField(){}
     private Role convertStringToRole(String roleString) {
         switch (roleString) {
             case "filter.admin":

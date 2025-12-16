@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -30,14 +31,13 @@
 
                 <Region prefWidth="20.0" />
 
-                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0" spacing="10.0">
                     <children>
                         <Label fx:id="filterLabel" text="Filter:" />
                         <ComboBox fx:id="cashierFilterComboBox" prefWidth="130.0" />
+                  <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="130.0" promptText="%search" />
                     </children>
                 </HBox>
-
-                <Region maxWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS" />
 
                 <Label text="%menu.tickets">
                     <font>
@@ -45,7 +45,7 @@
                     </font>
                 </Label>
 
-                <Region maxWidth="-Infinity" prefWidth="250.0" HBox.hgrow="ALWAYS" />
+                <Region maxWidth="-Infinity" prefHeight="39.0" prefWidth="242.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="showStatisticButton" mnemonicParsing="false" onAction="#showStatisticButton" text="%stats" />
 
                 <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="%back" />

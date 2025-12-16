@@ -133,6 +133,9 @@ public class AnimalViewController {
         }
     }
 
+    @FXML
+    public void OnActionSearchTextField(){}
+
     private Status convertStringToStatus(String statusString) {
         switch (statusString) {
             case "filter.active":

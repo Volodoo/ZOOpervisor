@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -36,8 +37,7 @@
                         <ComboBox fx:id="zoneFilterComboBox" prefWidth="130.0" />
                     </children>
                 </HBox>
-
-                <Region prefHeight="50.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="118.0" promptText="%search" />
 
                 <Label text="%menu.enclosures">
                     <font>

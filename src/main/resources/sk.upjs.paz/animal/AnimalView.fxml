@@ -6,15 +6,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="548.0" prefWidth="871.0" spacing="10.0"
-      xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="sk.upjs.paz.animal.AnimalViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="871.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.animal.AnimalViewController">
 
     <children>
         <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
@@ -39,8 +37,7 @@
                         <ComboBox fx:id="speciesFilterComboBox" prefWidth="130.0" />
                     </children>
                 </HBox>
-
-                <Region HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="33.0" promptText="%search" HBox.hgrow="ALWAYS" />
 
                 <Label text="%menu.animals">
                     <font>

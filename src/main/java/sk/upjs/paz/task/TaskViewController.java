@@ -121,6 +121,7 @@ public class TaskViewController {
 
         userFilterComboBox.getItems().add("filter.all.task");
 
+
         for (User user : users) {
             if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.CASHIER) || user.getRole().equals(Role.INACTIVE)) {
                 continue;
@@ -132,6 +133,9 @@ public class TaskViewController {
 
         userFilterComboBox.getSelectionModel().select("filter.all.task");
     }
+
+    @FXML
+    public void OnActionSearchTextField(){}
 
     private void loadTasks() {
         var principal = Auth.INSTANCE.getPrincipal();
