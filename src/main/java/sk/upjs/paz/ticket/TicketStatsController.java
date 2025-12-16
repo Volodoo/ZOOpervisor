@@ -50,42 +50,70 @@ public class TicketStatsController {
 
     /** Graf: počet predaných lístkov každý deň podľa predavačov */
     private void showDailySalesChart() {
-        Set<LocalDate> days = tickets.stream()
-                .map(t -> t.getPurchaseDateTime().toLocalDate())
-                .collect(Collectors.toCollection(TreeSet::new));
 
-        Map<User, Map<LocalDate, Long>> stats = tickets.stream()
-                .collect(Collectors.groupingBy(
-                        Ticket::getCashier,
-                        Collectors.groupingBy(
-                                t -> t.getPurchaseDateTime().toLocalDate(),
-                                Collectors.counting()
-                        )
-                ));
+        // 1. Zoznam všetkých dní (usporiadaný)
+        Set<LocalDate> days = new TreeSet<>();
 
+        for (Ticket ticket : tickets) {
+            LocalDate day = ticket.getPurchaseDateTime().toLocalDate();
+            days.add(day);
+        }
+
+        // 2. Štatistiky: pokladník -> (deň -> počet lístkov)
+        Map<User, Map<LocalDate, Long>> stats = new HashMap<>();
+
+        for (Ticket ticket : tickets) {
+            User cashier = ticket.getCashier();
+            LocalDate day = ticket.getPurchaseDateTime().toLocalDate();
+
+            // ak pokladník ešte nemá mapu dní, vytvor ju
+            if (!stats.containsKey(cashier)) {
+                stats.put(cashier, new HashMap<>());
+            }
+
+            Map<LocalDate, Long> byDay = stats.get(cashier);
+
+            // zvýš počet lístkov v daný deň
+            long count = byDay.getOrDefault(day, 0L);
+            byDay.put(day, count + 1);
+        }
+
+        // 3. Dataset pre graf
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        StringBuilder statsText = new StringBuilder(translate("statistic.option1")+ ":\n");
+        // 4. Textové štatistiky
+        StringBuilder statsText =
+                new StringBuilder(translate("statistic.option1") + ":\n");
 
         for (User cashier : stats.keySet()) {
             Map<LocalDate, Long> byDay = stats.get(cashier);
             long total = 0;
+
             for (LocalDate day : days) {
                 long count = byDay.getOrDefault(day, 0L);
-                dataset.addValue(count, cashier.getFirstName() + " " + cashier.getLastName(), day.toString());
+
+                dataset.addValue(
+                        count,
+                        cashier.getFirstName() + " " + cashier.getLastName(),
+                        day.toString()
+                );
+
                 total += count;
             }
+
             statsText.append(cashier.getFirstName())
                     .append(" ")
                     .append(cashier.getLastName())
                     .append(": ")
-                    .append(total+" ")
+                    .append(total)
+                    .append(" ")
                     .append(translate("tickets"))
-                    .append(":\n");
+                    .append("\n");
         }
 
         statsLabel.setText(statsText.toString());
 
+        // 5. Vytvorenie grafu
         JFreeChart lineChart = ChartFactory.createLineChart(
                 translate("statistic.option1"),
                 translate("date"),
@@ -98,23 +126,55 @@ public class TicketStatsController {
 
     /** Graf: počet predaných lístkov podľa typu lístka (histogram) */
     private void showTypeSalesChart() {
+
+        // 1. Všetky typy lístkov (poradie bude vždy rovnaké)
         List<String> allTypes = Arrays.asList("Child", "Student_Senior", "Adult");
 
-        Map<String, Long> typeCounts = tickets.stream()
-                .collect(Collectors.groupingBy(Ticket::getType, Collectors.counting()));
+        // 2. Počty lístkov podľa typu
+        Map<String, Long> typeCounts = new HashMap<>();
 
+        for (Ticket ticket : tickets) {
+            String type = ticket.getType();
+
+            long count = 0;
+            if (typeCounts.containsKey(type)) {
+                count = typeCounts.get(type);
+            }
+
+            typeCounts.put(type, count + 1);
+        }
+
+        // 3. Dataset pre graf
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        StringBuilder statsText = new StringBuilder(translate("statistic.option2")+ ":\n");
+        // 4. Textové štatistiky
+        StringBuilder statsText =
+                new StringBuilder(translate("statistic.option2") + ":\n");
 
         for (String type : allTypes) {
-            long count = typeCounts.getOrDefault(type, 0L);
-            dataset.addValue(count, translate("menu.tickets"), getTypeInSlovak(type));
-            statsText.append(getTypeInSlovak(type)).append(": ").append(count+" ").append("tickets").append(" \n");
+            long count = 0;
+
+            if (typeCounts.containsKey(type)) {
+                count = typeCounts.get(type);
+            }
+
+            dataset.addValue(
+                    count,
+                    translate("menu.tickets"),
+                    getTypeInSlovak(type)
+            );
+
+            statsText.append(getTypeInSlovak(type))
+                    .append(": ")
+                    .append(count)
+                    .append(" ")
+                    .append("tickets")
+                    .append("\n");
         }
 
         statsLabel.setText(statsText.toString());
 
+        // 5. Vytvorenie stĺpcového grafu
         JFreeChart barChart = ChartFactory.createBarChart(
                 translate("statistic.option2"),
                 translate("ticket.type"),
@@ -125,7 +185,6 @@ public class TicketStatsController {
         setChart(barChart);
     }
 
-    /** Pomocná metóda na aktualizáciu SwingNode */
     private void setChart(JFreeChart chart) {
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setMouseWheelEnabled(true);

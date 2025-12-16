@@ -44,7 +44,7 @@ public class SellTicketController {
     private Label totalPriceLabel;
 
     @FXML
-    private Label successLabel;  // Label pre úspešnú správu
+    private Label successLabel;
 
     private static final BigDecimal PRICE_CHILD = new BigDecimal("4.00");
     private static final BigDecimal PRICE_SENIOR_STUDENT = new BigDecimal("7.00");
@@ -59,12 +59,10 @@ public class SellTicketController {
         userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
         roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-        // Nastavenie Spinnerov
         childSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         seniorStudentSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         adultSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
 
-        // Počúvanie zmien hodnôt v Spinneroch
         childSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
         seniorStudentSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
         adultSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateTicketPrices());
@@ -72,14 +70,11 @@ public class SellTicketController {
         updateTicketPrices();
     }
 
-    // Metóda na výpočet ceny na základe počtu lístkov
     private void updateTicketPrices() {
-        // Získame počet lístkov pre každý typ
         int childCount = childSpinner.getValue();
         int seniorStudentCount = seniorStudentSpinner.getValue();
         int adultCount = adultSpinner.getValue();
 
-        // Vypočítame cenu pre každý typ lístka
         BigDecimal childTotal = PRICE_CHILD.multiply(new BigDecimal(childCount));
         BigDecimal seniorStudentTotal = PRICE_SENIOR_STUDENT.multiply(new BigDecimal(seniorStudentCount));
         BigDecimal adultTotal = PRICE_ADULT.multiply(new BigDecimal(adultCount));
@@ -87,9 +82,9 @@ public class SellTicketController {
         String priceLabelText = "Cena:";
         try {
             priceLabelText = SceneManager.getBundle().getString("priceSell");
-        } catch (Exception e) { /* Ignorujeme, ostane default */ }
+        } catch (Exception e) {
+        }
 
-        // Aktualizujeme text pre jednotlivé ceny
         childTotalPrice.setText(priceLabelText + childTotal + " €");
         seniorStudentTotalPrice.setText(priceLabelText + seniorStudentTotal + " €");
         adultTotalPrice.setText(priceLabelText + adultTotal + " €");
@@ -97,8 +92,9 @@ public class SellTicketController {
         String totalLabelText = "Celková cena:";
         try {
             totalLabelText = SceneManager.getBundle().getString("priceTogheder");
-        } catch (Exception e) {  }
-        // Celková cena
+        } catch (Exception e) {
+        }
+
         BigDecimal totalPrice = childTotal.add(seniorStudentTotal).add(adultTotal);
         totalPriceLabel.setText(totalLabelText + totalPrice + " €");
     }
@@ -106,7 +102,7 @@ public class SellTicketController {
     @FXML
     public void sellTicket(ActionEvent event) {
         boolean suhlas = SceneManager.confirm("Naozaj chcete predať lístok?");
-        if(!suhlas){
+        if (!suhlas) {
             return;
         }
 
