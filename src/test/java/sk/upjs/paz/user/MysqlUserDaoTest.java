@@ -88,6 +88,7 @@ class MysqlUserDaoTest extends TestContainers {
         assertEquals("Test", fromDb.getFirstName());
         assertEquals("User", fromDb.getLastName());
         assertEquals(Role.INACTIVE, fromDb.getRole());
+
     }
 
     @Test
