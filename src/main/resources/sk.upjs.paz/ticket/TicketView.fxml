@@ -35,7 +35,7 @@
                     <children>
                         <Label fx:id="filterLabel" text="Filter:" />
                         <ComboBox fx:id="cashierFilterComboBox" prefWidth="130.0" />
-                  <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="130.0" promptText="%search" />
+                  <TextField fx:id="searchTextField" prefHeight="26.0" prefWidth="130.0" promptText="%search" />
                     </children>
                 </HBox>
 

@@ -3,6 +3,7 @@ package sk.upjs.paz.ticket;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -36,14 +37,21 @@ public class TicketViewController {
 
     @FXML
     public ComboBox<String> cashierFilterComboBox;
+
     @FXML
     public Label userNameLabel;
+
     @FXML
     public Label roleLabel;
-    public Spinner ticket1CountSpinner;
+
+    @FXML
+    public TextField searchTextField;
 
     private TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
     private UserDao userDao = Factory.INSTANCE.getUserDao();
+
+    private ObservableList<Ticket> masterData = FXCollections.observableArrayList();
+    private FilteredList<Ticket> filteredData;
 
     @FXML
     public void initialize() {
@@ -52,28 +60,35 @@ public class TicketViewController {
         userNameLabel.setText(principal.getFirstName() + " " + principal.getLastName());
         roleLabel.setText("(" + principal.getRole().toString() + ")");
 
-
         typeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(getTypeInSlovak(cellData.getValue().getType()))
         );
 
-        purchaseDateTimeCol.setCellValueFactory(cellData -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-            return new SimpleStringProperty(cellData.getValue().getPurchaseDateTime().format(formatter));
-        });
+        purchaseDateTimeCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue()
+                                .getPurchaseDateTime()
+                                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+                )
+        );
 
         priceCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice()))
         );
 
         cashierCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCashier().getFirstName() + " " + cellData.getValue().getCashier().getLastName())
+                new SimpleStringProperty(
+                        cellData.getValue().getCashier().getFirstName() + " " +
+                                cellData.getValue().getCashier().getLastName()
+                )
         );
 
         loadCashiers();
-        loadTickets();
 
-        cashierFilterComboBox.setConverter(new StringConverter<String>() {
+        filteredData = new FilteredList<>(masterData, p -> true);
+        ticketTable.setItems(filteredData);
+
+        cashierFilterComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String key) {
                 if (key == null) return "";
@@ -90,55 +105,33 @@ public class TicketViewController {
             }
         });
 
-        cashierFilterComboBox.setOnAction(event -> filterTicketsByCashier());
+        cashierFilterComboBox.getSelectionModel().select("filter.all.task");
+        cashierFilterComboBox.setOnAction(e -> applyFilters());
+
+        searchTextField.textProperty().addListener((obs, oldText, newText) -> applyFilters());
+
+        loadTickets();
     }
 
     private String getTypeInSlovak(String type) {
-        switch (type) {
-            case "Child":
-                return "Dieťa";
-            case "Student_Senior":
-                return "Študent/Senior";
-            case "Adult":
-                return "Dospelý";
-            default:
-                return type;
-        }
+        return switch (type) {
+            case "Child" -> "Dieťa";
+            case "Student_Senior" -> "Študent/Senior";
+            case "Adult" -> "Dospelý";
+            default -> type;
+        };
     }
-
-    @FXML
-    public void OnActionSearchTextField(){}
 
     private void loadCashiers() {
         List<User> users = userDao.getAll();
 
         cashierFilterComboBox.getItems().clear();
-
         cashierFilterComboBox.getItems().add("filter.all.task");
 
         for (User user : users) {
-            if (user.getRole().equals(Role.CASHIER)) {
-                String cashierFullNameWithId = user.getFirstName() + " " + user.getLastName() + " (" + user.getId() + ")";
-                cashierFilterComboBox.getItems().add(cashierFullNameWithId);
-            }
-        }
-
-        cashierFilterComboBox.getSelectionModel().select("filter.all.task");
-    }
-
-    private void filterTicketsByCashier() {
-        String selectedCashier = cashierFilterComboBox.getSelectionModel().getSelectedItem();
-
-        if (selectedCashier != null) {
-            if (selectedCashier.equals("filter.all.task")) {
-                loadTickets();
-            } else {
-                Long cashierId = extractCashierIdFromString(selectedCashier);
-                if (cashierId != null) {
-                    List<Ticket> tickets = ticketDao.getByCashier(cashierId);
-                    ObservableList<Ticket> ticketObservableList = FXCollections.observableArrayList(tickets);
-                    ticketTable.setItems(ticketObservableList);
-                }
+            if (user.getRole() == Role.CASHIER) {
+                cashierFilterComboBox.getItems().add(
+                        user.getFirstName() + " " + user.getLastName());
             }
         }
     }
@@ -152,10 +145,38 @@ public class TicketViewController {
         }
     }
 
+    private void applyFilters() {
+        String searchText = searchTextField.getText();
+        String selectedCashier = cashierFilterComboBox.getSelectionModel().getSelectedItem();
+
+        filteredData.setPredicate(ticket -> {
+
+            // Filter podľa pokladníka
+            if (selectedCashier != null && !selectedCashier.equals("filter.all.task")) {
+                Long cashierId = extractCashierIdFromString(selectedCashier);
+                if (!ticket.getCashier().getId().equals(cashierId)) {
+                    return false;
+                }
+            }
+
+            // Filter podľa search textu
+            if (searchText == null || searchText.isBlank()) {
+                return true;
+            }
+
+            String filter = searchText.toLowerCase();
+
+            return getTypeInSlovak(ticket.getType()).toLowerCase().contains(filter)
+                    || ticket.getPurchaseDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")).contains(filter)
+                    || ticket.getPrice().toString().contains(filter)
+                    || (ticket.getCashier().getFirstName() + " " + ticket.getCashier().getLastName()).toLowerCase().contains(filter);
+        });
+    }
+
     private void loadTickets() {
         List<Ticket> tickets = ticketDao.getAll();
-        ObservableList<Ticket> ticketObservableList = FXCollections.observableArrayList(tickets);
-        ticketTable.setItems(ticketObservableList);
+        masterData.setAll(tickets);
+        applyFilters();
     }
 
     @FXML
@@ -166,6 +187,5 @@ public class TicketViewController {
     @FXML
     public void showStatisticButton(ActionEvent event) {
         SceneManager.openNewWindow("/sk.upjs.paz/ticket/TicketStatsView.fxml", "Štatistika");
-
     }
 }

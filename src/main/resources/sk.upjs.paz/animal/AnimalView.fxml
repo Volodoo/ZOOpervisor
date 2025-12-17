@@ -37,7 +37,7 @@
                         <ComboBox fx:id="speciesFilterComboBox" prefWidth="130.0" />
                     </children>
                 </HBox>
-            <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="33.0" promptText="%search" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchTextField"  prefHeight="26.0" prefWidth="33.0" promptText="%search" HBox.hgrow="ALWAYS" />
 
                 <Label text="%menu.animals">
                     <font>

@@ -37,7 +37,7 @@
                         <ComboBox fx:id="userFilterComboBox" minHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" promptText="Podľa používateľa" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
-            <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="151.0" promptText="%search" />
+            <TextField fx:id="searchTextField" prefHeight="26.0" prefWidth="151.0" promptText="%search" />
 
                 <Label fx:id="taskLabel" minWidth="-Infinity" text="%menu.tasks" HBox.hgrow="ALWAYS">
                     <font>

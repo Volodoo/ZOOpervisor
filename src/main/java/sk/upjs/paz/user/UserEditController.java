@@ -7,6 +7,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
+import sk.upjs.paz.security.Auth;
 
 
 public class UserEditController {
@@ -31,6 +32,9 @@ public class UserEditController {
 
     @FXML
     void initialize() {
+
+
+
         genderComboBox.getItems().setAll(Gender.values());
         roleComboBox.getItems().setAll(Role.values());
     }
@@ -74,6 +78,11 @@ public class UserEditController {
         birthDatePicker.setValue(user.getBirthDay());
         roleComboBox.setValue(user.getRole());
         genderComboBox.setValue(user.getGender());
+
+        var principal = Auth.INSTANCE.getPrincipal();
+        if (principal.getId() == user.getId()) {
+            roleComboBox.setDisable(true);
+        }
     }
 
 }

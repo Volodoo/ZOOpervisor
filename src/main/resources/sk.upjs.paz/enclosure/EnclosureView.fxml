@@ -37,7 +37,7 @@
                         <ComboBox fx:id="zoneFilterComboBox" prefWidth="130.0" />
                     </children>
                 </HBox>
-            <TextField fx:id="searchTextField" onAction="#OnActionSearchTextField" prefHeight="26.0" prefWidth="118.0" promptText="%search" />
+            <TextField fx:id="searchTextField" prefHeight="26.0" prefWidth="118.0" promptText="%search" />
 
                 <Label text="%menu.enclosures">
                     <font>

@@ -15,7 +15,6 @@
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="87.0" HBox.hgrow="ALWAYS">
                <children>
-                    <!-- Užívateľské meno a rola -->
                     <Label fx:id="userNameLabel" prefWidth="200.0" text="User Name" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="16.0" />

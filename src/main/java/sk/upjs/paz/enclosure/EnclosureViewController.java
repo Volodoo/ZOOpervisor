@@ -3,15 +3,14 @@ package sk.upjs.paz.enclosure;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.animal.AnimalEditController;
 import sk.upjs.paz.security.Auth;
 import sk.upjs.paz.user.Role;
 
@@ -25,34 +24,29 @@ public class EnclosureViewController {
 
     @FXML
     public TableColumn<Enclosure, String> animalsCountCol;
-
     @FXML
     public ComboBox<String> zoneFilterComboBox;
-
     @FXML
     public Label userNameLabel;
-
     @FXML
     public Label roleLabel;
-
+    @FXML
+    public TextField searchTextField;
     @FXML
     private Button addEnclosureButton;
-
     @FXML
     private TableView<Enclosure> enclosuresTable;
-
-
     @FXML
     private TableColumn<Enclosure, String> lastMaintainanceCol;
-
     @FXML
     private TableColumn<Enclosure, String> nameCol;
-
     @FXML
     private TableColumn<Enclosure, String> zoneCol;
 
+    private final EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
 
-    private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
+    private final ObservableList<Enclosure> masterData = FXCollections.observableArrayList();
+    private FilteredList<Enclosure> filteredData;
 
     @FXML
     void initialize() {
@@ -64,34 +58,41 @@ public class EnclosureViewController {
         if (principal.getRole() != Role.ADMIN) {
             addEnclosureButton.setDisable(true);
         }
+
         if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
-            SceneManager.setupDoubleClick(enclosuresTable, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Upraviť zviera", EnclosureEditController::setEnclosure);
+            SceneManager.setupDoubleClick(
+                    enclosuresTable,
+                    "/sk.upjs.paz/enclosure/EnclosureEdit.fxml",
+                    "Upraviť výbeh",
+                    EnclosureEditController::setEnclosure
+            );
         } else {
             enclosuresTable.setOnMouseClicked(Event::consume);
         }
 
+        nameCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
 
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        zoneCol.setCellValueFactory(new PropertyValueFactory<>("zone"));
+        zoneCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getZone()));
 
-        animalsCountCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAnimalsCount())));
+        animalsCountCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getAnimalsCount())));
 
         lastMaintainanceCol.setCellValueFactory(cellData -> {
             if (cellData.getValue().getLastMaintainance() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                return new SimpleStringProperty(cellData.getValue().getLastMaintainance().format(formatter));
+                return new SimpleStringProperty(cellData.getValue().getLastMaintainance().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
             } else {
                 return new SimpleStringProperty("");
             }
         });
 
         loadZones();
-        zoneFilterComboBox.setConverter(new StringConverter<String>() {
+
+        zoneFilterComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String item) {
                 if (item == null) return "";
-
-                // 1. Ak je to kľúč pre "Všetky"
                 if (item.equals("filter.all")) {
                     try {
                         return SceneManager.getBundle().getString(item);
@@ -99,15 +100,10 @@ public class EnclosureViewController {
                         return item;
                     }
                 }
-
-                // 2. Ak je to názov zóny (napr. "Savana")
-                // Skúsime nájsť kľúč "zone.Savana"
                 String zoneKey = "zone." + item;
                 try {
                     return SceneManager.getBundle().getString(zoneKey);
                 } catch (Exception e) {
-                    // Ak preklad neexistuje (zabudol si ho pridať do súboru),
-                    // vráti pôvodný názov z databázy.
                     return item;
                 }
             }
@@ -117,49 +113,64 @@ public class EnclosureViewController {
                 return null;
             }
         });
-        loadEnclosures();
-        zoneFilterComboBox.setOnAction(event -> filterEnclosuresByZone());
-    }
+        zoneFilterComboBox.getSelectionModel().select("filter.all");
+        zoneFilterComboBox.setOnAction(e -> applyFilters());
 
-    @FXML
-    public void OnActionSearchTextField(){}
+        // nastavenie filteredData
+        filteredData = new FilteredList<>(masterData, p -> true);
+        enclosuresTable.setItems(filteredData);
+
+        // search bar listener
+        searchTextField.textProperty().addListener((obs, oldText, newText) -> applyFilters());
+
+        loadEnclosures();
+    }
 
     private void loadZones() {
         List<Enclosure> enclosures = enclosureDao.getAll();
         Set<String> zones = new HashSet<>();
-
         for (Enclosure enclosure : enclosures) {
             zones.add(enclosure.getZone());
         }
-
+        zoneFilterComboBox.getItems().clear();
         zoneFilterComboBox.getItems().add("filter.all");
         zoneFilterComboBox.getItems().addAll(zones);
-        zoneFilterComboBox.getSelectionModel().select("filter.all");
     }
 
-    private void filterEnclosuresByZone() {
+    private void applyFilters() {
+        String searchText = searchTextField.getText();
         String selectedZone = zoneFilterComboBox.getSelectionModel().getSelectedItem();
 
-        if (selectedZone != null) {
-            if (selectedZone.equals("filter.all")) {
-                loadEnclosures();
-            } else {
-                List<Enclosure> enclosures = enclosureDao.getByZone(selectedZone);
-                ObservableList<Enclosure> enclosureObservableList = FXCollections.observableArrayList(enclosures);
-                enclosuresTable.setItems(enclosureObservableList);
+        filteredData.setPredicate(enclosure -> {
+
+            if (selectedZone != null && !selectedZone.equals("filter.all")) {
+                if (!enclosure.getZone().equals(selectedZone)) {
+                    return false;
+                }
             }
-        }
+
+            if (searchText == null || searchText.isBlank()) {
+                return true;
+            }
+
+            String filter = searchText.toLowerCase();
+
+            return enclosure.getName().toLowerCase().contains(filter)
+                    || enclosure.getZone().toLowerCase().contains(filter)
+                    || enclosure.getAnimalsCount().toString().contains(filter)
+                    || (enclosure.getLastMaintainance() != null && enclosure.getLastMaintainance().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")).contains(filter));
+        });
     }
 
     private void loadEnclosures() {
         List<Enclosure> enclosures = enclosureDao.getAllSortedByZone();
-        ObservableList<Enclosure> enclosureObservableList = FXCollections.observableArrayList(enclosures);
-        enclosuresTable.setItems(enclosureObservableList);
+        masterData.setAll(enclosures);
+        applyFilters();
     }
 
     @FXML
     void addEnclosureButtonAction(ActionEvent event) {
-        SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Pridavanie vybehu");
+        SceneManager.changeScene(event, "/sk.upjs.paz/enclosure/EnclosureEdit.fxml", "Pridavanie výbehu");
     }
 
     @FXML

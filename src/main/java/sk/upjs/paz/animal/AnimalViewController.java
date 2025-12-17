@@ -3,6 +3,7 @@ package sk.upjs.paz.animal;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -22,16 +23,12 @@ public class AnimalViewController {
 
     @FXML
     public TableColumn<Animal, String> birthdayCol;
-
     @FXML
     public TableColumn<Animal, String> lastCheckCol;
-
     @FXML
     public TableColumn<Animal, String> statusCol;
-
     @FXML
     public ComboBox<String> speciesFilterComboBox;
-
     @FXML
     public Button addAnimalButton;
     @FXML
@@ -39,21 +36,22 @@ public class AnimalViewController {
     @FXML
     public Label roleLabel;
     @FXML
+    public TextField searchTextField;
+    @FXML
     private TableColumn<Animal, String> enclosureCol;
-
     @FXML
     private TableView<Animal> animalsTable;
-
     @FXML
     private TableColumn<Animal, String> nicknameCol;
-
     @FXML
     private TableColumn<Animal, String> sexCol;
-
     @FXML
     private TableColumn<Animal, String> speciesCol;
 
     private AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
+
+    private ObservableList<Animal> masterData = FXCollections.observableArrayList();
+    private FilteredList<Animal> filteredData;
 
     @FXML
     void initialize() {
@@ -65,18 +63,26 @@ public class AnimalViewController {
         if (principal == null || principal.getRole() != Role.ADMIN) {
             addAnimalButton.setDisable(true);
         }
+
         if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
-            SceneManager.setupDoubleClick(animalsTable, "/sk.upjs.paz/animal/AnimalEdit.fxml", "Upraviť zviera", AnimalEditController::setAnimal);
+            SceneManager.setupDoubleClick(
+                    animalsTable,
+                    "/sk.upjs.paz/animal/AnimalEdit.fxml",
+                    "Upraviť zviera",
+                    AnimalEditController::setAnimal
+            );
         } else {
             animalsTable.setOnMouseClicked(Event::consume);
         }
 
-        speciesFilterComboBox.getItems().add("filter.all");
-        speciesFilterComboBox.getItems().add("filter.active");
-        speciesFilterComboBox.getItems().add("filter.inactive");
-        speciesFilterComboBox.getItems().add("filter.treatment");
+        speciesFilterComboBox.getItems().addAll(
+                "filter.all",
+                "filter.active",
+                "filter.inactive",
+                "filter.treatment"
+        );
 
-        speciesFilterComboBox.setConverter(new StringConverter<String>() {
+        speciesFilterComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String key) {
                 if (key == null) return "";
@@ -94,74 +100,87 @@ public class AnimalViewController {
         });
 
         speciesFilterComboBox.getSelectionModel().select("filter.all");
+        speciesFilterComboBox.setOnAction(event -> applyFilters());
 
-        speciesFilterComboBox.setOnAction(event -> filterAnimalsByStatus());
+        nicknameCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNickname()));
 
-        nicknameCol.setCellValueFactory(new PropertyValueFactory<>("nickname"));
-        speciesCol.setCellValueFactory(new PropertyValueFactory<>("species"));
-        sexCol.setCellValueFactory(new PropertyValueFactory<>("sex"));
-        birthdayCol.setCellValueFactory(cellData -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            return new SimpleStringProperty(cellData.getValue().getBirthDay().format(formatter));
-        });
-        enclosureCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnclosure().getName()));
+        speciesCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getSpecies()));
+
+        sexCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getSex().toString()));
+
+        birthdayCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
+
+        enclosureCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEnclosure().getName()));
+
         lastCheckCol.setCellValueFactory(cellData -> {
             if (cellData.getValue().getLastCheck() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                return new SimpleStringProperty(cellData.getValue().getLastCheck().format(formatter));
+                return new SimpleStringProperty(cellData.getValue().getLastCheck().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
             } else {
                 return new SimpleStringProperty("");
             }
         });
-        statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus().toString()));
+
+        statusCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStatus().toString()));
+
+        // nastavenie filteredData
+        filteredData = new FilteredList<>(masterData, p -> true);
+        animalsTable.setItems(filteredData);
+
+        searchTextField.textProperty().addListener((obs, oldText, newText) -> applyFilters());
 
         loadAnimals();
     }
 
-    private void filterAnimalsByStatus() {
+    private void applyFilters() {
+        String searchText = searchTextField.getText();
         String selectedStatus = speciesFilterComboBox.getSelectionModel().getSelectedItem();
 
-        if (selectedStatus != null) {
-            if (selectedStatus.equals("filter.all")) {
-                loadAnimals();
-            } else {
+        filteredData.setPredicate(animal -> {
+
+            // Filter podľa statusu
+            if (selectedStatus != null && !selectedStatus.equals("filter.all")) {
                 Status status = convertStringToStatus(selectedStatus);
-                List<Animal> animals = animalDao.getByStatus(status);
-                ObservableList<Animal> animalObservableList = FXCollections.observableArrayList(animals);
-                animalsTable.setItems(animalObservableList);
+                if (animal.getStatus() != status) {
+                    return false;
+                }
             }
-        }
+
+            // Filter podľa search textu
+            if (searchText == null || searchText.isBlank()) {
+                return true;
+            }
+
+            String filter = searchText.toLowerCase();
+
+            return animal.getNickname().toLowerCase().contains(filter)
+                    || animal.getSpecies().toLowerCase().contains(filter)
+                    || animal.getSex().toString().toLowerCase().contains(filter)
+                    || animal.getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).contains(filter)
+                    || animal.getEnclosure().getName().toLowerCase().contains(filter)
+                    || animal.getStatus().toString().toLowerCase().contains(filter)
+                    || (animal.getLastCheck() != null && animal.getLastCheck().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")).contains(filter));
+        });
     }
 
-    @FXML
-    public void OnActionSearchTextField(){}
-
     private Status convertStringToStatus(String statusString) {
-        switch (statusString) {
-            case "filter.active":
-                return Status.ACTIVE;
-            case "filter.inactive":
-                return Status.INACTIVE;
-            case "filter.treatment":
-                return Status.TREATMENT;
-            default:
-                throw new IllegalArgumentException("Neznámy status: " + statusString);
-        }
+        return switch (statusString) {
+            case "filter.active" -> Status.ACTIVE;
+            case "filter.inactive" -> Status.INACTIVE;
+            case "filter.treatment" -> Status.TREATMENT;
+            default -> throw new IllegalArgumentException("Neznámy status: " + statusString);
+        };
     }
 
     private void loadAnimals() {
-        String selectedStatus = speciesFilterComboBox.getSelectionModel().getSelectedItem();
-
-        List<Animal> animals;
-        if (selectedStatus == null || selectedStatus.equals("filter.all")) {
-            animals = animalDao.getAllSortedByZoneSpecies();
-        } else {
-            Status status = convertStringToStatus(selectedStatus);
-            animals = animalDao.getByStatus(status);
-        }
-
-        ObservableList<Animal> animalObservableList = FXCollections.observableArrayList(animals);
-        animalsTable.setItems(animalObservableList);
+        List<Animal> animals = animalDao.getAllSortedByZoneSpecies();
+        masterData.setAll(animals);
+        applyFilters();
     }
 
     @FXML

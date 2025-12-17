@@ -3,6 +3,7 @@ package sk.upjs.paz.task;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -19,7 +20,6 @@ import sk.upjs.paz.user.Role;
 import sk.upjs.paz.user.User;
 import sk.upjs.paz.user.UserDao;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +40,7 @@ public class TaskViewController {
     public Label userNameLabel;
     public Label roleLabel;
     public Button deleteTaskButton;
+    public TextField searchTextField;
 
     @FXML
     private Button addTaskButton;
@@ -51,6 +52,9 @@ public class TaskViewController {
     private UserDao userDao = Factory.INSTANCE.getUserDao();
     private AnimalDao animalDao = Factory.INSTANCE.getAnimalDao();
     private EnclosureDao enclosureDao = Factory.INSTANCE.getEnclosureDao();
+
+    private ObservableList<Task> masterData = FXCollections.observableArrayList();
+    private FilteredList<Task> filteredData;
 
     @FXML
     void initialize() {
@@ -65,17 +69,26 @@ public class TaskViewController {
             deleteTaskButton.setDisable(true);
             taskTable.setOnMouseClicked(Event::consume);
         } else {
-            SceneManager.setupDoubleClick(taskTable, "/sk.upjs.paz/task/TaskEdit.fxml", "Upraviť výbeh", TaskEditController::setTask);
+            SceneManager.setupDoubleClick(taskTable, "/sk.upjs.paz/task/TaskEdit.fxml", "Upraviť úlohu", TaskEditController::setTask);
         }
 
-        nameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        descriptionCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
-        deadlineCol.setCellValueFactory(cellData -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-            return new SimpleStringProperty(cellData.getValue().getDeadline().format(formatter));
+        // Lambda pre všetky stĺpce
+        nameCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
+
+        descriptionCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDescription()));
+
+        deadlineCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDeadline().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))));
+
+        statusCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStatus().toString()));
+
+        userCol.setCellValueFactory(cellData -> {
+            User user = cellData.getValue().getUser();
+            return new SimpleStringProperty(user.getFirstName() + " " + user.getLastName() + " (" + user.getRole() + ")");
         });
-        statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus().toString()));
-        userCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getFirstName() + " " + cellData.getValue().getUser().getLastName() + " (" + cellData.getValue().getUser().getRole() + ")"));
 
         animalsCol.setCellValueFactory(cellData -> {
             Set<Animal> animals = cellData.getValue().getAnimals();
@@ -84,7 +97,6 @@ public class TaskViewController {
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(animalsString.isEmpty() ? "" : animalsString);
         });
-
         enclosuresCol.setCellValueFactory(cellData -> {
             Set<Enclosure> enclosures = cellData.getValue().getEnclosures();
             String enclosuresString = enclosures.stream()
@@ -93,16 +105,29 @@ public class TaskViewController {
             return new SimpleStringProperty(enclosuresString.isEmpty() ? "" : enclosuresString);
         });
 
+        // načítanie užívateľov do comboboxu
         loadUsers();
-        loadTasks();
 
-        userFilterComboBox.setOnAction(event -> filterTasksByUser());
+        // masterData + filteredData
+        filteredData = new FilteredList<>(masterData, p -> true);
+        taskTable.setItems(filteredData);
+
+        // search bar listener
+        searchTextField.textProperty().addListener((obs, oldText, newText) -> applyFilters());
+
+        // combobox listener
+        userFilterComboBox.setOnAction(event -> applyFilters());
+
+        loadTasks();
     }
 
     private void loadUsers() {
         List<User> users = userDao.getAll();
 
-        userFilterComboBox.setConverter(new StringConverter<String>() {
+        userFilterComboBox.getItems().clear();
+        userFilterComboBox.getItems().add("filter.all.task");
+
+        userFilterComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String key) {
                 if (key == null) return "";
@@ -119,27 +144,19 @@ public class TaskViewController {
             }
         });
 
-        userFilterComboBox.getItems().add("filter.all.task");
-
-
         for (User user : users) {
-            if (user.getRole().equals(Role.MANAGER) || user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.CASHIER) || user.getRole().equals(Role.INACTIVE)) {
+            if (user.getRole() == Role.MANAGER || user.getRole() == Role.ADMIN || user.getRole() == Role.CASHIER || user.getRole() == Role.INACTIVE) {
                 continue;
             }
-            String displayString = String.format("%s %s (%s) (%d)",
-                    user.getFirstName(), user.getLastName(), user.getRole(), user.getId());
+            String displayString = String.format("%s %s (%s) (%d)", user.getFirstName(), user.getLastName(), user.getRole(), user.getId());
             userFilterComboBox.getItems().add(displayString);
         }
 
         userFilterComboBox.getSelectionModel().select("filter.all.task");
     }
 
-    @FXML
-    public void OnActionSearchTextField(){}
-
     private void loadTasks() {
         var principal = Auth.INSTANCE.getPrincipal();
-
         List<Task> tasks;
 
         if (principal.getRole() == Role.ADMIN || principal.getRole() == Role.MANAGER) {
@@ -148,29 +165,45 @@ public class TaskViewController {
             tasks = taskDao.getByUser(principal.getId());
         }
 
-        ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
-        taskTable.setItems(taskObservableList);
+        masterData.setAll(tasks);
+        applyFilters();
     }
 
-    private void filterTasksByUser() {
+    private void applyFilters() {
+        String searchText = searchTextField.getText();
         String selectedUser = userFilterComboBox.getSelectionModel().getSelectedItem();
 
-        if (selectedUser != null) {
-            if (selectedUser.equals("filter.all.task")) {
-                loadTasks();
-            } else {
+        filteredData.setPredicate(task -> {
+
+            // filter podľa usera
+            if (selectedUser != null && !selectedUser.equals("filter.all.task")) {
                 String userIdString = selectedUser.substring(selectedUser.lastIndexOf("(") + 1, selectedUser.lastIndexOf(")"));
                 try {
                     long userId = Long.parseLong(userIdString);
-
-                    List<Task> tasks = taskDao.getByUser(userId);
-                    ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
-                    taskTable.setItems(taskObservableList);
+                    if (task.getUser().getId() != userId) {
+                        return false;
+                    }
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    return false;
                 }
             }
-        }
+
+            // filter podľa search textu
+            if (searchText == null || searchText.isBlank()) {
+                return true;
+            }
+
+            String filter = searchText.toLowerCase();
+
+            return task.getName().toLowerCase().contains(filter)
+                    || task.getDescription().toLowerCase().contains(filter)
+                    || task.getStatus().toString().toLowerCase().contains(filter)
+                    || task.getUser().getFirstName().toLowerCase().contains(filter)
+                    || task.getUser().getLastName().toLowerCase().contains(filter)
+                    || task.getUser().getRole().toString().toLowerCase().contains(filter)
+                    || task.getAnimals().stream().anyMatch(a -> a.getNickname().toLowerCase().contains(filter) || a.getId().toString().contains(filter)) || task.getEnclosures().stream().anyMatch(e -> e.getName().toLowerCase().contains(filter))
+                    || task.getDeadline().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")).contains(filter);
+        });
     }
 
     @FXML
@@ -186,21 +219,17 @@ public class TaskViewController {
     @FXML
     public void finishTaskButtonAction(ActionEvent actionEvent) {
         boolean suhlas = SceneManager.confirm("Naozaj chcete označiť úlohu ako dokončenú?");
-        if (!suhlas) {
-            return;
-        }
+        if (!suhlas) return;
 
         Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
-
         if (selectedTask != null) {
             selectedTask.setStatus(Status.COMPLETED);
-
             taskDao.update(selectedTask);
 
             if (!selectedTask.getAnimals().isEmpty()) {
                 for (Animal animal : selectedTask.getAnimals()) {
                     Animal animalToUpdate = animalDao.getById(animal.getId());
-                    animalToUpdate.setLastCheck(LocalDateTime.now());
+                    animalToUpdate.setLastCheck(java.time.LocalDateTime.now());
                     animalDao.update(animalToUpdate);
                 }
             }
@@ -208,35 +237,23 @@ public class TaskViewController {
             if (!selectedTask.getEnclosures().isEmpty()) {
                 for (Enclosure enclosure : selectedTask.getEnclosures()) {
                     Enclosure enclosureToUpdate = enclosureDao.getById(enclosure.getId());
-                    enclosureToUpdate.setLastMaintainance(LocalDateTime.now());
+                    enclosureToUpdate.setLastMaintainance(java.time.LocalDateTime.now());
                     enclosureDao.update(enclosureToUpdate);
                 }
             }
 
             taskTable.refresh();
-        } else {
-            System.out.println("Žiadna úloha nebola vybraná.");
         }
     }
 
     public void deleteTaskButtonAction(ActionEvent event) {
         boolean suhlas = SceneManager.confirm("Naozaj chcete vymazať úlohu zo zoznamu?");
-        if (!suhlas) {
-            return;
-        }
+        if (!suhlas) return;
 
         Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
-
         if (selectedTask != null) {
             taskDao.delete(selectedTask.getId());
             loadTasks();
-
-
-            List<Task> tasks = taskDao.getAll();
-            ObservableList<Task> taskObservableList = FXCollections.observableArrayList(tasks);
-            taskTable.setItems(taskObservableList);
         }
     }
-
-
 }
