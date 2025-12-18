@@ -15,10 +15,10 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="871.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.enclosure.EnclosureViewController">
 
     <children>
-        <HBox fx:id="occupationHbox" alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
-            <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="871.0" spacing="20.0">
+         <children>
 
-                <VBox alignment="CENTER_LEFT">
+                <VBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="96.0">
                     <children>
                         <Label fx:id="userNameLabel" text="User">
                             <font><Font name="System Bold" size="14.0" /></font>
@@ -28,8 +28,20 @@
                         </Label>
                     </children>
                 </VBox>
+            <Region prefHeight="38.0" prefWidth="259.0" />
 
-                <Region prefWidth="20.0" />
+                <Label text="%menu.enclosures">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" />
+         </VBox.margin>
+      </HBox>
+        <HBox fx:id="occupationHbox" alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="831.0" spacing="10.0" VBox.vgrow="NEVER">
+            <children>
 
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
@@ -39,12 +51,6 @@
                 </HBox>
             <TextField fx:id="searchTextField" prefHeight="26.0" prefWidth="118.0" promptText="%search" />
 
-                <Label text="%menu.enclosures">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-
                 <Region HBox.hgrow="ALWAYS" />
 
                 <Button fx:id="addEnclosureButton" mnemonicParsing="false" onAction="#addEnclosureButtonAction" text="%add" />
@@ -52,7 +58,7 @@
             </children>
 
             <VBox.margin>
-                <Insets bottom="5.0" left="20.0" right="20.0" top="10.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
             </VBox.margin>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

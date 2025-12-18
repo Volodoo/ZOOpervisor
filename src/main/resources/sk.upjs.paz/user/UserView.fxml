@@ -15,21 +15,33 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="841.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.user.UserViewController">
 
     <children>
-        <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
-            <children>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
 
-                <VBox alignment="CENTER_LEFT">
+                <VBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
                     <children>
-                        <Label fx:id="userNameLabel" text="User">
+                        <Label fx:id="userNameLabel" prefHeight="20.0" prefWidth="115.0" text="User">
                             <font><Font name="System Bold" size="14.0" /></font>
                         </Label>
-                        <Label fx:id="roleLabel" text="Role" textFill="#666666">
+                        <Label fx:id="roleLabel" prefHeight="18.0" prefWidth="120.0" text="Role" textFill="#666666">
                             <font><Font size="12.0" /></font>
                         </Label>
                     </children>
                 </VBox>
+            <Region maxWidth="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="264.0" />
 
-                <Region prefWidth="20.0" />
+                <Label prefHeight="35.0" prefWidth="149.0" text="%menu.users">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" />
+         </VBox.margin>
+      </HBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="821.0" spacing="10.0" VBox.vgrow="NEVER">
+            <children>
 
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
@@ -39,22 +51,16 @@
                     </children>
                 </HBox>
 
-                <Label prefHeight="35.0" prefWidth="149.0" text="%menu.users">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-
-                <Region maxWidth="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="186.0" HBox.hgrow="ALWAYS" />
+                <Region maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="462.0" HBox.hgrow="ALWAYS" />
 
                 <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="%back" />
             </children>
 
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" right="5.0" top="10.0" />
             </padding>
             <VBox.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </VBox.margin>
         </HBox>
 

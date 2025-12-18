@@ -15,10 +15,10 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.TicketViewController">
 
     <children>
-        <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" VBox.vgrow="NEVER">
-            <children>
+      <HBox prefHeight="0.0" prefWidth="1000.0">
+         <children>
 
-                <VBox alignment="CENTER_LEFT">
+                <VBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="94.0">
                     <children>
                         <Label fx:id="userNameLabel" text="User">
                             <font><Font name="System Bold" size="14.0" /></font>
@@ -28,31 +28,37 @@
                         </Label>
                     </children>
                 </VBox>
-
-                <Region prefWidth="20.0" />
-
-                <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0" spacing="10.0">
-                    <children>
-                        <Label fx:id="filterLabel" text="Filter:" />
-                        <ComboBox fx:id="cashierFilterComboBox" prefWidth="130.0" />
-                  <TextField fx:id="searchTextField" prefHeight="26.0" prefWidth="130.0" promptText="%search" />
-                    </children>
-                </HBox>
+            <Region maxWidth="-Infinity" prefHeight="38.0" prefWidth="346.0" />
 
                 <Label text="%menu.tickets">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="1000.0" spacing="10.0" VBox.vgrow="NEVER">
+            <children>
 
-                <Region maxWidth="-Infinity" prefHeight="39.0" prefWidth="242.0" HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="351.0" spacing="10.0">
+                    <children>
+                        <Label fx:id="filterLabel" prefHeight="18.0" prefWidth="53.0" text="Filter:" />
+                        <ComboBox fx:id="cashierFilterComboBox" prefWidth="130.0" />
+                  <TextField fx:id="searchTextField" prefHeight="26.0" prefWidth="122.0" promptText="%search" />
+                    </children>
+                </HBox>
+
+                <Region maxWidth="-Infinity" prefHeight="26.0" prefWidth="494.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="showStatisticButton" mnemonicParsing="false" onAction="#showStatisticButton" text="%stats" />
 
                 <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="%back" />
             </children>
 
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
             <VBox.margin>
                 <Insets />

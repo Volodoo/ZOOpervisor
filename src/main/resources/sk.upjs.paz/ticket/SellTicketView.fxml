@@ -9,25 +9,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.SellTicketController">
+<VBox prefHeight="400.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.SellTicketController">
     <children>
-      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0" spacing="20.0">
+      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0" spacing="15.0">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="87.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="122.0" HBox.hgrow="ALWAYS">
                <children>
-                    <Label fx:id="userNameLabel" prefWidth="200.0" text="User Name" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                    <Label fx:id="userNameLabel" prefHeight="26.0" prefWidth="125.0" text="User Name" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
                     <Label fx:id="roleLabel" prefWidth="200.0" text="Role" VBox.vgrow="ALWAYS">
                      <font>
-                        <Font size="15.0" />
+                        <Font size="13.0" />
                      </font>
                   </Label>
                </children>
             </VBox>
-            <Label text="%menu.sell">
+            <Label prefHeight="32.0" prefWidth="150.0" text="%menu.sell">
                <font>
                   <Font name="System Bold" size="22.0" />
                </font>
