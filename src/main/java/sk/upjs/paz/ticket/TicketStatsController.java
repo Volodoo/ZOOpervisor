@@ -10,27 +10,25 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.SwingUtilities;
+import java.awt.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.WeekFields;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import sk.upjs.paz.Factory;
 
 public class TicketStatsController {
 
     @FXML
-    public DatePicker fromDatePicker;
+    private DatePicker fromDatePicker;
     @FXML
-    public DatePicker toDatePicker;
+    private DatePicker toDatePicker;
     @FXML
-    public ComboBox<String> aggregationComboBox;
+    private ComboBox<String> aggregationComboBox;
     @FXML
     private SwingNode chartContainer;
 
@@ -40,8 +38,6 @@ public class TicketStatsController {
     private Button typeSalesButton;
 
     private final TicketService ticketService;
-
-    // stav: true = cashier, false = type
     private boolean showCashiers = true;
 
     public TicketStatsController() {
@@ -54,25 +50,21 @@ public class TicketStatsController {
         aggregationComboBox.getSelectionModel().select("DAY");
 
         fromDatePicker.setValue(LocalDate.of(2025, 12, 6));
-        toDatePicker.setValue(LocalDate.of(2025, 12, 8));
+        toDatePicker.setValue(LocalDate.now());
 
         ChangeListener<Object> updateListener = (obs, oldVal, newVal) -> updateChart();
         fromDatePicker.valueProperty().addListener(updateListener);
         toDatePicker.valueProperty().addListener(updateListener);
         aggregationComboBox.valueProperty().addListener(updateListener);
 
-        // tlačidlá pre prepínanie
-        cashierSalesButton.setOnAction(e -> {
-            showCashiers = true;
-            updateChart();
-        });
+        cashierSalesButton.setOnAction(e -> switchMode(true));
+        typeSalesButton.setOnAction(e -> switchMode(false));
 
-        typeSalesButton.setOnAction(e -> {
-            showCashiers = false;
-            updateChart();
-        });
+        updateChart();
+    }
 
-        // vykreslíme defaultne
+    private void switchMode(boolean showCashiers) {
+        this.showCashiers = showCashiers;
         updateChart();
     }
 
@@ -81,96 +73,83 @@ public class TicketStatsController {
         LocalDate end = toDatePicker.getValue();
         String period = aggregationComboBox.getValue();
 
+        // Získame flat data podľa vybraného režimu
+        Map<String, Long> flatData;
         if (showCashiers) {
-            Map<String, Map<String, Long>> groupedData =
-                    getGroupedDataWithPeriod(ticketService.getTicketCountByCashier(start, end, period), period);
-            DefaultCategoryDataset dataset = createDataset(groupedData);
-            JFreeChart chart = ChartFactory.createBarChart(
-                    "Predaj lístkov podľa predavačov",
-                    "Obdobie",
-                    "Počet lístkov",
-                    dataset,
-                    PlotOrientation.VERTICAL,
-                    true,
-                    true,
-                    false
-            );
-            setChart(chart);
+            flatData = ticketService.getTicketCountByCashier(start, end, period);
         } else {
-            Map<String, Map<String, Long>> groupedData =
-                    getGroupedDataWithPeriod(ticketService.getTicketCountByType(start, end, period), period);
-            DefaultCategoryDataset dataset = createDataset(groupedData);
-            JFreeChart chart = ChartFactory.createBarChart(
-                    "Predaj lístkov podľa typu",
-                    "Obdobie",
-                    "Počet lístkov",
-                    dataset,
-                    PlotOrientation.VERTICAL,
-                    true,
-                    true,
-                    false
-            );
-            setChart(chart);
-        }
-    }
-
-    /** Zozbiera data do mapy: periodKey -> (séria -> počet) */
-    private Map<String, Map<String, Long>> getGroupedDataWithPeriod(Map<String, Long> flatData, String period) {
-        Map<String, Map<String, Long>> result = new TreeMap<>();
-        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-
-        for (String key : flatData.keySet()) {
-            String[] parts = key.split("\\(");
-            String seriesName = parts[0].trim();
-            LocalDate date = LocalDate.now(); // default
-
-            if (parts.length > 1) {
-                try {
-                    date = LocalDate.parse(parts[1].replace(")", "").trim(), dayFormatter);
-                } catch (Exception ignored) {}
-            }
-
-            String periodKey;
-            switch (period.toUpperCase()) {
-                case "WEEK":
-                    int weekNumber = date.get(weekFields.weekOfWeekBasedYear());
-                    int year = date.getYear();
-                    periodKey = "Week " + weekNumber + " " + year;
-                    break;
-                case "MONTH":
-                    int monthNumber = date.getMonthValue();
-                    periodKey = "Month " + monthNumber + " " + date.getYear();
-                    break;
-                default:
-                    DateTimeFormatter dayWithWeekFormatter = DateTimeFormatter.ofPattern("EEEE, dd.MM.yyyy");
-                    periodKey = date.format(dayWithWeekFormatter);
-                    break;
-            }
-
-            result.putIfAbsent(periodKey, new LinkedHashMap<>());
-            result.get(periodKey).put(seriesName, flatData.get(key));
+            flatData = ticketService.getTicketCountByType(start, end, period);
         }
 
-        return result;
+        // Skupíme flat data do formátu: periodKey -> (séria -> počet)
+        Map<String, Map<String, Long>> groupedData = groupFlatData(flatData);
+
+        // Vytvoríme dataset a graf
+        DefaultCategoryDataset dataset = createDataset(groupedData);
+
+        String chartTitle;
+        if (showCashiers) {
+            chartTitle = "Predaj lístkov podľa predavačov";
+        } else {
+            chartTitle = "Predaj lístkov podľa typu";
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                chartTitle,
+                "Obdobie",
+                "Počet lístkov",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+
+        setChart(chart);
     }
 
-    /** Vytvorí DefaultCategoryDataset z mapy */
+    /**
+     * Skupí flatData do formátu: periodKey -> (séria -> počet), poradie zachované
+     */
+    private Map<String, Map<String, Long>> groupFlatData(Map<String, Long> flatData) {
+        Map<String, Map<String, Long>> grouped = new LinkedHashMap<>();
+        for (Map.Entry<String, Long> entry : flatData.entrySet()) {
+            String key = entry.getKey();
+            int startIdx = key.indexOf('(');
+            int endIdx = key.indexOf(')');
+            String seriesName = key.substring(0, startIdx).trim();
+            String periodKey = key.substring(startIdx + 1, endIdx).trim();
+
+            grouped.computeIfAbsent(periodKey, k -> new LinkedHashMap<>())
+                    .put(seriesName, entry.getValue());
+        }
+        return grouped;
+    }
+
     private DefaultCategoryDataset createDataset(Map<String, Map<String, Long>> groupedData) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (String periodKey : groupedData.keySet()) {
-            Map<String, Long> seriesMap = groupedData.get(periodKey);
-            for (String series : seriesMap.keySet()) {
-                dataset.addValue(seriesMap.get(series), series, periodKey);
-            }
-        }
+        groupedData.forEach((periodKey, seriesMap) ->
+                seriesMap.forEach((series, value) -> dataset.addValue(value, series, periodKey))
+        );
         return dataset;
     }
 
-    /** Vloží graf do SwingNode */
     private void setChart(JFreeChart chart) {
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setMouseWheelEnabled(false);
+
+        BarRenderer renderer = (BarRenderer) chart.getCategoryPlot().getRenderer();
+        if (showCashiers) {
+            renderer.setSeriesPaint(0, Color.RED);
+            renderer.setSeriesPaint(1, Color.GREEN);
+            renderer.setSeriesPaint(2, Color.BLUE);
+            renderer.setSeriesPaint(3, Color.ORANGE);
+            renderer.setSeriesPaint(4, Color.PINK);
+        } else {
+            renderer.setSeriesPaint(0, Color.CYAN);
+            renderer.setSeriesPaint(1, Color.MAGENTA);
+            renderer.setSeriesPaint(2, Color.YELLOW);
+        }
 
         javafx.application.Platform.runLater(() ->
                 SwingUtilities.invokeLater(() -> chartContainer.setContent(chartPanel))

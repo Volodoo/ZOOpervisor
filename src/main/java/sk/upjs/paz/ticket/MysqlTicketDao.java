@@ -80,7 +80,10 @@ public class MysqlTicketDao implements TicketDao {
         LocalDateTime startDateTime = start.atStartOfDay(); // 00:00:00
         LocalDateTime endDateTime = end.atTime(23, 59, 59);
 
-        String getTicketsBetweenQuery = selectTicketQuery + " WHERE ti.purchase_date_time BETWEEN ? AND ?";
+        String getTicketsBetweenQuery = selectTicketQuery
+                + " WHERE ti.purchase_date_time BETWEEN ? AND ?"
+                + " ORDER BY ti.purchase_date_time ASC";
+
         return jdbcOperations.query(getTicketsBetweenQuery, resultSetExtractor, startDateTime, endDateTime);
     }
 
