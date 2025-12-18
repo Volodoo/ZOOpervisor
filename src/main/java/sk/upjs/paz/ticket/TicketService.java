@@ -1,7 +1,5 @@
 package sk.upjs.paz.ticket;
 
-import sk.upjs.paz.user.User;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
