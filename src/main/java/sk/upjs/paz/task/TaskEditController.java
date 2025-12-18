@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static sk.upjs.paz.SceneManager.getBundle;
+
 public class TaskEditController {
     @FXML
     public Spinner hourSpinner;
@@ -37,6 +39,9 @@ public class TaskEditController {
 
     @FXML
     private VBox enclosuresVBox;
+
+    @FXML
+    private Label labelText;
 
     @FXML
     private TextField nameField;
@@ -115,6 +120,7 @@ public class TaskEditController {
 
     public void setTask(Task task) {
         this.editMode = true;
+        labelText.setText(getBundle().getString("editTask"));
         this.saveTaskButton.setText("Uložiť");
         this.task = task;
 
@@ -171,14 +177,14 @@ public class TaskEditController {
         );
 
         if (editMode) {
-            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
+            boolean suhlas = SceneManager.confirm(getBundle().getString("editConfirm"));
             if (!suhlas) {
                 return;
             }
             taskDao.update(taskToSave);
             editMode = false;
         } else {
-            boolean suhlas = SceneManager.confirm("Naozaj chcete pridať novú úlohu?");
+            boolean suhlas = SceneManager.confirm(getBundle().getString("addConfirmTask"));
             if (!suhlas) {
                 return;
             }

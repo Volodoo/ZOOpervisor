@@ -13,6 +13,8 @@ import sk.upjs.paz.user.Role;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static sk.upjs.paz.SceneManager.getBundle;
+
 public class AnimalEditController {
 
     @FXML
@@ -37,6 +39,9 @@ public class AnimalEditController {
 
     @FXML
     private ComboBox<Sex> sexComboBox;
+
+    @FXML
+    private Label labelText;
 
     @FXML
     private TextField speciesField;
@@ -96,14 +101,15 @@ public class AnimalEditController {
         Animal animalToSave;
 
         if (editMode) {
-            if (!SceneManager.confirm("Naozaj chcete uložiť zmeny zvieraťa?")) {
+            if (!SceneManager.confirm(getBundle().getString("editConfirm"))) {
                 return;
             }
 
             animalToSave = animal;
 
         } else {
-            if (!SceneManager.confirm("Naozaj chcete vytvoriť nové zviera?")) {
+            labelText.setText(getBundle().getString("addAnimal"));
+            if (!SceneManager.confirm(getBundle().getString("addConfirmAnimal"))) {
                 return;
             }
 
@@ -142,6 +148,7 @@ public class AnimalEditController {
 
     public void setAnimal(Animal animal) {
         this.editMode = true;
+        labelText.setText(getBundle().getString("animalEdit"));
         this.animal = animal;
         nicknameField.setText(animal.getNickname());
         speciesField.setText(animal.getSpecies());

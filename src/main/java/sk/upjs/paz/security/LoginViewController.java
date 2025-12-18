@@ -41,9 +41,9 @@
 
             if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
                 Alert alert= new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Upozornenie");
+                alert.setTitle(getBundle().getString("warning"));
                 alert.setHeaderText(null);
-                alert.setContentText("Heslo alebo email su prázdne");
+                alert.setContentText(getBundle().getString("emptyPassword"));
                 alert.showAndWait();
                 return;
             }
@@ -56,7 +56,7 @@
                 Alert alert= new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("Nesprávne heslo alebo email");
+                alert.setContentText(getBundle().getString("invalidEmail"));
                 alert.showAndWait();
                 return;
             }
@@ -92,7 +92,7 @@
                 SceneManager.applyTheme(scene);
                 Stage stage = (Stage) emailField.getScene().getWindow();
                 stage.setScene(scene);
-                stage.setTitle("Registrácia nového usera");
+                stage.setTitle(getBundle().getString("loggingUser"));
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
