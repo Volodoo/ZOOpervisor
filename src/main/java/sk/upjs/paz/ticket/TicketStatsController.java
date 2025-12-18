@@ -51,7 +51,7 @@ public class TicketStatsController {
     public void initialize() {
         aggregationComboBox.getItems().addAll("period.day", "period.week", "period.month");
 
-        aggregationComboBox.setConverter(new StringConverter<String>() {
+        aggregationComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String key) {
                 if (key == null) return "";
@@ -67,7 +67,8 @@ public class TicketStatsController {
                 return null;
             }
         });
-        aggregationComboBox.getSelectionModel().select(getBundle().getString("period.day"));
+
+        aggregationComboBox.getSelectionModel().select("period.day");
 
         fromDatePicker.setValue(LocalDate.of(2025, 12, 6));
         toDatePicker.setValue(LocalDate.now());
@@ -88,31 +89,33 @@ public class TicketStatsController {
         updateChart();
     }
 
+    /**
+     * 1 = DAY, 2 = WEEK, 3 = MONTH
+     */
+    private int getSelectedPeriod() {
+        String value = aggregationComboBox.getValue();
+        return switch (value) {
+            case "period.week" -> 2;
+            case "period.month" -> 3;
+            default -> 1;
+        };
+    }
+
     private void updateChart() {
         LocalDate start = fromDatePicker.getValue();
         LocalDate end = toDatePicker.getValue();
-        String period = aggregationComboBox.getValue();
+        int period = getSelectedPeriod();
 
-        // Získame flat data podľa vybraného režimu
-        Map<String, Long> flatData;
-        if (showCashiers) {
-            flatData = ticketService.getTicketCountByCashier(start, end, period);
-        } else {
-            flatData = ticketService.getTicketCountByType(start, end, period);
-        }
+        Map<String, Long> flatData = showCashiers
+                ? ticketService.getTicketCountByCashier(start, end, period)
+                : ticketService.getTicketCountByType(start, end, period);
 
-        // Skupíme flat data do formátu: periodKey -> (séria -> počet)
         Map<String, Map<String, Long>> groupedData = groupFlatData(flatData);
-
-        // Vytvoríme dataset a graf
         DefaultCategoryDataset dataset = createDataset(groupedData);
 
-        String chartTitle;
-        if (showCashiers) {
-            chartTitle = getBundle().getString("byCashiers");
-        } else {
-            chartTitle = getBundle().getString("statistic.option2");
-        }
+        String chartTitle = showCashiers
+                ? getBundle().getString("byCashiers")
+                : getBundle().getString("statistic.option2");
 
         JFreeChart chart = ChartFactory.createBarChart(
                 chartTitle,
@@ -129,28 +132,34 @@ public class TicketStatsController {
     }
 
     /**
-     * Skupí flatData do formátu: periodKey -> (séria -> počet), poradie zachované
+     * periodKey -> (series -> value)
      */
     private Map<String, Map<String, Long>> groupFlatData(Map<String, Long> flatData) {
         Map<String, Map<String, Long>> grouped = new LinkedHashMap<>();
+
         for (Map.Entry<String, Long> entry : flatData.entrySet()) {
             String key = entry.getKey();
             int startIdx = key.indexOf('(');
             int endIdx = key.indexOf(')');
+
             String seriesName = key.substring(0, startIdx).trim();
             String periodKey = key.substring(startIdx + 1, endIdx).trim();
 
             grouped.computeIfAbsent(periodKey, k -> new LinkedHashMap<>())
                     .put(seriesName, entry.getValue());
         }
+
         return grouped;
     }
 
     private DefaultCategoryDataset createDataset(Map<String, Map<String, Long>> groupedData) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
         groupedData.forEach((periodKey, seriesMap) ->
-                seriesMap.forEach((series, value) -> dataset.addValue(value, series, periodKey))
+                seriesMap.forEach((series, value) ->
+                        dataset.addValue(value, series, periodKey))
         );
+
         return dataset;
     }
 
@@ -159,6 +168,7 @@ public class TicketStatsController {
         chartPanel.setMouseWheelEnabled(false);
 
         BarRenderer renderer = (BarRenderer) chart.getCategoryPlot().getRenderer();
+
         if (showCashiers) {
             renderer.setSeriesPaint(0, Color.RED);
             renderer.setSeriesPaint(1, Color.GREEN);
