@@ -25,13 +25,13 @@ public class TicketService {
         for (Ticket t : tickets) {
             String key;
             switch (period.toUpperCase()) {
-                case "WEEK":
+                case "period.week":
                     int weekNumber = t.getPurchaseDateTime().get(weekFields.weekOfWeekBasedYear());
                     int year = t.getPurchaseDateTime().getYear();
                     key = t.getCashier().getFirstName() + " " + t.getCashier().getLastName()
                             + " (Week " + weekNumber + " " + year + ")";
                     break;
-                case "MONTH":
+                case "period.month":
                     key = t.getCashier().getFirstName() + " " + t.getCashier().getLastName()
                             + " (" + t.getPurchaseDateTime().getMonthValue() + " " + t.getPurchaseDateTime().getYear() + ")";
                     break;
@@ -48,7 +48,7 @@ public class TicketService {
 
     public Map<String, Long> getTicketCountByType(LocalDate start, LocalDate end, String period) {
         List<Ticket> tickets = ticketDao.getTicketsBetween(start, end);
-        Map<String, Long> result = new LinkedHashMap<>(); // <-- zachová poradie
+        Map<String, Long> result = new LinkedHashMap<>();
 
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 

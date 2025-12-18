@@ -6,6 +6,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.util.StringConverter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -20,6 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import sk.upjs.paz.Factory;
+
+import static sk.upjs.paz.SceneManager.getBundle;
 
 public class TicketStatsController {
 
@@ -46,8 +49,25 @@ public class TicketStatsController {
 
     @FXML
     public void initialize() {
-        aggregationComboBox.getItems().addAll("DAY", "WEEK", "MONTH");
-        aggregationComboBox.getSelectionModel().select("DAY");
+        aggregationComboBox.getItems().addAll("period.day", "period.week", "period.month");
+
+        aggregationComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String key) {
+                if (key == null) return "";
+                try {
+                    return getBundle().getString(key);
+                } catch (Exception e) {
+                    return key;
+                }
+            }
+
+            @Override
+            public String fromString(String string) {
+                return null;
+            }
+        });
+        aggregationComboBox.getSelectionModel().select(getBundle().getString("period.day"));
 
         fromDatePicker.setValue(LocalDate.of(2025, 12, 6));
         toDatePicker.setValue(LocalDate.now());
@@ -89,15 +109,15 @@ public class TicketStatsController {
 
         String chartTitle;
         if (showCashiers) {
-            chartTitle = "Predaj lístkov podľa predavačov";
+            chartTitle = getBundle().getString("byCashiers");
         } else {
-            chartTitle = "Predaj lístkov podľa typu";
+            chartTitle = getBundle().getString("statistic.option2");
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
                 chartTitle,
-                "Obdobie",
-                "Počet lístkov",
+                getBundle().getString("period.graph"),
+                getBundle().getString("ticket.count"),
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
