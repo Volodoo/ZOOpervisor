@@ -1,217 +1,179 @@
 package sk.upjs.paz.ticket;
 
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import sk.upjs.paz.Factory;
-import sk.upjs.paz.SceneManager;
-import sk.upjs.paz.user.User;
-
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.time.LocalDate;
-
 import javax.swing.SwingUtilities;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
+import sk.upjs.paz.Factory;
 
 public class TicketStatsController {
 
     @FXML
+    public DatePicker fromDatePicker;
+    @FXML
+    public DatePicker toDatePicker;
+    @FXML
+    public ComboBox<String> aggregationComboBox;
+    @FXML
     private SwingNode chartContainer;
 
     @FXML
-    private Button btnDailySales;
-
+    private Button cashierSalesButton;
     @FXML
-    private Button btnTypeSales;
+    private Button typeSalesButton;
 
-    @FXML
-    private Label statsLabel;
+    private final TicketService ticketService;
 
-    private TicketDao ticketDao = Factory.INSTANCE.getTicketDao();
-    private List<Ticket> tickets;
+    // stav: true = cashier, false = type
+    private boolean showCashiers = true;
+
+    public TicketStatsController() {
+        ticketService = new TicketService(Factory.INSTANCE.getTicketDao());
+    }
 
     @FXML
     public void initialize() {
-        tickets = ticketDao.getAll();
+        aggregationComboBox.getItems().addAll("DAY", "WEEK", "MONTH");
+        aggregationComboBox.getSelectionModel().select("DAY");
 
-        // Default graf: denné predaje
-        showDailySalesChart();
+        fromDatePicker.setValue(LocalDate.of(2025, 12, 6));
+        toDatePicker.setValue(LocalDate.of(2025, 12, 8));
 
-        // Nastavenie tlačidiel
-        btnDailySales.setOnAction(e -> showDailySalesChart());
-        btnTypeSales.setOnAction(e -> showTypeSalesChart());
+        ChangeListener<Object> updateListener = (obs, oldVal, newVal) -> updateChart();
+        fromDatePicker.valueProperty().addListener(updateListener);
+        toDatePicker.valueProperty().addListener(updateListener);
+        aggregationComboBox.valueProperty().addListener(updateListener);
+
+        // tlačidlá pre prepínanie
+        cashierSalesButton.setOnAction(e -> {
+            showCashiers = true;
+            updateChart();
+        });
+
+        typeSalesButton.setOnAction(e -> {
+            showCashiers = false;
+            updateChart();
+        });
+
+        // vykreslíme defaultne
+        updateChart();
     }
 
-    /** Graf: počet predaných lístkov každý deň podľa predavačov */
-    private void showDailySalesChart() {
+    private void updateChart() {
+        LocalDate start = fromDatePicker.getValue();
+        LocalDate end = toDatePicker.getValue();
+        String period = aggregationComboBox.getValue();
 
-        // 1. Zoznam všetkých dní (usporiadaný)
-        Set<LocalDate> days = new TreeSet<>();
-
-        for (Ticket ticket : tickets) {
-            LocalDate day = ticket.getPurchaseDateTime().toLocalDate();
-            days.add(day);
-        }
-
-        // 2. Štatistiky: pokladník -> (deň -> počet lístkov)
-        Map<User, Map<LocalDate, Long>> stats = new HashMap<>();
-
-        for (Ticket ticket : tickets) {
-            User cashier = ticket.getCashier();
-            LocalDate day = ticket.getPurchaseDateTime().toLocalDate();
-
-            // ak pokladník ešte nemá mapu dní, vytvor ju
-            if (!stats.containsKey(cashier)) {
-                stats.put(cashier, new HashMap<>());
-            }
-
-            Map<LocalDate, Long> byDay = stats.get(cashier);
-
-            // zvýš počet lístkov v daný deň
-            long count = byDay.getOrDefault(day, 0L);
-            byDay.put(day, count + 1);
-        }
-
-        // 3. Dataset pre graf
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        // 4. Textové štatistiky
-        StringBuilder statsText =
-                new StringBuilder(translate("statistic.option1") + ":\n");
-
-        for (User cashier : stats.keySet()) {
-            Map<LocalDate, Long> byDay = stats.get(cashier);
-            long total = 0;
-
-            for (LocalDate day : days) {
-                long count = byDay.getOrDefault(day, 0L);
-
-                dataset.addValue(
-                        count,
-                        cashier.getFirstName() + " " + cashier.getLastName(),
-                        day.toString()
-                );
-
-                total += count;
-            }
-
-            statsText.append(cashier.getFirstName())
-                    .append(" ")
-                    .append(cashier.getLastName())
-                    .append(": ")
-                    .append(total)
-                    .append(" ")
-                    .append(translate("tickets"))
-                    .append("\n");
-        }
-
-        statsLabel.setText(statsText.toString());
-
-        // 5. Vytvorenie grafu
-        JFreeChart lineChart = ChartFactory.createLineChart(
-                translate("statistic.option1"),
-                translate("date"),
-                translate("ticket.count"),
-                dataset
-        );
-
-        setChart(lineChart);
-    }
-
-    /** Graf: počet predaných lístkov podľa typu lístka (histogram) */
-    private void showTypeSalesChart() {
-
-        // 1. Všetky typy lístkov (poradie bude vždy rovnaké)
-        List<String> allTypes = Arrays.asList("Child", "Student_Senior", "Adult");
-
-        // 2. Počty lístkov podľa typu
-        Map<String, Long> typeCounts = new HashMap<>();
-
-        for (Ticket ticket : tickets) {
-            String type = ticket.getType();
-
-            long count = 0;
-            if (typeCounts.containsKey(type)) {
-                count = typeCounts.get(type);
-            }
-
-            typeCounts.put(type, count + 1);
-        }
-
-        // 3. Dataset pre graf
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        // 4. Textové štatistiky
-        StringBuilder statsText =
-                new StringBuilder(translate("statistic.option2") + ":\n");
-
-        for (String type : allTypes) {
-            long count = 0;
-
-            if (typeCounts.containsKey(type)) {
-                count = typeCounts.get(type);
-            }
-
-            dataset.addValue(
-                    count,
-                    translate("menu.tickets"),
-                    getTypeInSlovak(type)
+        if (showCashiers) {
+            Map<String, Map<String, Long>> groupedData =
+                    getGroupedDataWithPeriod(ticketService.getTicketCountByCashier(start, end, period), period);
+            DefaultCategoryDataset dataset = createDataset(groupedData);
+            JFreeChart chart = ChartFactory.createBarChart(
+                    "Predaj lístkov podľa predavačov",
+                    "Obdobie",
+                    "Počet lístkov",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    true,
+                    false
             );
-
-            statsText.append(getTypeInSlovak(type))
-                    .append(": ")
-                    .append(count)
-                    .append(" ")
-                    .append("tickets")
-                    .append("\n");
+            setChart(chart);
+        } else {
+            Map<String, Map<String, Long>> groupedData =
+                    getGroupedDataWithPeriod(ticketService.getTicketCountByType(start, end, period), period);
+            DefaultCategoryDataset dataset = createDataset(groupedData);
+            JFreeChart chart = ChartFactory.createBarChart(
+                    "Predaj lístkov podľa typu",
+                    "Obdobie",
+                    "Počet lístkov",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    true,
+                    false
+            );
+            setChart(chart);
         }
-
-        statsLabel.setText(statsText.toString());
-
-        // 5. Vytvorenie stĺpcového grafu
-        JFreeChart barChart = ChartFactory.createBarChart(
-                translate("statistic.option2"),
-                translate("ticket.type"),
-                translate("ticket.count"),
-                dataset
-        );
-
-        setChart(barChart);
     }
 
+    /** Zozbiera data do mapy: periodKey -> (séria -> počet) */
+    private Map<String, Map<String, Long>> getGroupedDataWithPeriod(Map<String, Long> flatData, String period) {
+        Map<String, Map<String, Long>> result = new TreeMap<>();
+        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+
+        for (String key : flatData.keySet()) {
+            String[] parts = key.split("\\(");
+            String seriesName = parts[0].trim();
+            LocalDate date = LocalDate.now(); // default
+
+            if (parts.length > 1) {
+                try {
+                    date = LocalDate.parse(parts[1].replace(")", "").trim(), dayFormatter);
+                } catch (Exception ignored) {}
+            }
+
+            String periodKey;
+            switch (period.toUpperCase()) {
+                case "WEEK":
+                    int weekNumber = date.get(weekFields.weekOfWeekBasedYear());
+                    int year = date.getYear();
+                    periodKey = "Week " + weekNumber + " " + year;
+                    break;
+                case "MONTH":
+                    int monthNumber = date.getMonthValue();
+                    periodKey = "Month " + monthNumber + " " + date.getYear();
+                    break;
+                default:
+                    DateTimeFormatter dayWithWeekFormatter = DateTimeFormatter.ofPattern("EEEE, dd.MM.yyyy");
+                    periodKey = date.format(dayWithWeekFormatter);
+                    break;
+            }
+
+            result.putIfAbsent(periodKey, new LinkedHashMap<>());
+            result.get(periodKey).put(seriesName, flatData.get(key));
+        }
+
+        return result;
+    }
+
+    /** Vytvorí DefaultCategoryDataset z mapy */
+    private DefaultCategoryDataset createDataset(Map<String, Map<String, Long>> groupedData) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (String periodKey : groupedData.keySet()) {
+            Map<String, Long> seriesMap = groupedData.get(periodKey);
+            for (String series : seriesMap.keySet()) {
+                dataset.addValue(seriesMap.get(series), series, periodKey);
+            }
+        }
+        return dataset;
+    }
+
+    /** Vloží graf do SwingNode */
     private void setChart(JFreeChart chart) {
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setMouseWheelEnabled(true);
+        chartPanel.setMouseWheelEnabled(false);
 
         javafx.application.Platform.runLater(() ->
                 SwingUtilities.invokeLater(() -> chartContainer.setContent(chartPanel))
         );
-    }
-
-    private String translate(String key) {
-        try {
-            return SceneManager.getBundle().getString(key);
-        } catch (Exception e) {
-            return key;
-        }
-    }
-
-    private String getTypeInSlovak(String type) {
-        switch (type) {
-            case "child":
-                return "Dieťa";
-            case "studentSenior":
-                return "Študent/Senior";
-            case "adult":
-                return "Dospelý";
-            default:
-                return type;
-        }
     }
 }

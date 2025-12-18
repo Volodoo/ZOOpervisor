@@ -131,7 +131,7 @@ public class TicketViewController {
         for (User user : users) {
             if (user.getRole() == Role.CASHIER) {
                 cashierFilterComboBox.getItems().add(
-                        user.getFirstName() + " " + user.getLastName());
+                        user.getFirstName() + " " + user.getLastName() + " (" + user.getId() + ")");
             }
         }
     }

@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.embed.swing.SwingNode?>
 
 <BorderPane xmlns="http://javafx.com/javafx/23"
@@ -12,16 +14,34 @@
             fx:controller="sk.upjs.paz.ticket.TicketStatsController"
             minWidth="800" minHeight="600">
 
+    <!-- ===== TOP PANEL ===== -->
     <top>
-        <VBox spacing="5" style="-fx-padding: 10;">
+        <VBox spacing="10" style="-fx-padding: 10;">
+
+            <!-- Buttons -->
             <HBox spacing="10">
-                <Button text="%statistic.option1" fx:id="btnDailySales"/>
-                <Button text="%statistic.option2" fx:id="btnTypeSales"/>
+                <Button text="%statistic.option1" fx:id="cashierSalesButton"/>
+                <Button text="%statistic.option2" fx:id="typeSalesButton"/>
             </HBox>
-            <Label fx:id="statsLabel" text="Štatistiky sa zobrazia tu..." wrapText="true"/>
+
+            <!-- Filters -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Obdobie:"/>
+                <DatePicker fx:id="fromDatePicker" promptText="Od"/>
+                <DatePicker fx:id="toDatePicker" promptText="Do"/>
+
+                <Label text="Zobrazenie:"/>
+                <ComboBox fx:id="aggregationComboBox" prefWidth="180"/>
+            </HBox>
+
+            <!-- Info label -->
+            <Label fx:id="statsLabel"
+                   text="Vyber obdobie a typ zobrazenia"
+                   wrapText="true"/>
         </VBox>
     </top>
 
+    <!-- ===== CENTER (CHART) ===== -->
     <center>
         <SwingNode fx:id="chartContainer"/>
     </center>

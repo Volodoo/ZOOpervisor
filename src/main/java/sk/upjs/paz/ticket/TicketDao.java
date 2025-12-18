@@ -1,19 +1,20 @@
 package sk.upjs.paz.ticket;
 
 
-import sk.upjs.paz.exceptions.NotFoundException;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TicketDao {
 
     List<Ticket> getAll();
-    
+
     List<Ticket> getByCashier(long userId);
 
     List<Ticket> getAllSortedByPurchaseDateTime();
 
-    List<Ticket> getAllSortedByCashier();
+    List<Ticket> getTicketsBetween(LocalDate start, LocalDate end);
 
     Ticket getById(long id);
 

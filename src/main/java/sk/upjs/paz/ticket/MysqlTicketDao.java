@@ -6,6 +6,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.upjs.paz.exceptions.NotFoundException;
 import sk.upjs.paz.user.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,10 +76,14 @@ public class MysqlTicketDao implements TicketDao {
     }
 
     @Override
-    public List<Ticket> getAllSortedByCashier() {
-        String selectTicketSortedByCashier = selectTicketQuery + " ORDER BY us.id";
-        return jdbcOperations.query(selectTicketSortedByCashier, resultSetExtractor);
+    public List<Ticket> getTicketsBetween(LocalDate start, LocalDate end) {
+        LocalDateTime startDateTime = start.atStartOfDay(); // 00:00:00
+        LocalDateTime endDateTime = end.atTime(23, 59, 59);
+
+        String getTicketsBetweenQuery = selectTicketQuery + " WHERE ti.purchase_date_time BETWEEN ? AND ?";
+        return jdbcOperations.query(getTicketsBetweenQuery, resultSetExtractor, startDateTime, endDateTime);
     }
+
 
     @Override
     public Ticket getById(long id) {
