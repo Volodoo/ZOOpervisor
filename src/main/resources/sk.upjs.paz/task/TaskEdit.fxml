@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -23,13 +24,14 @@
     </padding>
 
     <children>
-        <HBox alignment="CENTER_RIGHT" prefHeight="74.0" prefWidth="779.0" spacing="20.0">
+        <HBox alignment="CENTER_RIGHT" prefHeight="58.0" prefWidth="779.0" spacing="20.0">
             <children>
-                <Label maxWidth="1.7976931348623157E308" prefHeight="74.0" prefWidth="602.0" text="%edit.task" HBox.hgrow="ALWAYS">
+                <Label fx:id="labelText" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="58.0" prefWidth="330.0" text="%addTask">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
+            <Region prefHeight="58.0" prefWidth="144.0" />
                 <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="%back" />
             </children>
             <VBox.margin>

@@ -17,7 +17,7 @@
    <children>
       <HBox alignment="CENTER_RIGHT" prefHeight="10.0" prefWidth="600.0" spacing="85.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label text="%userEdit" textAlignment="CENTER">
+            <Label fx:id="labelText" text="%userEdit" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="21.0" />
                </font>

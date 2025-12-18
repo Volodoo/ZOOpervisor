@@ -62,9 +62,9 @@ public class RegisterController {
 
         if (firstName.isEmpty() || lastName.isEmpty() || gender == null || birthDay == null || email.isEmpty() || password.isEmpty() || passwordAgain.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Upozornenie");
+            alert.setTitle(getBundle().getString("warning"));
             alert.setHeaderText(null);
-            alert.setContentText("Všetky polia musia byť vyplnené!");
+            alert.setContentText(getBundle().getString("mustBeFilled"));
             alert.showAndWait();
             return;
         }
@@ -72,16 +72,16 @@ public class RegisterController {
 
         if (passwordAgain.length() < 8) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Upozornenie");
+            alert.setTitle(getBundle().getString("warning"));
             alert.setHeaderText(null);
-            alert.setContentText("Heslo musí byť dĺžky 8 znakov a obsahovať aspon jednu číslicu a jeden špeciálny znak!");
+            alert.setContentText(getBundle().getString("passwordCondition1"));
             alert.showAndWait();
             return;
         } else if (!password.matches("\\d+") && !passwordAgain.matches(".*[^a-zA-Z0-9].*")) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Upozornenie");
+            alert.setTitle(getBundle().getString("warning"));
             alert.setHeaderText(null);
-            alert.setContentText("Heslo musí obsahovať aspon jeden špeciálny znak a jednu číslicu!");
+            alert.setContentText(getBundle().getString("passwordCondition2"));
             alert.showAndWait();
             return;
         }
@@ -90,7 +90,7 @@ public class RegisterController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Hesla sa nezhodujú!");
+            alert.setContentText(getBundle().getString("notMatching"));
             alert.showAndWait();
             return;
         }
@@ -113,9 +113,9 @@ public class RegisterController {
         try {
             User createdUser = userDao.create(newUser);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Uspech");
+            alert.setTitle(getBundle().getString("succes"));
             alert.setHeaderText(null);
-            alert.setContentText("Registrácia bola úspešná");
+            alert.setContentText(getBundle().getString("succesSignin"));
             alert.showAndWait();
             SceneManager.changeScene(event, "/sk.upjs.paz/security/LoginView.fxml", "ZOOpervisor");
         } catch (Exception e) {

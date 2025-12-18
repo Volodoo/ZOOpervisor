@@ -14,6 +14,8 @@ import sk.upjs.paz.user.UserDao;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static sk.upjs.paz.SceneManager.getBundle;
+
 public class SellTicketController {
 
     @FXML
@@ -81,7 +83,7 @@ public class SellTicketController {
 
         String priceLabelText = "Cena:";
         try {
-            priceLabelText = SceneManager.getBundle().getString("priceSell");
+            priceLabelText = getBundle().getString("priceSell");
         } catch (Exception e) {
         }
 
@@ -91,7 +93,7 @@ public class SellTicketController {
 
         String totalLabelText = "Celková cena:";
         try {
-            totalLabelText = SceneManager.getBundle().getString("priceTogheder");
+            totalLabelText = getBundle().getString("priceTogheder");
         } catch (Exception e) {
         }
 
@@ -101,7 +103,7 @@ public class SellTicketController {
 
     @FXML
     public void sellTicket(ActionEvent event) {
-        boolean suhlas = SceneManager.confirm("Naozaj chcete predať lístok?");
+        boolean suhlas = SceneManager.confirm(getBundle().getString("sellTicketConfirm"));
         if (!suhlas) {
             return;
         }

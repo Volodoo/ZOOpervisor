@@ -9,6 +9,8 @@ import sk.upjs.paz.Factory;
 import sk.upjs.paz.SceneManager;
 import sk.upjs.paz.security.Auth;
 
+import static sk.upjs.paz.SceneManager.getBundle;
+
 
 public class UserEditController {
     @FXML
@@ -42,7 +44,7 @@ public class UserEditController {
     @FXML
     public void saveUser(ActionEvent event) {
         if (editMode) {
-            boolean suhlas = SceneManager.confirm("Naozaj chcete uložiť zmeny?");
+            boolean suhlas = SceneManager.confirm(getBundle().getString("editConfirm"));
             if (!suhlas) {
                 return;
             }

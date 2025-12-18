@@ -11,6 +11,8 @@ import sk.upjs.paz.user.Role;
 
 import java.time.LocalDateTime;
 
+import static sk.upjs.paz.SceneManager.getBundle;
+
 public class EnclosureEditController {
     @FXML
     public Spinner<Integer> hourSpinner;
@@ -32,6 +34,9 @@ public class EnclosureEditController {
 
     @FXML
     private Label nameLabel;
+
+    @FXML
+    private Label labelText;
 
     @FXML
     private Button updateEnclosureButton;
@@ -83,14 +88,14 @@ public class EnclosureEditController {
         Enclosure enclosureToSave;
 
         if (editMode) {
-            if (!SceneManager.confirm("Naozaj chcete uložiť zmeny výbehu?")) {
+            if (!SceneManager.confirm(getBundle().getString("editConfirm"))) {
                 return;
             }
 
             enclosureToSave = enclosure;
 
         } else {
-            if (!SceneManager.confirm("Naozaj chcete vytvoriť nový výbeh?")) {
+            if (!SceneManager.confirm(getBundle().getString("addConfirmEnclosure"))) {
                 return;
             }
 
@@ -123,6 +128,7 @@ public class EnclosureEditController {
 
     public void setEnclosure(Enclosure enclosure) {
         this.editMode = true;
+        labelText.setText(getBundle().getString("enclosureEdit"));
         this.enclosure = enclosure;
         nameField.setText(enclosure.getName());
         zoneField.setText(enclosure.getZone());
