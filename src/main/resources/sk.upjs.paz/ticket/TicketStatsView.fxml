@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="600" minWidth="800" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.TicketStatsController">
+<BorderPane minHeight="600" minWidth="800" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.paz.ticket.TicketStatsController">
 
     <!-- ===== TOP PANEL ===== -->
     <top>
