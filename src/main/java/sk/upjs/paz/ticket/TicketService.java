@@ -24,24 +24,25 @@ public class TicketService {
 
         for (Ticket t : tickets) {
             String key;
-            String cashierName = t.getCashier().getFirstName() + " " + t.getCashier().getLastName();
+            Long cashierId = t.getCashier().getId();
 
             switch (period) {
                 case 2: // WEEK
-                    int weekNumber = t.getPurchaseDateTime().get(weekFields.weekOfWeekBasedYear());
+                    int weekNumber = t.getPurchaseDateTime()
+                            .get(weekFields.weekOfWeekBasedYear());
                     int year = t.getPurchaseDateTime().getYear();
-                    key = cashierName + " (Week " + weekNumber + " " + year + ")";
+                    key = cashierId + " (Week " + weekNumber + " " + year + ")";
                     break;
 
                 case 3: // MONTH
-                    key = cashierName + " (" +
+                    key = cashierId + " (" +
                             t.getPurchaseDateTime().getMonthValue() + " " +
                             t.getPurchaseDateTime().getYear() + ")";
                     break;
 
                 case 1: // DAY
                 default:
-                    key = cashierName + " (" +
+                    key = cashierId + " (" +
                             t.getPurchaseDateTime().format(dayFormatter) + ")";
                     break;
             }
@@ -51,6 +52,7 @@ public class TicketService {
 
         return result;
     }
+
 
     public Map<String, Long> getTicketCountByType(LocalDate start, LocalDate end, int period) {
         List<Ticket> tickets = ticketDao.getTicketsBetween(start, end);

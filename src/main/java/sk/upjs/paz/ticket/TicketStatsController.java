@@ -17,10 +17,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import javax.swing.SwingUtilities;
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import sk.upjs.paz.Factory;
+import sk.upjs.paz.user.User;
+import sk.upjs.paz.user.UserDao;
 
 import static sk.upjs.paz.SceneManager.getBundle;
 
@@ -41,10 +44,16 @@ public class TicketStatsController {
     private Button typeSalesButton;
 
     private final TicketService ticketService;
+    private final UserDao userDao;
+
     private boolean showCashiers = true;
+
+    // Cache ID -> meno
+    private final Map<Long, String> cashierLabelCache = new HashMap<>();
 
     public TicketStatsController() {
         ticketService = new TicketService(Factory.INSTANCE.getTicketDao());
+        userDao = Factory.INSTANCE.getUserDao();
     }
 
     @FXML
@@ -132,6 +141,7 @@ public class TicketStatsController {
     }
 
     /**
+     * Zoskupí flat map do datasetu pre JFreeChart
      * periodKey -> (series -> value)
      */
     private Map<String, Map<String, Long>> groupFlatData(Map<String, Long> flatData) {
@@ -139,17 +149,35 @@ public class TicketStatsController {
 
         for (Map.Entry<String, Long> entry : flatData.entrySet()) {
             String key = entry.getKey();
+
             int startIdx = key.indexOf('(');
             int endIdx = key.indexOf(')');
 
-            String seriesName = key.substring(0, startIdx).trim();
+            String rawSeries = key.substring(0, startIdx).trim(); // ID alebo typ
             String periodKey = key.substring(startIdx + 1, endIdx).trim();
+
+            String seriesName = rawSeries;
+
+            if (showCashiers) {
+                Long userId = Long.valueOf(rawSeries);
+                seriesName = getCashierLabel(userId);
+            }
 
             grouped.computeIfAbsent(periodKey, k -> new LinkedHashMap<>())
                     .put(seriesName, entry.getValue());
         }
 
         return grouped;
+    }
+
+    private String getCashierLabel(Long userId) {
+        return cashierLabelCache.computeIfAbsent(userId, id -> {
+            User user = userDao.getById(id);
+            if (user == null) {
+                return "User ID " + id;
+            }
+            return user.getFirstName() + " " + user.getLastName();
+        });
     }
 
     private DefaultCategoryDataset createDataset(Map<String, Map<String, Long>> groupedData) {

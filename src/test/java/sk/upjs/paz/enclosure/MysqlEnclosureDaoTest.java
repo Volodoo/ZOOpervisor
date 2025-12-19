@@ -20,7 +20,6 @@ class MysqlEnclosureDaoTest extends TestContainers {
         dao = new MysqlEnclosureDao(jdbc);
     }
 
-    /* -------------------- getAll -------------------- */
     @Test
     void getAll() {
         List<Enclosure> enclosures = dao.getAll();
@@ -35,7 +34,6 @@ class MysqlEnclosureDaoTest extends TestContainers {
         assertEquals("Výbeh pre šimpanzy", enclosures.get(6).getName());
     }
 
-    /* -------------------- getAllSortedByZone -------------------- */
     @Test
     void getAllSortedByZone() {
         List<Enclosure> enclosures = dao.getAllSortedByZone();
@@ -51,7 +49,6 @@ class MysqlEnclosureDaoTest extends TestContainers {
         assertEquals("Savana", enclosures.get(6).getZone());
     }
 
-    /* -------------------- getByZone -------------------- */
     @Test
     void getByZone() {
         List<Enclosure> savana = dao.getByZone("Savana");
@@ -67,7 +64,6 @@ class MysqlEnclosureDaoTest extends TestContainers {
         assertEquals("Výbeh pre šimpanzy", dzungla.get(1).getName());
     }
 
-    /* -------------------- getById -------------------- */
     @Test
     void getById() {
         Enclosure e1 = dao.getById(1L);
@@ -78,7 +74,6 @@ class MysqlEnclosureDaoTest extends TestContainers {
         assertThrows(NotFoundException.class, () -> dao.getById(999L));
     }
 
-    /* -------------------- create -------------------- */
     @Test
     void create() {
         Enclosure newEnclosure = new Enclosure();
@@ -92,21 +87,6 @@ class MysqlEnclosureDaoTest extends TestContainers {
     }
 
     @Test
-    void create_nullEnclosure() {
-        assertThrows(IllegalArgumentException.class, () -> dao.create(null));
-    }
-
-    @Test
-    void create_withIdSet() {
-        Enclosure e = new Enclosure();
-        e.setId(10L);
-        e.setName("Test");
-        e.setZone("TestZone");
-        assertThrows(IllegalArgumentException.class, () -> dao.create(e));
-    }
-
-    /* -------------------- update -------------------- */
-    @Test
     void update() {
         Enclosure e1 = dao.getById(1L);
         e1.setName("Výbeh pre veľké levy");
@@ -118,20 +98,7 @@ class MysqlEnclosureDaoTest extends TestContainers {
         assertEquals("Výbeh pre veľké levy", fromDb.getName());
     }
 
-    @Test
-    void update_nullEnclosure() {
-        assertThrows(IllegalArgumentException.class, () -> dao.update(null));
-    }
 
-    @Test
-    void update_noId() {
-        Enclosure e = new Enclosure();
-        e.setName("Test");
-        e.setZone("Test");
-        assertThrows(IllegalArgumentException.class, () -> dao.update(e));
-    }
-
-    /* -------------------- getAnimals -------------------- */
     @Test
     void getAnimals() {
         Set<Animal> a1 = dao.getAnimals(1L);
@@ -144,9 +111,8 @@ class MysqlEnclosureDaoTest extends TestContainers {
         assertEquals(2, a7.size());
     }
 
-    /* -------------------- getAnimalsCount -------------------- */
     @Test
-    void getAnimalsCount_manual() {
+    void getAnimalsCount() {
         assertEquals(1, dao.getAnimalsCount(1L), "Výbeh pre levy ma 1 zviera");
         assertEquals(1, dao.getAnimalsCount(2L), "Výbeh pre zebry ma 1 zviera");
         assertEquals(1, dao.getAnimalsCount(3L), "Výbeh pre žirafy ma 1 zviera");

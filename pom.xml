@@ -103,7 +103,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- SLF4J Simple Logger pre Testcontainers (odstráni warningy) -->
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
